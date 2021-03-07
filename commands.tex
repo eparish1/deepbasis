@@ -1,9 +1,35 @@
-\newcommand{\PDEResid}{\mathcal{R}}
+\newcommand{\spatialAcronym}{SDR}
+\newcommand{\spaceTimeAcronym}{STDR}
+\newcommand{\defeq}{\vcentcolon=}
+\newcommand{\RRStar}[2]{\mathbb{V}_{#1}(\RR{#2})}
+\newcommand{\Range}[1]{\text{Range}(#1)}
+\newcommand{\RomDim}{K}
+\newcommand{\NVars}{N_v}
+\newcommand{\paramDomain}{\mathcal{D}}
+\newcommand{\numParams}{N_{\mu}}
+\newcommand{\PhysicalDomain}{\Omega}
+\newcommand{\PDEStateDomain}{\PhysicalDomain \times (0,T] \times \paramDomain}
+\newcommand{\PDEStateCodomain}{\RR{\NVars}}
+\newcommand{\PDEFlux}{\mathcal{F}}
 \newcommand{\NSpace}{N_s}
 \newcommand{\NTime}{\numTimeSteps}
 \newcommand{\NST}{N_{st}}
 \newcommand{\x}{\boldsymbol x}
-\newcommand{\RR}{\mathbb{R}}
+\newcommand{\xd}{\mathbf{x}}
+\newcommand{\xs}{x}
+\newcommand{\ys}{y}
+\newcommand{\zs}{z}
+
+\newcommand{\TimeSpace}{\mathcal{T}}
+\newcommand{\STDim}{K_{\text{st}}}
+\newcommand{\SemiDiscreteSpaceTimeTrialSpace}{\mathcal{ST}}
+\newcommand{\SemiDiscreteSpaceTimeBasisMat}{\boldsymbol \Pi}
+\newcommand{\OnesFunction}{\mathcal{O}}
+
+
+\newcommand{\SemiDiscreteStateIC}{\SemiDiscreteState_0(\params)}
+
+\newcommand{\RR}[1]{\mathbb{R}^{#1}}
 \newcommand{\FomDim}{N}
 \newcommand{\PDEState}{\mathsf{u}}
 \newcommand{\ApproxPDEState}{\tilde{\boldsymbol u}}
@@ -21,10 +47,19 @@
 \newcommand{\GenState}{\hat{\boldsymbol u}}
 \newcommand{\BasisArgs}{\boldsymbol x, t,\params;\weightsInner}
 \newcommand{\BasisDiscreteArgs}{\params;\weightsInner}
-
 \newcommand{\TrialSpace}{\mathcal{V}}
 \newcommand{\velocity}{\boldsymbol f}
-\newcommand{\state}{\boldsymbol u}
+\newcommand{\ApproxSemiDiscreteState}{\tilde{\SemiDiscreteState}}
+\newcommand{\SemiDiscreteStateRef}{\SemiDiscreteState_{\text{ref}}}
+\newcommand{\SemiDiscreteSpatialTrialSpace}{\mathcal{V}}
+\newcommand{\SemiDiscreteSpatialBasisMat}{\mathbf{V}}
+\newcommand{\SemiDiscreteSpatialBasisVec}{\mathbf{v}}
+\newcommand{\SemiDiscreteGenState}{\hat{\SemiDiscreteState}}
+\newcommand{\SemiDiscreteGenStateArgs}{\SemiDiscreteStateArgs}
+
+
+\newcommand{\SemiDiscreteState}{\boldsymbol u}
+\newcommand{\SemiDiscreteStateArgs}{t,\params}
 \newcommand{\DiscreteResid}{\mathbf{R}}
 \newcommand{\DiscreteState}{\mathbf{u}}
 \newcommand{\DiscreteStateArgs}{\params}

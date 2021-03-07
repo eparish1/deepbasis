@@ -17,17 +17,161 @@
 
 %\maketitle
 \section{Introduction}
+The simulation of parameterized partial differential equations is ubiquitous in computational science, playing important roles in uncertainty quantification, design and optimization, and control, to name a few areas. Despite the tremendous growth in computing capabilities in the past several decades, however, simulating partial differential equations for a single parameter instance can be a computational bottle neck. As a result, analysts often rely on low-cost computational models to generate approximate solutions. 
+
+Projection-based reduced-order models comprise a promising approximation strategy. 
+
+\begin{enumerate}
+\item PROMs
+\begin{itemize}
+\item Project onto low-dimensional space-(time) subspace, predict for new parameter instances
+\item Kolmogorov n-width
+\end{itemize}
+\item PINNs
+\begin{itemize}
+\item Learn a mapping via deep learning, minimize composite loss
+\item Full-order model solve
+\item Final layer is a basis
+\end{itemize}
+\end{enumerate}  
+\section{Mathematical setting}
 We consider model reduction of the partial differential equation given by
 \begin{equation}\label{eq:fom}
-\PDEResid(\PDEState(\PDEStateArgs)) = \bz.
+\frac{\partial \PDEState}{\partial t}(\PDEStateArgs) = \PDEFlux(\PDEState,\PDEStateArgs), 
 \end{equation}
+where $\PDEState: \PDEStateDomain \rightarrow \PDEStateCodomain$ is the state, $\PDEFlux: \PDEStateDomain \times \paramDomain$ is the flux, and $\params \in \paramDomain \subset \RR{\numParams}$  are system parameters.
 \subsection{Semi-discrete form}
-We now discuss a form of Eq.~\eqref{eq:fom} in a semi-discrete form. To this end, we introduce a discretization of $\Omega$ into $N$ 
-Typically, in model reduction, we either work directly with the continuous form~\eqref{eq:fom}, a semi-discrete form of~\eqref{eq:fom} (obtained, for example, by discretizing in space), or a fully-discrete form of the system. We denote the semi-discrete system as 
-$$\frac{d \state}{dt} = \velocity(\state,t,\params),$$
-where $\state(t) \in \RR{\FomDim}$ is the disc
+In model reduction, it is often the case where we aim to generate reduced-order models not for the continuous PDE~\eqref{eq:fom}, but rather for a semi-discrete form obtained after spatial discretization. This is the case, for example, when working with legacy codes with complex equation sets, and when working with hyperbolic systems that require stabilization. To this end, we introduce a discretization of $\Omega$ into $\NSpace$ degrees of freedom characterized by the nodal points $\xd_i$, which in three-dimensions, for example, is given by the coordinates $\xd_i = (\xs_i,\ys_i,\zs_i)$. Spatial discrertization of the FOM PDE~\eqref{eq:fom} yields the semi-discrete system  
+$$\frac{d \SemiDiscreteState}{dt}(\SemiDiscreteStateArgs) = \velocity(\SemiDiscreteState(\SemiDiscreteStateArgs),t,\params),$$
+where $\SemiDiscreteState(t,\params) \in \RR{\FomDim}$ is the semi-discrete state-vector, $\FomDim = \NVars \NSpace$ the total of discrete degrees of freedom, and $\velocity: \RR{\FomDim} \times [0,T] \times \paramDomain \rightarrow \RR{\FomDim}$ is the velocity function.
+
+ \subsection{Reduced-order models}
+Projection-based ROMs generate approximate solutions to the FOM
+	ODE~\eqref{eq:FOM} by approximating the state in a low-dimensional trial
+	subspace. Two types of space--time trial subspaces are commonly used for
+	this purpose:\footnote{For both spatial and space--time ROMs of dynamical systems, all trial subspaces are, strictly speaking, space--time subspaces.} 
+\begin{enumerate} 
+	\item \textit{Subspaces that reduce only the spatial dimension of the full-order
+		model (\spatialAcronym)}. These trial subspaces are characterized by a spatial projection operator, associate with a basis that represents the spatial dependence of the state, and are employed in classic model reduction approaches, e.g., Galerkin and LSPG. %These 
+	\item \textit{Subspaces that reduce both the spatial and temporal dimensions of the full-order
+		model (\spaceTimeAcronym)}.
+These trial subspaces are characterized by a space--time projection operator, associate with a basis that represents the spatial and temporal dependence of the state, and are employed in space--time 
+model reduction approaches (e.g., space--time Galerkin~\cite{benner_st}, space--time LSPG~\cite{choi_stlspg}). 
+\end{enumerate}
+ We now describe these two types of space--time trial subspaces and their
+	application to the Galerkin, LSPG, and space--time LSPG approaches. 
+
+\subsection{\spatialAcronym\ trial subspaces}
+At a given time instance 
+$t\in[0,T]$ and parameter instance $\params \in \paramDomain$,
+\spatialAcronym\ trial subspaces approximate the FOM ODE solution
+	as $\ApproxSemiDiscreteState(\SemiDiscreteStateArgs)\approx\SemiDiscreteState(\SemiDiscreteStateArgs)$, which is enforced to reside in an
+	affine spatial trial subspace of dimension $K\ll\FomDim$ such that
+	$\ApproxSemiDiscreteState(\SemiDiscreteStateArgs) \in
+	\SemiDiscreteStateRef +\SemiDiscreteSpatialTrialSpace
+\subseteq\RR{\FomDim}$, where $\dim(\SemiDiscreteSpatialTrialSpace) = K$
+and $\SemiDiscreteStateRef \in \mathbb{R}^{\FomDim}$ denotes the reference state, which
+	is often taken to be the initial condition.
+Here, the trial subspace
+$\SemiDiscreteSpatialTrialSpace$ 
+is spanned by an orthogonal basis such that
+$ \SemiDiscreteSpatialTrialSpace= \Range{\SemiDiscreteSpatialBasisMat}$
+with 
+$ \SemiDiscreteSpatialBasisMat \equiv \begin{bmatrix}  \SemiDiscreteSpatialBasisVec_1  & \cdots &  \SemiDiscreteSpatialBasisVec_K \end{bmatrix}
+	\in \RRStar{\RomDim}{\FomDim}$, where $\RRStar{\RomDim}{\FomDim}$ denotes the compact Stiefel manifold (i.e.,  $
+	\RRStar{\RomDim}{\FomDim}\defeq
+	\{ \mathbf{X} \in \RR{\FomDim
+	\times \RomDim}\, \big|\, \mathbf{X}^T \mathbf{X} = \mathbf{I} \}$).
+The basis vectors $\SemiDiscreteSpatialBasisVec_i$, $i=1,\ldots,K$ are typically constructed
+using state snapshots, e.g., via
+proper orthogonal decomposition (POD)~\cite{berkooz_turbulence_pod}, the reduced-basis method~\cite{rb_1,rb_2,rb_3,NgocCuong2005,Rozza2008}. 
+Thus, at any time instance $t\in[0,T]$ and parameter instance $\params \in \paramDomain$, ROMs that employ the  \spatialAcronym\
+trial subspace approximate the FOM ODE solution as
+\begin{equation}\label{eq:affine_trialspace}
+\SemiDiscreteState(\SemiDiscreteStateArgs)  \approx \ApproxSemiDiscreteState(\SemiDiscreteStateArgs) = \SemiDiscreteSpatialBasisMat  \SemiDiscreteGenState(\SemiDiscreteGenStateArgs) + \SemiDiscreteStateRef,
+\end{equation}
+where $\SemiDiscreteGenState(\SemiDiscreteGenStateArgs) \in \RR{\RomDim}$ denotes the generalized
+coordinates. 
+\begin{comment}
+
+From the space--time perspective, this is equivalent to approximating the
+	FOM ODE solution trajectory $\stateFOM\in\RR{N}\otimes\timeSpace$ with 
+	$\approxstate\in \stspaceS$, where
+\begin{equation}\label{eq:spatial_subspace}
+\begin{split}
+& \stspaceS \defeq \trialspace \otimes \timeSpace +
+	\stateIntercept\otimes\onesFunction\subseteq\RR{N}\otimes\timeSpace,
+\end{split}
+\end{equation}
+with $\onesFunction\in\timeSpace$ defined as
+$\onesFunction:\timeDummy\mapsto 1$.
+ 
+Substituting the approximation~\eqref{eq:affine_trialspace} into the FOM ODE~\eqref{eq:FOM} and performing orthogonal
+$\elltwo$-projection of the initial condition onto the trial subspace yields
+the overdetermined system of ODEs
+\begin{equation}\label{eq:g_truncation}
+\basisspace \genstateDotArg{}{t} = \velocity(\basisspace
+\genstateArg{}{t} + \stateIntercept,t ), \qquad \genstate(0) = \genstateIC,
+	\qquad t \in [0,T],
+\end{equation}
+where $\genstateDot\equiv {d \genstate}/{d\tau}$.
+Because Eq.~\eqref{eq:g_truncation} is overdetermined, a solution may not
+exist. Typically, either \textit{Galerkin} or \textit{least-squares
+Petrov--Galerkin} projection is employed to reduce the number of equations
+such that a unique solution exists. We now describe these two methods.
+
 and the fully discrete system as
 $$\DiscreteResid(\DiscreteState(\DiscreteStateArgs)) = \bz.$$ 
+\end{comment}
+
+
+
+
+\subsection{\spaceTimeAcronym\ trial spaces and space--time ROMs}
+Space--time projection methods that employ \spaceTimeAcronym\ trial
+spaces~\cite{choi_stlspg,constantine_strom,URBAN2012203,Yano2014ASC,benner_st,bui_thesis}
+aim to overcome the latter two shortcomings of LSPG. Because these methods employ \spaceTimeAcronym\ trial
+spaces, they reduce both the spatial and temporal dimensions of the full-order
+model; further, they yield error bounds that grow more slowly in time and
+their trajectories exhibit an optimality property over the entire time domain. 
+
+For a given parameter instance $\params \in \paramDomain$, \spaceTimeAcronym\ trial subspaces approximate the FOM ODE solution
+trajectory
+	$\SemiDiscreteState(\cdot,\params) \in\RR{\FomDim}\otimes \TimeSpace$ with an approximation that resides in an
+	affine space--time trial subspace of dimension $\STDim\ll\FomDim$, i.e., 
+	$\ApproxSemiDiscreteState \in \SemiDiscreteSpaceTimeTrialSpace$ with $\dim(\SemiDiscreteSpaceTimeTrialSpace) =\STDim $, where
+\begin{equation}\label{eq:sttrialspace_def}
+ \SemiDiscreteSpaceTimeTrialSpace \defeq 
+	\Range{\SemiDiscreteSpaceTimeBasisMat} + 
+	\SemiDiscreteStateIC \otimes \OnesFunction
+	\subseteq \RR{\FomDim} \otimes \TimeSpace.
+\end{equation}
+
+%and $\stbasis\in\RR{N \times \stdim}\otimes \timeSpace$ with 
+%Here $\stbasis \in \RR{\fomdim \times \stdim} \otimes \timeSpace$, with $\stbasis:\timeDummy\mapsto\stbasis(\timeDummy)$ and $\stbasis(0) =
+%\boldsymbol 0$
+%denotes the space--time trial basis. 
+%Thus, at any time instance $t\in[0,T]$, ROMs that employ the
+%\spaceTimeAcronym\ trial subspace approximate the FOM ODE solution as
+%\begin{equation}\label{eq:stapprox1}
+% \stateFOMArg{}{t} \approx \approxstateArg{}{t}  = \stbasisArg{}{t} \stgenstate + \stateFOMIC,
+%\end{equation}
+%where $\stgenstateArg{} \in \RR{\stdim}$ denotes the space--time generalized coordinates. 
+%Critically, comparing the approximations arising from \spatialAcronym\ and
+%\spaceTimeAcronym\ trial subspaces in Eqs.~\eqref{eq:affine_trialspace} and \eqref{eq:stapprox1}, respectively,
+%highlights that the former approximation associates with time-dependent
+%generalized coordinates, while the latter approximation associates with a
+%time-dependent basis matrix.
+
+
+
+
+
+
+
+
+
+
 
 \section{Deep learning surrogate for the state}
 In the offline phase, we model our state as
@@ -51,7 +195,7 @@ The space--time Galerkin method operates by restricting the state to the trial s
 
 \section{Galerkin reduced-order model}
 The Galerkin ROM operates by restricting the state to be orthogonal to the trial space. At a continuous level, for a given parameter instance, we solve the following weak problem: find $\ApproxPDEState \in \TrialSpace$ such that
-$$\left( \BasisVec, \PDEResid\left(\ApproxPDEState\left(\PDEStateArgs\right)\right) \right) = \bz \qquad \forall \BasisVec \in \TrialSpace$$
+$$\left( \BasisVec, \PDEFlux\left(\ApproxPDEState\left(\PDEStateArgs\right)\right) \right) = \bz \qquad \forall \BasisVec \in \TrialSpace$$
 where $\TrialSpace \equiv \text{span}\{ \BasisVec_i\}_{i=1}^{\NBasis}$.
 
 \end{document}
