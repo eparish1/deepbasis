@@ -1,0 +1,576 @@
+%\newcommand{\methodAcronym}{WLS}
+%\newcommand{\methodAcronymROM}{WLS-ROM}
+%\newcommand{\methodAcronymROMs}{WLS-ROMs}
+%
+%\newcommand{\methodName}{Windowed Least-Squares}
+\newcommand{\nskip}{N_{\text{skip}}}
+\newcommand{\parameter}{\mu}
+\newcommand{\spatialvar}{\mathsf{x}_1}
+\newcommand{\spatialvarTwo}{\mathsf{x}_2}
+\newcommand{\physDomain}{\Omega}
+\newcommand{\parameterdomain}{\mathcal{D}}
+\newcommand{\params}{\boldsymbol \mu}
+\newcommand{\podIP}{\mathbf{P}}
+\newcommand{\spacetimeWord}{state--time}
+\newcommand{\spatialWord}{state}
+\newcommand{\stateWord}{state}
+\newcommand{\approachKwd}{approach}
+\newcommand{\projStr}{approach}
+\newcommand{\directMethodAcronym}{direct-WLS}
+\newcommand{\methodAcronym}{WLS}
+\newcommand{\methodAcronymROM}{WLS ROM}
+\newcommand{\methodAcronymROMs}{WLS ROMs}
+
+\newcommand{\RRplus}{\RR{}_{+}}
+\newcommand{\methodName}{Windowed Least-Squares}
+\newcommand{\methodNameLower}{windowed least-squares}
+
+\newcommand{\Changes}[1]{{\color{purple}#1}}
+
+\newcommand{\EP}[1]{{\color{red}EP: #1}}
+%======= Shaping for matrix
+%\newcommand{\matshapea}{\underbrace{[ \circ \circ \circ \circ \circ ]}_{1 \times N}}
+%\newcommand{\matshapeb}{\begin{matrix} \circ &   \\ \circ & \circ    \end{matrix}}
+%\newcommand{\matshapebf}{\begin{matrix} \circ & \circ  \\ \circ & \circ    \end{matrix}}
+%\newcommand{\matshapec}{\circ}
+\newcommand{\matshapea}{
+\tikz[baseline=0.0ex]\draw (0,0) rectangle (15pt,-25pt);}
+\newcommand{\matshapeb}{
+\tikz[baseline=0.0ex]\draw (0,0) rectangle (10pt,-25pt);}
+
+
+%\newcommand{\matshapeb}{\begin{bmatrix} &   \end{bmatrix}}
+%\newcommand{\matshapeb}{\tikz[baseline=0.0ex]\draw (0,0) triangle (30pt,30pt,30pt);}
+%\newcommand{\matshapeb}{
+%%\begin{tikzpicture}
+%\tikz[baseline=0.0ex]\draw (0,0)%{$A$}
+%  -- (20pt,0pt) %{$C$}
+%  -- (0pt,20pt) %{$B$}
+%  -- cycle;}
+%\end{tikzpicture}}
+\newcommand{\matshapebf}{
+\tikz[baseline=0pt]\draw (0pt,0pt) rectangle (20pt,20pt);}
+%\newcommand{\matshapec}{\rule[0pt]{0.5pt}{20pt}}
+\newcommand{\matshapec}{
+\tikz[baseline=0.0ex]\draw (0,0pt) rectangle (2pt,20pt);}
+%====================
+\newcommand{\stState}{\overline{\mathbf{x}}}
+\newcommand{\stGenState}{\hat{\overline{\mathbf{x}}}}
+
+\newcommand{\stdim}{K_{\text{ST}}}
+\newcommand{\stdimArg}[1]{K_{\text{ST}}^{#1}}
+\newcommand{\quadWeightsScalarArg}[3]{\alpha^{#1,#2}_{#3}}
+\newcommand{\quadWeightsLMSScalarArg}[2]{\gamma^{#1,#2}}
+\newcommand{\timeDumArg}{t}
+\newcommand{\timeDummy}{\tau}
+\newcommand{\fbsmGrowth}{\psi_1}
+\newcommand{\fbsmDecay}{\psi_2}
+\newcommand{\projector}{\mathbb{P}}
+\newcommand{\projectorArg}[1]{\projector^{#1}}
+\newcommand{\genProjectorSpatialArg}[1]{\hat{\projector}_s^{#1}}
+
+\newcommand{\projectorSpatialArg}[1]{\projector_{\mathcal{S}}^{#1}}
+\newcommand{\veloargsromy}{\decoderArg{ \genstateyDiscreteArgnt{}},\timeDummy}
+\newcommand{\quadWeightsVecArg}[1]{\boldsymbol \alpha^{#1}}
+\newcommand{\minIntegrandFull}{\frac{1}{2} \big[\frac{\partial \decoder}{\partial \genstate} \dot{\genstate} - \velocity(\decoder(\genstate)) \big]^T \stweightingMat(t) \big[\frac{\partial \decoder}{\partial \genstate} \dot{\genstate} - \velocity(\decoder(\genstate)) \big]}
+
+
+\newcommand{\statew}{\boldsymbol w}
+
+\newcommand{\adjointStr}{adjoint}
+%\newcommand{\stweightingMatCollocArg}[2]{\stweightingMat^{#1,#2}}
+%\newcommand{\stweightingMatCollocArgt}[2]{\stweightingMat^{#1}(#2)}
+\newcommand{\stweightingMatCollocArgt}[2]{\stweightingMat}
+\newcommand{\stweightingMatCollocArg}[2]{\overline{\stweightingMat}}
+\newcommand{\stweightingMat}{ \mathbf{A}}
+
+\newcommand{\stweightingMatOne}{ \mathbf{W}}
+\newcommand{\stweightingMatOneArg}[1]{\stweightingMatOne^{#1}}
+\newcommand{\stweightingMatOneTArg}[1]{[\stweightingMatOne^{#1}]^T}
+
+%\newcommand{\stweightingMatArg}[1]{\stweightingMat^{#1}}
+%\newcommand{\stweightingMatArgt}[2]{\stweightingMat^{#1}(#2)}
+\newcommand{\stweightingMatArg}[1]{\stweightingMat^{#1}}
+\newcommand{\stweightingMatArgt}[2]{\stweightingMat^{#1}}
+\newcommand{\DeltaSlabArg}[1]{\Delta T^{#1}}
+\newcommand{\lagrangeBasis}{\boldsymbol \ell}
+\newcommand{\lagrangeBasisArg}[2]{\boldsymbol \ell^{#1,#2}}
+\newcommand{\lagrangeBasisScalar}{ \ell}
+\newcommand{\lagrangeBasisScalarArg}[3]{\lagrangeBasisScalar^{#1,#2}_{#3}}
+
+\newcommand{\collocBasis}{\boldsymbol \lagrangeBasis}
+\newcommand{\collocBasisArg}[2]{\collocBasis^{#1,#2}}
+\newcommand{\collocBasisDot}{\dot{\collocBasis}}
+\newcommand{\collocBasisDotArg}[2]{\collocBasisDot^{#1,#2}}
+\newcommand{\collocBasisScalar}{p}
+\newcommand{\collocBasisScalarArg}[4]{p^{#1,#2}_{#3}({#4})}
+\newcommand{\jacobianSlab}{\boldsymbol J}
+\newcommand{\jacobianSlabArg}[1]{\jacobianSlab^{#1}}
+\newcommand{\hamiltonian}{\mathcal{H}}
+\newcommand{\hamiltonianArg}[1]{\hamiltonian^{#1}}
+\newcommand{\adjoint}{\hat{\boldsymbol \lambda}}
+
+\newcommand{\adjointDot}{\dot{\adjoint}}
+\newcommand{\adjointDotArg}[2]{\adjointDot^{#1}(#2)}
+\newcommand{\adjointDotArgnt}[1]{\adjointDot^{#1}}
+
+\newcommand{\adjointArg}[2]{\adjoint^{#1}(#2)}
+\newcommand{\adjointArgnt}[1]{\adjoint^{#1}}
+
+\newcommand{\adjointOCDot}{\dot{\hat{\boldsymbol \nu}}}
+\newcommand{\adjointOCDotArg}[2]{\adjointOCDot^{#1}(#2)}
+
+\newcommand{\adjointOC}{\hat{\boldsymbol \nu}}
+\newcommand{\adjointOCArg}[2]{\adjointOC^{#1}(#2)}
+\newcommand{\adjointOCArgnt}[1]{\adjointOC^{#1}}
+
+
+\newcommand{\adjointDum}{\hat{\boldsymbol \mu}}
+\newcommand{\adjointDumArgt}[2]{\adjointDum^{#1}(#2)}
+\newcommand{\adjointDumArgnt}[1]{\adjointDum^{#1}}
+\newcommand{\adjointDiscreteDum}{\hat{\pmb \mu}}
+\newcommand{\adjointDiscreteDumArgt}[2]{\adjointDiscreteDum^{#1}(#2)}
+\newcommand{\adjointDiscreteDumArgnt}[1]{\adjointDiscreteDum^{#1}}
+
+\newcommand{\Range}[1]{\mathrm{Ran}(#1)}
+
+\newcommand{\lipshitzf}{\Gamma}
+\newcommand{\lipshitz}{\kappa}
+\newcommand{\lipshitzi}{\alpha}
+\newcommand{\lipshitziArg}[1]{\alpha^{#1}}
+
+\newcommand{\lipshitzv}{\kappa_{\velocity}}
+\newcommand{\constAInt}{\eta}
+\newcommand{\stateFOMSol}{\stateFOM)}
+\newcommand{\stateFOMDot}{\dot{\stateFOM}}
+\newcommand{\stateFOMDotArg}[1]{\dot{\stateFOM}(#1)}
+
+\newcommand{\stateFOMSolArg}[1]{\stateFOM^{#1}}
+\newcommand{\stateFOMSolArgt}[2]{\stateFOM^{#1}(#2)}
+\newcommand{\stateFOMProjSol}{\tilde{\state}_{\ell^2}}
+\newcommand{\stateFOMProjSolArg}[1]{\stateFOMProjSol^{#1}}
+\newcommand{\stateFOMProjSolArgt}[2]{\stateFOMProjSol^{#1}(#2)} 
+
+\newcommand{\intSlabArg}[1]{\int_{\timeStartArg{#1}}^{\timeEndArg{#1}} }
+\newcommand{\genstateROMSol}{\genstate}
+\newcommand{\genstateROMSolArg}[1]{\genstateROMSol^{#1}}
+\newcommand{\genstateROMSolArgt}[2]{\genstateROMSol^{#1}(#2)}
+\newcommand{\genstateROMStarSol}{\genstate_{*}}
+\newcommand{\genstateROMStarSolArg}[1]{\genstateROMStarSol^{#1}}
+\newcommand{\genstateROMStarSolArgt}[2]{\genstateROMStarSol^{#1}(#2)}
+
+
+%\newcommand{\approxstateIC}{\approxstateDiscrete_0}
+\newcommand{\approxstateIC}{\basisspace \basisspace^T (\stateFOMIC - \stateIntercept) + \stateIntercept}
+
+
+\newcommand{\errorStar}{\hat{\error}_{*}}
+\newcommand{\errorStarArg}[1]{\errorStar^{#1}}
+\newcommand{\errorStarArgt}[2]{\errorStar^{#1}(#2)}
+\newcommand{\errorStarDot}{\dot{\hat{\error}}_{*}}
+\newcommand{\errorStarDotArg}[1]{\errorStarDot^{#1}}
+\newcommand{\errorStarDotArgt}[2]{\errorStarDot^{#1}(#2)}
+
+
+\newcommand{\stateROMSolDot}{\dot{\tilde{\state}}}
+\newcommand{\stateROMSolDotArg}[1]{\stateROMSolDot^{#1}}
+\newcommand{\stateROMSolDotArgt}[2]{\stateROMSolDot^{#1}(#2)}
+
+\newcommand{\stateROMStarSolDot}{\dot{\tilde{\state}}_{*}}
+\newcommand{\stateROMStarSolDotArg}[1]{\stateROMStarSolDot^{#1}}
+\newcommand{\stateROMStarSolDotArgt}[2]{\stateROMStarSolDot^{#1}(#2)}
+
+
+\newcommand{\stateROMSol}{\tilde{\state}}
+\newcommand{\stateROMSolArg}[1]{\stateROMSol^{#1}}
+\newcommand{\stateROMSolArgt}[2]{\stateROMSol^{#1}(#2)}
+\newcommand{\stateROMStarSol}{\tilde{\state}_{*}}
+\newcommand{\stateROMStarSolArg}[1]{\stateROMStarSol^{#1}}
+\newcommand{\stateROMStarSolArgt}[2]{\stateROMStarSol^{#1}(#2)}
+\newcommand{\errorROMStarSolArgt}[2]{\error^{#1}_{R^*}(#2)}
+\newcommand{\errorConstantArg}[1]{\theta^{#1}}
+\newcommand{\adjointROMStarSol}{\adjoint_*}
+\newcommand{\adjointROMStarSolArg}[1]{\adjointROMStarSol^{#1}}
+
+\newcommand{\adjointROMSol}{\adjoint}
+\newcommand{\adjointROMSolArg}[1]{\adjoint^{#1}}
+\newcommand{\adjointROMStarSolArgt}[2]{\adjointROMStarSol^{#1}(#2)}
+\newcommand{\adjointROMSolArgt}[2]{\adjointROMSol^{#1}(#2)}
+
+
+\newcommand{\errorArg}[1]{\error^{#1}}
+\newcommand{\errorArgt}[2]{\error^{#1}(#2)}
+\newcommand{\errorProject}{\tilde{\error}}
+\newcommand{\errorProjectArg}[1]{\errorProject^{#1}}
+\newcommand{\errorProjectArgt}[2]{\errorProject^{#1}(#2)}
+
+\newcommand{\objectiveArg}[1]{\objective^{#1}}
+\newcommand{\objectiveDiscrete}{J}
+\newcommand{\objectiveArgLMS}[1]{\objectiveDiscrete^{#1}}
+\newcommand{\objectiveArgC}[1]{\objectiveDiscrete_{C}^{#1}}
+
+\newcommand{\objectiveDiscreteST}{J_{\text{ST}}}
+\newcommand{\objectiveDiscreteSTArg}[1]{\objectiveDiscreteST^{#1}}
+
+
+%\newcommand{\objectiveDiscrete}{\overline{\objective}}
+\newcommand{\objectiveDiscreteArg}[1]{\objectiveDiscrete^{#1}}
+
+\newcommand{\objective}{\mathcal{J}}
+\newcommand{\controller}{\hat{\boldsymbol u}}
+\newcommand{\controllerArg}[2]{\controller^{#1}(#2)}
+\newcommand{\controllerArgnt}[1]{{\controller^{#1}}}
+\newcommand{\controllerStarArgnt}[1]{{\controller^{#1^*}}}
+
+\newcommand{\objectiveControl}{\mathcal{L}}
+\newcommand{\objectiveControlArg}[1]{\objectiveControl^{#1}}
+\newcommand{\controllerDum}{\hat{\boldsymbol v}}
+\newcommand{\controllerDumArg}[2]{\controllerDum^{#1}(#2)}
+\newcommand{\controllerDumArgnt}[1]{\controllerDum^{#1}}
+\newcommand{\controllerDiscreteDum}{\hat{\mathbf{v}}}
+\newcommand{\controllerDiscreteDumArg}[2]{\controllerDiscreteDum^{#1}(#2)}
+\newcommand{\controllerDiscreteDumArgnt}[1]{\controllerDiscreteDum^{#1}}
+
+\newcommand{\collocModes}{\boldsymbol x}
+\newcommand{\collocMat}{\mathbf{X}_\text{C}}
+\newcommand{\collocMatArg}[2]{\collocMat^{#1,#2}}
+\newcommand{\collocModesArg}[1]{\collocModes^{#1}}
+\newcommand{\genCollocModes}{\overline{\collocModes}}
+\newcommand{\genCollocModesArg}[1]{\overline{\collocModes}^{#1}}
+
+\newcommand{\spatialICDiscrete}{\basisspaceTArg{n}( \approxstateDiscreteArg{n-1,\nstepsArg{n-1}}  - \stateInterceptArg{n} )}
+
+\newcommand{\genspatialICDiscrete}{\basisspaceTArg{n}(\basisspaceArg{n-1} \genstateDiscreteArg{n-1,\nstepsArg{n-1}}   + \stateInterceptArg{n-1} - \stateInterceptArg{n} )}
+\newcommand{\spatialIC}{\basisspaceTArg{n}(\basisspaceArg{n-1} \genstate^{n-1}(\timeEndArg{n-1} )  + \stateInterceptArg{n-1} - \stateInterceptArg{n} )}
+%\newcommand{\spatialIC}{\genProjectorSpatialArg{n}(\basisspaceArg{n-1} \genstate^{n-1}(\timeEndArg{n-1} )  + \stateInterceptArg{n-1} )}
+
+\newcommand{\defeq}{\vcentcolon=}
+\newcommand{\mass}{\mathbf{M}}
+\newcommand{\massArg}[1]{\mass^{#1}}
+
+%\newcommand{\massArgnt}[1]{\mass^{#1}}
+\newcommand{\massArgnt}[1]{\mass}
+\newcommand{\massArgt}[2]{\mass}
+%\newcommand{\genstateyDotArg}[2]{\dot{\genstatey}^{#1}(#2)}
+%\newcommand{\genstateyDot}{\dot{\genstatey}}
+\newcommand{\genstateyDot}{\hat{\boldsymbol v}}
+\newcommand{\genstateyDotArg}[2]{\genstateyDot^{#1}(#2)}
+
+
+%\newcommand{\genstateyDiscreteDot}{\dot{\genstateyDiscrete}}
+\newcommand{\genstateyDiscreteDot}{\hat{\mathbf{v}}}
+%\newcommand{\genstateyDiscreteDotArgnt}[1]{\dot{\genstateyDiscrete}^{#1}}
+\newcommand{\genstateyDiscreteDotArgnt}[1]{\genstateyDiscreteDot^{#1}}
+
+\newcommand{\genstateDot}{\dot{\genstate}}
+\newcommand{\stateDot}{\dot{\state}}
+\newcommand{\stateyDot}{{\boldsymbol v}}
+
+\newcommand{\statezDot}{\dot{\statez}}
+\newcommand{\statez}{\boldsymbol z}
+\newcommand{\statezDotBar}{\dot{\statezBar}}
+\newcommand{\statezBar}{\overline{\statez}}
+
+\newcommand{\variation}{\boldsymbol \eta}
+\newcommand{\variationArgn}[1]{\boldsymbol \eta^{#1}}
+\newcommand{\variationArgntt}[2]{\boldsymbol \eta^{#1}(#2)}
+
+\newcommand{\variationDot}{\dot{\boldsymbol \eta}}
+
+\newcommand{\variationArg}[1]{\boldsymbol \eta(#1)}
+\newcommand{\variationArgnt}{\boldsymbol \eta}
+
+\newcommand{\genstateyDotArgnt}[1]{\dot{\genstatey}^{#1}}
+
+\newcommand{\genstateDDotArg}[2]{\ddot{\genstate}^{#1}(#2)}
+\newcommand{\velocityDot}{\dot{\velocity}}
+
+\newcommand{\genstateDotArg}[2]{\dot{\genstate}^{#1}(#2)}
+\newcommand{\genstateDotArgnt}[1]{\dot{\genstate}^{#1}}
+
+
+\newcommand{\genstateDiscrete}{\hat{\mathbf{x}}}
+\newcommand{\genstateDiscreteArg}[1]{\genstateDiscrete^{#1}}
+\newcommand{\genstateGuessDiscrete}{\hat{\mathbf{x}}}
+\newcommand{\genstateGuessDiscreteArg}[2]{\genstateGuessDiscrete^{#1}_{#2}}
+
+\newcommand{\genstateArg}[2]{\genstate^{#1}(#2)}
+\newcommand{\genstateArgnt}[1]{\genstate^{#1}}
+
+\newcommand{\genstateGalerkinDot}{\dot{\genstate}_{\text{G}}}
+\newcommand{\genstateGalerkinDotArg}[2]{\genstateGalerkinDot^{#1}(#2)}
+
+\newcommand{\genstateGalerkin}{\genstate_{\text{G}}}
+\newcommand{\genstateGalerkinArg}[2]{\genstateGalerkin^{#1}(#2)}
+\newcommand{\genstateGalerkinArgnt}[1]{\genstateGalerkin^{#1}}
+
+\newcommand{\genstateLSPG}{\genstate_{\text{L}}}
+\newcommand{\genstateLSPGArg}[2]{\genstateGalerkin^{#1}(#2)}
+\newcommand{\genstateLSPGArgnt}[1]{\genstateGalerkin^{#1}}
+
+
+
+\newcommand{\genstateyArg}[2]{\genstatey^{#1}(#2)}
+\newcommand{\genstateyArgnt}[1]{\genstatey^{#1}}
+
+\newcommand{\genstateyDiscreteArg}[1]{\genstateyDiscrete^{#1}}
+\newcommand{\genstateyDiscreteArgnt}[1]{\genstateyDiscrete^{#1}}
+
+\newcommand{\stateyArgnt}[1]{\statey^{#1}}
+\newcommand{\stateyDiscreteArgnt}[1]{\stateyDiscrete^{#1}}
+\newcommand{\stateyDiscreteArg}[1]{\stateyDiscrete^{#1}}
+\newcommand{\statewDiscrete}{\mathbf{w}}
+
+\newcommand{\ncolloc}{n_{\text{C}}}
+\newcommand{\ncollocArg}[2]{\ncolloc^{#1,#2}}
+
+\newcommand{\ncollocST}{N_{\text{ST}}}
+\newcommand{\ncollocSTArg}[1]{\ncollocST^{#1}}
+\newcommand{\collocPointST}{\chi_{\text{ST}}}
+\newcommand{\collocPointSTArg}[2]{\collocPointST^{#1,#2}}
+
+
+\newcommand{\ncollocEnforce}{\ncolloc + 1}
+\newcommand{\collocOrder}{p}
+\newcommand{\collocOrderArg}[2]{p^{#1,#2}}
+
+\newcommand{\minintegrandArg}[1]{\minintegrand^{#1}}
+%\newcommand{\minintegrandArg}[1]{\minintegrand}
+\newcommand{\minintegrandCollocArg}[1]{\minintegrandColloc^{#1}}
+\newcommand{\dIdV}{\minintegrand_{ \genstateyDiscreteDot}}
+\newcommand{\dIdVDot}{\dot{\minintegrand}_{ \genstateyDiscreteDot}}
+\newcommand{\dIdY}{\minintegrand_{ \genstateyDiscrete}}
+
+
+\newcommand{\dIdVArg}[1]{\dIdV^{#1}}
+\newcommand{\dIdYArg}[1]{\dIdY^{#1}}
+\newcommand{\dIdVDotArg}[1]{\dIdVDot^{#1}}
+
+\newcommand{\minintegrandDiscrete}{\minintegrand_c}
+\newcommand{\minintegrandDiscreteArg}[1]{\minintegrand_c^{#1}}
+
+
+\newcommand{\lagrange}{\ell}
+\newcommand{\lagrangecoef}{c}
+
+
+\newcommand{\collocPoint}{\zeta}
+\newcommand{\collocPointArg}[3]{\zeta^{#1,#2}_{#3}}
+\newcommand{\collocPointVecArg}[2]{{\boldsymbol \zeta}^{#1,#2}}
+
+\newcommand{\nsamples}{n_s}
+
+\newcommand{\timeWindow}{\tau}
+\newcommand{\timeWindowArg}[2]{\tau^{#1,#2}}
+
+\newcommand{\bz}{\boldsymbol 0}
+\newcommand{\nsteps}{N_{\tau}}
+%\newcommand{\nstepsArg}[1]{\nsteps(#1)}
+\newcommand{\nstepsArg}[1]{\nsteps^{#1}}
+\newcommand{\lspgWeighting}{\stweightingMatOne}
+\newcommand{\lspgWeightingArg}[1]{\stweightingMatOne}
+\newcommand{\lspgWeightingST}{\stweightingMatOne_{\text{ST}}}
+\newcommand{\lspgWeightingSTArg}[1]{\stweightingMatOne_{\text{ST}}}
+
+%%States
+\newcommand{\approxstate}{\tilde{\boldsymbol x}} 
+\newcommand{\approxstateDiscrete}{\tilde{\mathbf{x}}} 
+\newcommand{\approxstateDiscreteArg}[1]{\approxstateDiscrete^{#1}} 
+
+\newcommand{\approxstateLSPG}{\approxstateDiscrete_{\text{L}}} 
+\newcommand{\approxstateLR}{\approxstateDiscrete_{\text{lr}}} 
+\newcommand{\approxstateLRIntercept}{\approxstateDiscrete_{\text{lr}_{\text{intercept}}}} 
+
+\newcommand{\approxstateArg}[2]{\approxstate^{#1}(#2)} 
+\newcommand{\approxstateArgnt}[1]{\approxstate^{#1}} 
+
+\newcommand{\approxstatecolloc}{\overline{\state}}
+\newcommand{\approxstatecollocArg}[3]{\overline{\state}^{#1,#2}(#3)}
+\newcommand{\statecolloc}{\overline{\state}}
+\newcommand{\statecollocArg}[3]{\statecolloc^{#1,#2}(#3)}
+\newcommand{\genstateycolloc}{\overline{\statey}}
+\newcommand{\genstateycollocArg}[3]{\genstateycolloc^{#1,#2}(#3)}
+\newcommand{\genstateycollocArgnt}[2]{\genstateycolloc^{#1,#2}}
+\newcommand{\genstatecolloc}{\overline{\overline{\state}}}
+\newcommand{\genstatecollocArg}[3]{\genstatecolloc^{#1,#2}(#3)}
+\newcommand{\genstatecollocArgnt}[2]{\genstatecolloc^{#1,#2}}
+\newcommand{\stateMat}{\mathbf {x}}
+\newcommand{\stateMaty}{\mathbf{y}}
+\newcommand{\genstatecollocMat}{\overline{\stateMat}}
+\newcommand{\genstatecollocMaty}{\overline{\stateMaty}}
+\newcommand{\genstatecollocMatyArg}[1]{\overline{\stateMaty}^{#1}}
+\newcommand{\genCollocMat}{\hat{\stateMat}}
+\newcommand{\genCollocMatArg}[2]{\genCollocMat^{#1,#2}}
+\newcommand{\genCollocMaty}{\hat{\stateMaty}}
+\newcommand{\genCollocMatyArg}[2]{\genCollocMaty^{#1,#2}}
+
+\newcommand{\collocMatyArg}[2]{{\stateMaty}^{#1,#2}}
+
+\newcommand{\genstatecollocMatArg}[2]{\genstatecollocMat^{#1,#2}}
+
+
+%% SpaceTime
+\newcommand{\spaceTrialSpace}{\mathcal{V}}
+\newcommand{\timeTrialSpace}{\mathcal{Y}}
+\newcommand{\timeTrialSpaceDiscrete}{\mathcal{Y}_{\text{D}}}
+
+\newcommand{\timeTrialSpaceArg}[1]{\timeTrialSpace^{#1}}
+
+
+\newcommand{\genstatecollocMatSlab}{\hat{\overline{\overline{\stateMat}}}}
+\newcommand{\genstatecollocMatSlabArg}[1]{\genstatecollocMatSlab^{#1}}
+\newcommand{\genstatecollocMatySlab}{\hat{\overline{\overline{\stateMaty}}}}
+\newcommand{\genstatecollocMatySlabArg}[1]{\genstatecollocMatySlab^{#1}}
+
+\newcommand{\timeSpace}{\mathcal{T}}
+\newcommand{\onesFunction}{\mathcal{O}}
+\newcommand{\onesFunctionArg}[1]{\mathcal{O}^{#1}}
+
+\newcommand{\timeSpaceArg}[1]{\timeSpace^{#1}}
+
+\newcommand{\stateArg}[2]{\state^{#1}(#2)}
+
+\newcommand{\stateFOM}{{\state}}
+\newcommand{\stateFOMIC}{{\stateFOMDiscrete_0}}
+\newcommand{\approxstateDiscreteIC}{{\approxstateDiscrete_0}}
+
+\newcommand{\stateFOMArg}[2]{\stateFOM^{#1}(#2)}
+\newcommand{\stateFOMArgnt}[1]{\stateFOM^{#1}}
+
+\newcommand{\stateFOMDiscrete}{{\mathbf{x}}}
+\newcommand{\stateFOMDiscreteArg}[1]{\stateFOMDiscrete^{#1}}
+\newcommand{\stateFOMDiscreteParamArg}[2]{\stateFOMDiscrete(#2)^{#1}}
+
+\newcommand{\stateFOMDiscreteLMS}{{\mathbf{x}}}
+\newcommand{\stateFOMDiscreteLMSArg}[2]{\stateFOMDiscrete^{\indexMapper(#1,#2)}}
+
+\newcommand{\indexMapper}{\theta}
+\newcommand{\indexMappern}{\theta^*}
+
+\newcommand{\stateyArg}[2]{\statey^{#1}(#2)}
+\newcommand{\stateArgnt}[1]{\state^{#1}}
+\newcommand{\stgenstate}{\hat{\mathbf{\overline{x}}}}
+\newcommand{\stgenstateArg}[1]{\stgenstate^{#1}}
+\newcommand{\stgenstateStar}{\hat{\mathbf{\overline{x}}}_*}
+\newcommand{\stgenstateStarArg}[1]{\stgenstateStar^{#1}}
+
+\newcommand{\stgenstatey}{\hat{\mathbf{\overline{y}}}}
+\newcommand{\stgenstateyArg}[1]{\stgenstatey^{#1}}
+
+\newcommand{\stateyDiscrete}{\mathbf{y}}
+%\newcommand{\stateyDotDiscrete}{\mathbf{\dot{y}}}
+\newcommand{\stateyDotDiscrete}{\mathbf{{v}}}
+
+
+\newcommand{\statey}{\boldsymbol y}
+\newcommand{\stateIntercept}{\mathbf{x}_\text{ref}}
+\newcommand{\stateInterceptArg}[1]{\stateIntercept^{#1}}
+\newcommand{\stateInterceptST}{\mathbf{x}_\text{st}}
+\newcommand{\stateInterceptSTArg}[1]{\stateInterceptST^{#1}}
+
+\newcommand{\stateInterceptMat}{{\stateMat_*}^{n,i}}
+
+\newcommand{\genstatey}{\hat{\boldsymbol y}}
+\newcommand{\genstateyDiscrete}{\hat{\mathbf{y}}}
+
+\newcommand{\decoderColloc}{\decoder_c^{n,i}}
+\newcommand{\decoderCollocArg}[2]{\decoder_c^{#1,#2}}
+
+\newcommand{\residST}{\overline{\boldsymbol r}}
+\newcommand{\genresidST}{\hat{\overline{\boldsymbol r}}}
+\newcommand{\solveAlgo}{\underset{\text{solve}}{\leftarrow}}
+\newcommand{\residSlabArg}[1]{\overline{\boldsymbol r}^{#1}}
+\newcommand{\residLMSSlabArg}[1]{\overline{\overline{\boldsymbol r}}^{#1}_{\text{}}}
+%\newcommand{\spatialAcronym}{ST-SDR}
+%\newcommand{\spaceTimeAcronym}{ST-STDR}
+\newcommand{\spatialAcronym}{S-reduction}
+\newcommand{\spaceTimeAcronym}{ST-reduction}
+%\newcommand{\spatialAcronym}{SDR}
+%\newcommand{\spaceTimeAcronym}{STDR}
+\newcommand{\residArg}[1]{\resid^{#1}}
+\newcommand{\decoderDotColloc}{\dot{\decoder}_c}
+\newcommand{\residCollocArg}[1]{\resid_c^{#1}}
+\newcommand{\residLMSArg}[1]{\resid_{}^{#1}}
+\newcommand{\residLMSWArg}[2]{\resid_{}^{#1,#2}}
+
+\newcommand{\lmsSlabArg}[1]{g^{#1}}
+\newcommand{\lmsCollocArg}[1]{k^{#1}}
+\newcommand{\lmsWidthArg}[2]{k^{#1,#2}}
+\newcommand{\ntimeSteps}{N_t}
+\newcommand{\nslabs}{N_w}
+\newcommand{\RR}[1]{\mathbb{R}^{#1}}
+\newcommand{\RRStar}[2]{\mathbb{V}_{#1}(\RR{#2})}
+%velocity args
+\newcommand{\veloargsrom}{\basisspaceArg{} \genstateArg{}{t} + \stateInterceptArg{},t}
+\newcommand{\veloargsromn}{\basisspaceArg{n} \genstateArg{n}{t} + \stateInterceptArg{n},t}
+%\newcommand{\veloargsromnArg}[1]{\basisspaceArg{#1} \genstateArg{#1}{t} + \stateInterceptArg{#1},t}
+
+\newcommand{\veloargsromnt}{\basisspace \genstateArgnt{n} + \stateInterceptArg{n},t}
+\newcommand{\veloargsromntArg}[1]{\basisspace \genstateArgnt{n}_{#1} + \stateInterceptArg{n},t}
+\newcommand{\veloargsromArg}[1]{\basisspace \genstateArgnt{n}_{#1}(t) + \stateInterceptArg{n},t}
+
+\newcommand{\veloargs}{\stateArg{}{t}}
+
+%\newcommand{\timeStartArg}[1]{t_s(#1)}
+\newcommand{\timeStartArg}[1]{t_s^{#1}}
+%\newcommand{\timeEndArg}[1]{t_f(#1)}
+\newcommand{\timeEndArg}[1]{t_f^{#1}}
+\newcommand{\trialspace}{\mathcal{V } } 
+%\newcommand{\trialspaceArg}[1]{\trialspace^{#1}} 
+\newcommand{\trialspaceArg}[1]{\trialspace^{#1}} 
+
+\newcommand{\stspace}{\mathcal{ ST } } 
+\newcommand{\stspaceS}{\mathcal{ ST }_{\text{S}} } 
+\newcommand{\stspaceST}{\mathcal{ ST }_{\text{ST}} } 
+
+\newcommand{\stspaceDiscrete}{\mathcal{ ST }_{\text{D}} } 
+
+
+\newcommand{\stspaceBoundStartArg}[1]{\stspaceBoundStart^{#1}} 
+\newcommand{\stspaceBoundStart}{\mathcal{B}} 
+%\newcommand{\stspaceBoundEndArg}[1]{\stspaceBoundEnd^{#1}} 
+%\newcommand{\stspaceBoundEnd}{\mathcal{B}_{e}} 
+
+\newcommand{\stspaceBoundArg}[1]{\stspaceBound^{#1}} 
+\newcommand{\stspaceBound}{\mathcal{B}\timeSpace} 
+\newcommand{\stspaceArg}[1]{\stspace^{#1}} 
+\newcommand{\stspaceSTArg}[1]{\stspaceST^{#1}} 
+\newcommand{\stspaceSArg}[1]{\stspaceS^{#1}} 
+\newcommand{\stbasis}{\boldsymbol \Pi}
+\newcommand{\stbasisVec}{\boldsymbol \pi}
+\newcommand{\stbasisVecArg}[2]{\boldsymbol \pi^{#1}_{#2}}
+
+\newcommand{\stbasisArg}[2]{\stbasis^{#1}(#2)}
+\newcommand{\stbasisArgnt}[1]{\stbasis^{#1}}
+\newcommand{\stbasisDot}{\dot{\boldsymbol \Pi}}
+\newcommand{\stbasisDotArg}[2]{\stbasisDot^{#1}(#2)}
+\newcommand{\stbasisDotArgnt}[1]{\stbasisDot^{#1}}
+
+\newcommand{\genstateIC}{ \basisspaceTArg{}( \stateFOMIC - \stateInterceptArg{}) }
+\newcommand{\genstateICOne}{ [\basisspaceArg{1}]^T( \stateFOMIC -
+\stateInterceptArg{1}) }
+
+\newcommand{\elltwo}{\ell^2}
+%dimensions
+\newcommand{\romdim}{K}
+\newcommand{\romdimArg}[1]{K^{#1}}
+\newcommand{\fomdim}{N}
+
+%basis
+\newcommand{\basisspace}{\basismat}
+\newcommand{\basisspaceArg}[1]{\basismat^{#1}}
+\newcommand{\basisspaceTArg}[1]{[\basismat^{#1}]^T}
+
+\newcommand{\basismat}{\mathbf {V}}
+\newcommand{\basisvec}{\mathbf{v}}
+\newcommand{\basismatArg}[1]{\basismat^{#1}}
+\newcommand{\basisvecArg}[1]{\basisvec^{#1}}
+
+\newcommand{\minintegrand}{\mathcal{I}}
+\newcommand{\minintegrandColloc}{\mathcal{I}_c}
+
+\newcommand{\minintegrandMat}{\boldsymbol I}
+\newcommand{\minintegrandMatArg}[1]{\minintegrandMat^{#1}}
+
+%% Euler Lagrange
+\newcommand{\integrand}{\mathcal{I}}

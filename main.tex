@@ -1,0 +1,58 @@
+%\documentclass{article}
+\documentclass[3p,computermodern,10pt]{elsarticle}
+\input{packages}
+\input{commands}
+\begin{document}
+\begin{frontmatter}
+
+\title{Deep Bases: A practical deep learning approach for model reduction}
+%\title{The windowed least-squares framework for model reduction of dynamical systems}
+
+%\author[a]{Eric J. Parish and Kevin T. Carlberg}
+%\ead{ejparis@sandia.gov}
+\begin{abstract}
+\end{abstract}
+\end{frontmatter}
+
+
+%\maketitle
+\section{Introduction}
+We consider model reduction of the partial differential equation given by
+\begin{equation}\label{eq:fom}
+\PDEResid(\PDEState(\PDEStateArgs)) = \bz.
+\end{equation}
+\subsection{Semi-discrete form}
+We now discuss a form of Eq.~\eqref{eq:fom} in a semi-discrete form. To this end, we introduce a discretization of $\Omega$ into $N$ 
+Typically, in model reduction, we either work directly with the continuous form~\eqref{eq:fom}, a semi-discrete form of~\eqref{eq:fom} (obtained, for example, by discretizing in space), or a fully-discrete form of the system. We denote the semi-discrete system as 
+$$\frac{d \state}{dt} = \velocity(\state,t,\params),$$
+where $\state(t) \in \RR{\FomDim}$ is the disc
+and the fully discrete system as
+$$\DiscreteResid(\DiscreteState(\DiscreteStateArgs)) = \bz.$$ 
+
+\section{Deep learning surrogate for the state}
+In the offline phase, we model our state as
+$$\PDEState(\PDEStateArgs) \approx \ApproxPDEState(\ApproxPDEStateArgs),$$
+where $\ApproxPDEState$ is a deep learning network whose last layer is \textbf{linear} with no bias. Denoting this final layer as $\Basis$, we can write our approximation as
+$$\ApproxPDEState(\ApproxPDEStateArgs) = \Basis (\BasisArgs)\GenState \equiv \sum_{i=1}^{\NBasis} \BasisVec_i(\BasisArgs) \GenState_i.$$
+Given a space--time grid, we can define a space--time discrete basis vector as
+$$\BasisVecDiscrete_i(\BasisDiscreteArgs) = \begin{bmatrix} 
+\BasisVec_i(\x_1,t_1,\params;\weightsInner) & \cdots & \BasisVec_i(\x_{\NST},t_{\NST},\params;\weightsInner)
+\end{bmatrix}^T$$
+and a discrete space--time basis matrix as
+$$\BasisDiscrete(\BasisDiscreteArgs) = \begin{bmatrix} \BasisVecDiscrete_1(\BasisDiscreteArgs) & \cdots & \BasisVecDiscrete_{\NBasis}(\BasisDiscreteArgs) \end{bmatrix}.$$
+\section{Discrete formulation, and discrete space--time least-squares Petrov--Galerkin}
+We consider the discretization of the state at time instances $n=1,\ldots,\numTimeSteps$,
+$$\DiscreteSpaceTimeState = \begin{bmatrix} [\DiscreteState^1]^T & \cdots & [\DiscreteState^{\numTimeSteps}]^T \end{bmatrix}^T.$$
+Analogously, we define the space--time residual as
+$$\DiscreteSpaceTimeResid: \DiscreteSpaceTimeState \mapsto \DiscreteSpaceTimeResid(\DiscreteSpaceTimeState;\DiscreteSpaceTimeResidArgs).$$i
+\subsection{Space--time Galerkin}
+The space--time Galerkin method operates by restricting the state to the trial space, and enforces the residual to be orthogonal to the trial subspace,
+
+
+\section{Galerkin reduced-order model}
+The Galerkin ROM operates by restricting the state to be orthogonal to the trial space. At a continuous level, for a given parameter instance, we solve the following weak problem: find $\ApproxPDEState \in \TrialSpace$ such that
+$$\left( \BasisVec, \PDEResid\left(\ApproxPDEState\left(\PDEStateArgs\right)\right) \right) = \bz \qquad \forall \BasisVec \in \TrialSpace$$
+where $\TrialSpace \equiv \text{span}\{ \BasisVec_i\}_{i=1}^{\NBasis}$.
+
+\end{document}
+
