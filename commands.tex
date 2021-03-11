@@ -1,10 +1,18 @@
+\newcommand{\timeDummy}{\tau}
 \newcommand{\spatialAcronym}{SDR}
 \newcommand{\spaceTimeAcronym}{STDR}
+\newcommand{\parametricSpaceTimeAcronym}{PSTDR}
+\newcommand{\MLSubspaceNameLowercase}{deep subspaces}
+%\newcommand{\span}[1]{\text{span}{#1}}
+\newcommand{\PSTWeightingMatrix}{\boldsymbol W}
+\newcommand{\PSTInnerProduct}[2]{\left( #1, #2 \right)_{*}}
 \newcommand{\defeq}{\vcentcolon=}
 \newcommand{\RRStar}[2]{\mathbb{V}_{#1}(\RR{#2})}
 \newcommand{\Range}[1]{\text{Range}(#1)}
 \newcommand{\RomDim}{K}
 \newcommand{\NVars}{N_v}
+\newcommand{\ParametricSpace}{\mathcal{P}}
+\newcommand{\TimeDomain}{[0,T]}
 \newcommand{\paramDomain}{\mathcal{D}}
 \newcommand{\numParams}{N_{\mu}}
 \newcommand{\PhysicalDomain}{\Omega}
@@ -19,20 +27,30 @@
 \newcommand{\xs}{x}
 \newcommand{\ys}{y}
 \newcommand{\zs}{z}
-
+\newcommand{\NeuralNetwork}{\mathcal{NN}}
 \newcommand{\TimeSpace}{\mathcal{T}}
 \newcommand{\STDim}{K_{\text{st}}}
+\newcommand{\PSTDim}{K_{\text{pst}}}
+
 \newcommand{\SemiDiscreteSpaceTimeTrialSpace}{\mathcal{ST}}
+\newcommand{\SemiDiscreteParametricSpaceTimeTrialSpace}{\mathcal{PST}}
+
 \newcommand{\SemiDiscreteSpaceTimeBasisMat}{\boldsymbol \Pi}
 \newcommand{\OnesFunction}{\mathcal{O}}
+\newcommand{\SemiDiscreteParametricSpaceTimeBasisMat}{\boldsymbol \Phi}
+\newcommand{\SemiDiscreteParametricSpaceTimeBasisVec}{\boldsymbol \phi}
 
-
+\newcommand{\TrainingData}{\mathcal{S}}
+\newcommand{\NTrain}{N_{\text{train}}}
 \newcommand{\SemiDiscreteStateIC}{\SemiDiscreteState_0(\params)}
+\newcommand{\SemiDiscreteStateParametricSpaceTimeRef}{\SemiDiscreteState_{\text{ref}}}
 
 \newcommand{\RR}[1]{\mathbb{R}^{#1}}
 \newcommand{\FomDim}{N}
 \newcommand{\PDEState}{\mathsf{u}}
 \newcommand{\ApproxPDEState}{\tilde{\boldsymbol u}}
+\newcommand{\NNWeights}{\boldsymbol \theta}
+\newcommand{\NWeights}{N_{\NNWeights}}
 \newcommand{\weightsInner}{\boldsymbol \theta^*}
 \newcommand{\bz}{\boldsymbol 0}
 \newcommand{\params}{\boldsymbol \mu}
@@ -60,6 +78,10 @@
 
 \newcommand{\SemiDiscreteState}{\boldsymbol u}
 \newcommand{\SemiDiscreteStateArgs}{t,\params}
+\newcommand{\SemiDiscreteSpaceTimeGenState}{\overline{\hat{\SemiDiscreteState}}}
+\newcommand{\SemiDiscreteParametricSpaceTimeGenState}{\overline{\hat{\SemiDiscreteState}}}
+\newcommand{\SemiDiscreteParametricSpaceTimeGenStateNN}{\overline{\hat{\boldsymbol z}}}
+
 \newcommand{\DiscreteResid}{\mathbf{R}}
 \newcommand{\DiscreteState}{\mathbf{u}}
 \newcommand{\DiscreteStateArgs}{\params}
