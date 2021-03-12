@@ -1,0 +1,52 @@
+@article{LEE2020108973,
+title = {Model reduction of dynamical systems on nonlinear manifolds using deep convolutional autoencoders},
+journal = {Journal of Computational Physics},
+volume = {404},
+pages = {108973},
+year = {2020},
+issn = {0021-9991},
+doi = {https://doi.org/10.1016/j.jcp.2019.108973},
+url = {https://www.sciencedirect.com/science/article/pii/S0021999119306783},
+author = {Kookjin Lee and Kevin T. Carlberg},
+keywords = {Model reduction, Deep learning, Autoencoders, Machine learning, Nonlinear manifolds, Optimal projection},
+abstract = {Nearly all model-reduction techniques project the governing equations onto a linear subspace of the original state space. Such subspaces are typically computed using methods such as balanced truncation, rational interpolation, the reduced-basis method, and (balanced) proper orthogonal decomposition (POD). Unfortunately, restricting the state to evolve in a linear subspace imposes a fundamental limitation to the accuracy of the resulting reduced-order model (ROM). In particular, linear-subspace ROMs can be expected to produce low-dimensional models with high accuracy only if the problem admits a fast decaying Kolmogorov n-width (e.g., diffusion-dominated problems). Unfortunately, many problems of interest exhibit a slowly decaying Kolmogorov n-width (e.g., advection-dominated problems). To address this, we propose a novel framework for projecting dynamical systems onto nonlinear manifolds using minimum-residual formulations at the time-continuous and time-discrete levels; the former leads to manifold Galerkin projection, while the latter leads to manifold least-squares Petrov–Galerkin (LSPG) projection. We perform analyses that provide insight into the relationship between these proposed approaches and classical linear-subspace reduced-order models; we also derive a posteriori discrete-time error bounds for the proposed approaches. In addition, we propose a computationally practical approach for computing the nonlinear manifold, which is based on convolutional autoencoders from deep learning. Finally, we demonstrate the ability of the method to significantly outperform even the optimal linear-subspace ROM on benchmark advection-dominated problems, thereby demonstrating the method's ability to overcome the intrinsic n-width limitations of linear subspaces.}
+}
+
+@article{choi_stlspg,
+	Author = {Choi, Youngsoo. and Carlberg, Kevin.},
+	Doi = {10.1137/17M1120531},
+	Eprint = {https://doi.org/10.1137/17M1120531},
+	Journal = {SIAM Journal on Scientific Computing},
+	Number = {1},
+	Pages = {A26-A58},
+	Title = {Space--Time least-squares {Petrov--Galerkin} projection for nonlinear model reduction},
+	Url = {https://doi.org/10.1137/17M1120531},
+	Volume = {41},
+	Year = {2019},
+	Bdsk-Url-1 = {https://doi.org/10.1137/17M1120531}}
+
+@article{constantine_strom,
+	Author = {Paul G. Constantine and Qiqi Wang},
+	Date-Added = {2019-05-03 09:44:47 -0700},
+	Date-Modified = {2019-05-03 09:45:48 -0700},
+	Journal = {SIAM J. Sci. Comput.},
+	Title = {Residual Minimizing Model Interpolation for Parameterized Nonlinear Dynamical Systems},
+	Year = {2012}}
+
+@misc{deep_ensembles,
+      title={Simple and Scalable Predictive Uncertainty Estimation using Deep Ensembles}, 
+      author={Balaji Lakshminarayanan and Alexander Pritzel and Charles Blundell},
+      year={2017},
+      eprint={1612.01474},
+      archivePrefix={arXiv},
+      primaryClass={stat.ML}
+}
+
+@misc{kim2020fast,
+      title={A fast and accurate physics-informed neural network reduced order model with shallow masked autoencoder}, 
+      author={Youngkyu Kim and Youngsoo Choi and David Widemann and Tarek Zohdi},
+      year={2020},
+      eprint={2009.11990},
+      archivePrefix={arXiv},
+      primaryClass={math.NA}
+}
