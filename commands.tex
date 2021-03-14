@@ -1,3 +1,4 @@
+\newcommand{\TODO}[1]{{\color{red}{to do: #1}}}
 \newcommand{\timeDummy}{\tau}
 \newcommand{\spatialAcronym}{SDR}
 \newcommand{\spaceTimeAcronym}{STDR}
@@ -13,6 +14,7 @@
 \newcommand{\NVars}{N_v}
 \newcommand{\ParametricSpace}{\mathcal{P}}
 \newcommand{\TimeDomain}{[0,T]}
+\newcommand{\ParamDomain}{\mathcal{D}}
 \newcommand{\paramDomain}{\mathcal{D}}
 \newcommand{\numParams}{N_{\mu}}
 \newcommand{\SpatialDomain}{\Omega}
@@ -49,8 +51,15 @@
 \newcommand{\RRSym}[1]{\mathbb{R}_{\text{s}}^{#1}}
 \newcommand{\RR}[1]{\mathbb{R}^{#1}}
 \newcommand{\FomDim}{N}
+\newcommand{\ApproxPDEState}{\tilde{\PDEState}}
+
+\newcommand{\PDEStateSpatialTrialSpace}{\textit{X}}
+\newcommand{\SpatialTrialSpace}{\mathcal{X}}
+
 \newcommand{\PDEState}{\mathsf{u}}
-\newcommand{\ApproxPDEState}{\tilde{\boldsymbol u}}
+\newcommand{\PDEStateRef}{\mathsf{u}_{\text{ref}}}
+
+%\newcommand{\ApproxPDEState}{\tilde{\boldsymbol u}}
 \newcommand{\NNWeights}{\boldsymbol \theta}
 \newcommand{\NWeights}{N_{\NNWeights}}
 \newcommand{\weightsInner}{\boldsymbol \theta^*}
@@ -79,6 +88,19 @@
 \newcommand{\SemiDiscreteGenStateArgs}{\SemiDiscreteStateArgs}
 
 
+\newcommand{\FullyDiscreteStateDummy}{\mathbf{v}}
+
+\newcommand{\FullyDiscreteState}{\mathbf{u}}
+\newcommand{\FullyDiscreteStateArgs}{\params}
+
+\newcommand{\residLMS}{\boldsymbol{r}}
+
+\newcommand{\CollocationSet}{\mathcal{C}}
+\newcommand{\NCollocation}{N_c}
+\newcommand{\ResidualLoss}{\mathcal{L}_{r}}
+
+\newcommand{\SemiDiscreteStateDum}{\boldsymbol v}
+
 \newcommand{\SemiDiscreteState}{\boldsymbol u}
 \newcommand{\SemiDiscreteStateArgs}{t,\params}
 \newcommand{\SemiDiscreteSpaceTimeGenState}{\overline{\hat{\SemiDiscreteState}}}
@@ -92,3 +114,5 @@
 \newcommand{\DiscreteSpaceTimeState}{\overline{\DiscreteState}}
 \newcommand{\DiscreteSpaceTimeResid}{\overline{\DiscreteResid}}
 \newcommand{\DiscreteSpaceTimeResidArgs}{\params}
+
+\newcommand{\ContinuousResMin}{\mathcal{J}}

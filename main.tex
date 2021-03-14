@@ -5,7 +5,7 @@
 \begin{document}
 \begin{frontmatter}
 
-\title{Parametric space--time model reduction with deep bases: overcoming the Kolmogorov n-width by changing perspective}
+\title{Parametric space--time model reduction with deep bases: overcoming the Kolmogorov n-width by changing perspective (too lofty?!)}
 %\title{The windowed least-squares framework for model reduction of dynamical systems}
 
 %\author[a]{Eric J. Parish and Kevin T. Carlberg}
@@ -51,15 +51,17 @@ We consider model reduction of the partial differential equation given by
 \begin{equation}\label{eq:fom}
 \frac{\partial \PDEState}{\partial t}(\PDEStateArgs) = \PDEFlux(\PDEState(\cdot,t,\params),\PDEStateArgs), 
 \end{equation}
-where $\PDEState: \PDEStateDomain \rightarrow \PDEStateCodomain$ is the state, $\PDEFlux(\cdot,\cdot,\cdot,\cdot) \in \RR{\NVars}$ is the right hand side operator, $\params \in \paramDomain \subset \RR{\numParams}$  are system parameters, and $\x \in \RR{\SpatialDomain}$ are the spatial coordinates.
+where $\PDEState: \PDEStateDomain \rightarrow \PDEStateCodomain$ with $\PDEState(\cdot,t,\params) \in \PDEStateSpatialTrialSpace$ is the state, $\PDEStateSpatialTrialSpace$ is an appropriate function space for the PDE of interest (e.g., $H_1(\Omega)$), $\PDEFlux(\cdot,\cdot,\cdot,\cdot) \in \RR{\NVars}$ is the right hand side (differential) operator, $\params \in \paramDomain \subset \RR{\numParams}$  are system parameters, and $\x \in \SpatialDomain$ are the spatial coordinates.
 \subsection{Semi-discrete form}
 In model reduction, it is common to generate reduced-order models not for the continuous PDE~\eqref{eq:fom}, but rather for a semi-discrete form obtained after spatial discretization. To this end, we introduce a discretization of $\Omega$ into $\NSpace$ degrees of freedom characterized by the nodal points $\xd_i$, which in three-dimensions, for example, is given by the coordinates $\xd_i = (\xs_i,\ys_i,\zs_i)$. Spatial discrertization of the FOM PDE~\eqref{eq:fom} yields the semi-discrete system  
-$$\frac{d \SemiDiscreteState}{dt}(\SemiDiscreteStateArgs) = \velocity(\SemiDiscreteState(\SemiDiscreteStateArgs),t,\params),$$
+\begin{equation}\label{eq:fom_ode}
+\frac{d \SemiDiscreteState}{dt}(\SemiDiscreteStateArgs) = \velocity(\SemiDiscreteState(\SemiDiscreteStateArgs),t,\params),
+\end{equation}
 where $\SemiDiscreteState(t,\params) \in \RR{\FomDim}$ is the semi-discrete state-vector, $\FomDim = \NVars \NSpace$ is the total number of discrete degrees of freedom, and $\velocity: \RR{\FomDim} \times [0,T] \times \paramDomain \rightarrow \RR{\FomDim}$ is the velocity function.
 
  \subsection{Reduced-order models}
 Projection-based ROMs generate approximate solutions to the FOM
-	ODE~\eqref{eq:FOM} by approximating the state in a low-dimensional trial
+	PDE~\eqref{eq:fom} (or FOM ODE~\eqref{eq:fom_ode}) by approximating the state in a low-dimensional trial
 	subspace. Two types of space--time trial subspaces are commonly used for
 	this purpose:\footnote{For both spatial and space--time ROMs of dynamical systems, all trial subspaces are, strictly speaking, space--time subspaces.} 
 \begin{enumerate} 
@@ -74,16 +76,20 @@ model reduction approaches (e.g., space--time Galerkin~\cite{benner_st}, space--
 %	application to the Galerkin, LSPG, and space--time LSPG approaches. 
 
 \subsection{\spatialAcronym\ trial subspaces}
-At a given time instance 
+At a given spatial instance $\x \in \Omega$, time instance 
 $t\in[0,T]$ and parameter instance $\params \in \paramDomain$,
-\spatialAcronym\ trial subspaces approximate the FOM ODE solution
-	as $\ApproxSemiDiscreteState(\SemiDiscreteStateArgs)\approx\SemiDiscreteState(\SemiDiscreteStateArgs)$, which is enforced to reside in an
-	affine spatial trial subspace of dimension $K\ll\FomDim$ such that
-	$\ApproxSemiDiscreteState(\SemiDiscreteStateArgs) \in
-	\SemiDiscreteStateRef +\SemiDiscreteSpatialTrialSpace
-\subseteq\RR{\FomDim}$, where $\dim(\SemiDiscreteSpatialTrialSpace) = K$
-and $\SemiDiscreteStateRef \in \mathbb{R}^{\FomDim}$ denotes the reference state, which
-	is often taken to be the initial condition.
+\spatialAcronym\ trial subspaces approximate the FOM PDE solution
+as $\ApproxPDEState(\PDEStateArgs) \approx \PDEState(\PDEStateArgs)$ which is enforced to reside in an affine 
+trial subspace of dimension $K\ll \FomDim$ such that 
+$\ApproxPDEState(\cdot,t,\params) \in \SpatialTrialSpace + \PDEStateRef(\cdot,\params) \subset \PDEStateSpatialTrialSpace$, where $\dim{(\SpatialTrialSpace)} = K$ and 
+$\PDEStateRef(\cdot,\params) \in \PDEStateSpatialTrialSpace$ is a reference state, which is often taken to be the initial condition. 
+%	as $\ApproxSemiDiscreteState(\SemiDiscreteStateArgs)\approx\SemiDiscreteState(\SemiDiscreteStateArgs)$, which is enforced to reside in an
+%	affine spatial trial subspace of dimension $K\ll\FomDim$ such that
+%	$\ApproxSemiDiscreteState(\SemiDiscreteStateArgs) \in
+%	\SemiDiscreteStateRef +\SemiDiscreteSpatialTrialSpace
+%\subseteq\RR{\FomDim}$, where $\dim(\SemiDiscreteSpatialTrialSpace) = K$
+%and $\SemiDiscreteStateRef \in \mathbb{R}^{\FomDim}$ denotes the reference state, which
+%	is often taken to be the initial condition.
 Here, the trial subspace
 $\SemiDiscreteSpatialTrialSpace$ 
 is spanned by an orthogonal basis such that
@@ -179,7 +185,7 @@ time-dependent basis matrix.
 
 
 
-\section{Parametric space--time dimension reduction (PSTDR) subspaces}
+\section{Parametric space--time dimension reduction (PSTDR) reduced-order models}
 Both \spatialAcronym\ and \spaceTimeAcronym\ construct parameter-independent trial spaces. As a result, neither approach reduces the parametric dimension of the problem. Further, low-dimensional structures in an $x-t-\mu$ space may appear as high-dimensional structures in $x-t$ space, and thus both \spatialAcronym\ and \spaceTimeAcronym\ ROMs can be Kolmogorov $n$-width limited. To address these issues, we propose constructing parametric--space--time dimension reduction (\parametricSpaceTimeAcronym) subspaces. 
 
 With \parametricSpaceTimeAcronym, we propose to approximate the parametric FOM ODE trajectory $\SemiDiscreteState$, i.e., the FOM trajectory over all parameter instances, with an approximate parametric trajectory that lies within a low-dimensional affine parametric--space--time trial subspace of dimension $\PSTDim$, i.e., $\ApproxSemiDiscreteState \in \SemiDiscreteParametricSpaceTimeTrialSpace$ with $\dim(\SemiDiscreteParametricSpaceTimeTrialSpace) = \PSTDim$, where
@@ -199,8 +205,38 @@ Critically, comparing the approximations arising from \parametricSpaceTimeAcrony
 \spaceTimeAcronym\ trial subspaces in Eqs.~\eqref{eq:affine_trialspace} and \eqref{eq:stapprox1}, respectively,
 highlights that the \parametricSpaceTimeAcronym\ approximation associates with a basis matrix that depends on space, time, and parameters. 
 
+\subsection{Projection-based reduced-order models}
+We now highlight several model reduction formulations formulations that leverage \parametricSpaceTimeAcronym\ trial subspaces. In what follow, we construct ROMs for the semi-discrete FOM ODE~\eqref{eq:fom_ode}. We emphasize, however, that similar approaches can be employed for model reduction of the continuous PDE~\eqref{eq:fom}. 
 
-\subsection{Parametric--space--time Galerkin ROM}
+\begin{comment}
+\subsection{Time-discrete reduced-order models}
+We now describe time-discrete reduced-order models using linear multistep methods. To this end, we introduce a uniform time
+grid with time step $\Delta t$ and time instances
+$t^n = n\Delta
+t$, $n=0,\ldots,\numTimeSteps$. 
+Applying a linear multistep method to discretize the FOM ODE \eqref{eq:FOM}
+with this time grid
+yields the FOM O$\Delta$E, which computes the sequence of discrete
+solutions
+$\FullyDiscreteState^n(\FullyDiscreteStateArgs) \approx \SemiDiscreteState(t^n,\params)$, $n=1,\ldots,\numTimeSteps$
+as the implicit solution to the system of algebraic equations
+\begin{equation}\label{eq:lms}
+\residLMS^n
+	(\FullyDiscreteState^n(\FullyDiscreteStateArgs);,\FullyDiscreteState^{n-1}(\FullyDiscreteStateArgs),\ldots,\FullyDiscreteState^{n-k^n}(\FullyDiscreteStateArgs))
+	= \bz,\qquad n=1,\ldots,\numTimeSteps,
+\end{equation}
+with the initial condition $\FullyDiscreteState^0(\FullyDiscreteStateArgs) =\SemiDiscreteStateIC$. In the above, $k^n$ denotes the number of steps employed by the scheme at the $n$th
+time instance and 
+$\residLMS^n$ denotes the FOM O$\Delta$E residual at the $n$th time instance defined as
+\begin{align*}
+\residLMS^n &: (\FullyDiscreteStateDummy^n;\FullyDiscreteStateDummy^{n-1},\ldots,\FullyDiscreteStateDummy^{n-k^n},\paramsDummy) \mapsto  \frac{1}{\Delta t} \sum_{j=0}^{k^n} \alpha^n_j \FullyDiscreteStateDummy^{n-j} -  \sum_{j=0}^{k^n} \beta^n_j \velocity(\FullyDiscreteStateDummy^{n-j},t^{n-j},\params),
+\\
+&: \RR{\FomDim} \times \RR{k^n + 1} \times \paramDomain \rightarrow \RR{\FomDim}.
+\end{align*} 
+Here, $\alpha^n_j,\beta^n_j\in\RR{}$, $j=0,\ldots,k^n$ are coefficients
+that define the linear multistep method at the $n$th time instance.
+\end{comment}
+\subsubsection{Parametric--space--time Galerkin ROM}
 The Galerkin ROM for subspaces with \parametricSpaceTimeAcronym\ trial subspaces can be obtained making the substitution $\SemiDiscreteState \leftarrow \ApproxSemiDiscreteState$ and by enforcing orthogonality of the residual of the FOM ODE to the trial subspace. The weak form of the problem reads as follows: find $\ApproxSemiDiscreteState \in \SemiDiscreteParametricSpaceTimeTrialSpace$ such that, $\forall t \in \TimeDomain, \params \in \paramDomain$,
 $$\PSTInnerProduct{ \SemiDiscreteParametricSpaceTimeBasisVec(\SemiDiscreteStateArgs) }{ \frac{d \ApproxSemiDiscreteState}{dt}(\SemiDiscreteStateArgs) - \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params) } = \bz \qquad \forall \SemiDiscreteParametricSpaceTimeBasisVec \in  \SemiDiscreteParametricSpaceTimeTrialSpace ,$$
 where $\PSTInnerProduct{\cdot}{\cdot}$ is a (weighted) parametric--space--time inner product, 
@@ -211,15 +247,21 @@ $$\left( \frac{d\SemiDiscreteParametricSpaceTimeBasisVec}{dt}(\SemiDiscreteState
 Critically, we note that the PST Galerkin ROM reduces to a $\PSTDim$-dimensional algebraic systems of equations.  
 
 \subsection{Parametric--space--time least-squares ROM}
-In the case of \spatialAcronym\ trial subspaces, the Galerkin ROM is known to yield inaccurate results for non-symmetric and non-coercive systems. As a result, a variety of stabilized techniques have been developed, e.g., streamwise-upwind Petrov--Galerkin, least-squares Petrov--Galerkin. Here, we outline a least-squares formulation for \parametricSpaceTimeAcronym\ trial subspaces. 
+In the case of \spatialAcronym\ trial subspaces, the Galerkin ROM is known to yield inaccurate results for non-symmetric and non-coercive systems. As a result, a variety of stabilized techniques have been developed, e.g., streamwise-upwind Petrov--Galerkin, least-squares Petrov--Galerkin. Here, we outline both a least-squares formulation for \parametricSpaceTimeAcronym\ trial subspaces that is continuous in time and parameter space, as well as a collocation formulation that can be solved, e.g., via a discrete least-squares solver. 
 
-In a least-squares formulation, rather than working directly with the FOM ODE~\eqref{eq:fom}, we instead work with the normal equations,
-\begin{equation}\label{eq:FOM_normal}
- \bigg[\big[\frac{\partial \velocity}{\partial \boldsymbol y}(  \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params)  \big]^T  + \frac{d}{dt} \bigg] \bigg( \frac{d}{dt}\ApproxSemiDiscreteState(\SemiDiscreteStateArgs) -   \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params) \bigg) = \bz
-\end{equation} 
-with an initial boundary condition $\SemiDiscreteState(0,\params) = \SemiDiscreteStateIC$ and a terminal boundary condition $\SemiDiscreteState(T,\params) -   \velocity(\ApproxSemiDiscreteState(T,\params),T,\params) = \bz$. The normal equations have the advantage that they are symmetric, which can improve the stability properties of a ROM.
+\subsubsection{Continuous least-squares ROM}
+In a continuous residual-minimization ROMs, we seek to minimize the continuous residual minimization principle,
+$$\ContinuousResMin : \SemiDiscreteState \mapsto \int_{0}^T \int_{\paramDomain} \| \frac{d \SemiDiscreteState}{dt} - \velocity(\SemiDiscreteState,t,\params) \|_{\PSTWeightingMatrix(t,\params)}^2 d\params dt.$$
+An approximate solution is defined as one that minimizes this principle,\TODO{Add in weighting matrix} 
+$$\SemiDiscreteState = \underset{ \SemiDiscreteStateDum \in \SemiDiscreteParametricSpaceTimeTrialSpace}{\text{arg min}}\;\ContinuousResMin(\SemiDiscreteStateDum).$$
+The weak form given from this residual minimization principle is given as follows: find $\ApproxSemiDiscreteState \in \SemiDiscreteParametricSpaceTimeTrialSpace$ such that, $\forall t \in \TimeDomain, \params \in \paramDomain$,
+%  rather than working directly with the FOM ODE~\eqref{eq:fom}, we instead work with the normal equations,
+%\begin{equation}\label{eq:FOM_normal}
+% \bigg[\big[\frac{\partial \velocity}{\partial \boldsymbol y}(  \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params)  \big]^T  + \frac{d}{dt} \bigg] \bigg( \frac{d}{dt}\ApproxSemiDiscreteState(\SemiDiscreteStateArgs) -   \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params) \bigg) = \bz
+%\end{equation} 
+%with an initial boundary condition $\SemiDiscreteState(0,\params) = \SemiDiscreteStateIC$ and a terminal boundary condition $\SemiDiscreteState(T,\params) -   \velocity(\ApproxSemiDiscreteState(T,\params),T,\params) = \bz$. The normal equations have the advantage that they are symmetric, which can improve the stability properties of a ROM.
 
-A parametric--space--time least-squares ROM is obtained by by taking the inner product of~\eqref{eq:FOM_normal} w.r.p to the basis functions and integration by parts,
+\begin{comment}
  \begin{equation}\label{eq:ROM_normal1}
 \PSTInnerProduct{ \SemiDiscreteParametricSpaceTimeBasisVec}{ \bigg[\big[\frac{\partial \velocity}{\partial \boldsymbol y}(  \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params)  \big]^T  + \frac{d}{dt} \bigg] \bigg( \frac{d}{dt}\ApproxSemiDiscreteState(\SemiDiscreteStateArgs) -   \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params) \bigg)} = \bz
 \end{equation} 
@@ -234,24 +276,31 @@ A parametric--space--time least-squares ROM is obtained by by taking the inner p
  =  \\
 -  \SemiDiscreteParametricSpaceTimeBasisVec \left( \frac{d}{dt} \ApproxSemiDiscreteState(\SemiDiscreteStateArgs)   - \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params) \right)_0^T
 \end{multline} 
-
+\end{comment}
  \begin{multline}\label{eq:ROM_normal2}
 \PSTInnerProduct{ \SemiDiscreteParametricSpaceTimeBasisVec}{ \big[\frac{\partial \velocity}{\partial \boldsymbol y}(  \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params)  \big]^T  \left( \frac{d}{dt} \ApproxSemiDiscreteState(\SemiDiscreteStateArgs)  -   \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params) \right)} 
 + \PSTInnerProduct{\frac{d \SemiDiscreteParametricSpaceTimeBasisVec}{dt}}{   \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params)  } \\
 - \PSTInnerProduct{\frac{d^2 \SemiDiscreteParametricSpaceTimeBasisVec}{dt^2}}{  \ApproxSemiDiscreteState(\SemiDiscreteStateArgs)} 
  =  
--  \SemiDiscreteParametricSpaceTimeBasisVec \left( \frac{d}{dt} \ApproxSemiDiscreteState(\SemiDiscreteStateArgs)   - \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params) \right)_0^T - \frac{d \SemiDiscreteParametricSpaceTimeBasisVec}{dt}\ApproxSemiDiscreteState|_0^T
+-  \SemiDiscreteParametricSpaceTimeBasisVec \left( \frac{d}{dt} \ApproxSemiDiscreteState(\SemiDiscreteStateArgs)   - \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params) \right)_0^T - \frac{d \SemiDiscreteParametricSpaceTimeBasisVec}{dt}\ApproxSemiDiscreteState|_0^T \qquad \forall \SemiDiscreteParametricSpaceTimeBasisVec \in \SemiDiscreteParametricSpaceTimeTrialSpace
 \end{multline} 
 
+\subsubsection{Collocated minimum-residual ROMs}
+Collocation-based residual-minimization ROMs work with a discrete minimization principle, as opposed to the continuous one described in~\eqref{eq:}. Specifically, we discretize the parametric--space--time domain to obtain the set of collocation points, 
+$$\CollocationSet = \{ \x_i,t_i,\mu_i\}_{i=1}^{\NCollocation},$$
+where $\NCollocation \ge \PSTDim$ denotes the number of collocation points. These collocation points can be obtained via, e.g., tensor grids, sparse tensor grids, random sampling. With these collocation points, we can define the residual minimization principle 
+$$\mathbf{J} = \sum_{i=1}^{\NCollocation} \ResidualLoss\left( \dot{\SemiDiscreteParametricSpaceTimeBasisMat}(\x_i,t_i,\params_i)\SemiDiscreteParametricSpaceTimeGenState - \velocity( \SemiDiscreteParametricSpaceTimeBasisMat(\x_i,t_i,\params_i) \SemiDiscreteParametricSpaceTimeGenState ,t_i,\params_i) \right),$$
+where $\ResidualLoss : \RR{} \rightarrow \RR{+}$ is, e.g., an $\ell^2$ loss function. 
 
 \section{Construction of \parametricSpaceTimeAcronym\ trial subspaces via deep learning}
+We now outline a mesh-free deep-learning-based strategy for constructing of the \parametricSpaceTimeAcronym\ trial subspaces. We note that other approaches exist for computing these subspaces, e.g., tensor-product bases~\cite{choi_stlspg}, piecewise-constant subspaces via local bases~\cite{}, vector-basis splitting on the space--time--parametric solution snapshot~\cite{carlberg_hadaptation,ETTER2020112931}. Here, we pursue a deep-learning-based approach due to the expressiveness and flexibility of the resulting subspace.
 \subsection{Training data}
 As is customary in the traditional offline-online paradigm, we assume access to an \textit{a priori} set of \textit{training data} comprising solution snapshots of the full-order model at various spatial, temporal, and parametric instances,
 $$\TrainingData = \{\SemiDiscreteState(\x_i,t_i,\params_i) \}_{i=1}^{\NTrain}.$$ 
-In the offline stage, this training data is used to identify a low-dimensional subspace capable of representing the majority of the variance of the training data, for example, via POD. 
-In the present context, unfortunately, POD cannot be directly applied as, when viewed from the parametric--space--time perspective, the training data comprises only a single training instance, and thus only a single basis vector can be extracted. While this basis vector yields perfect reconstruction error on the training data, it may be inaccurate for prediction at new data points. Alternative approaches that could be used to construct informative parametric--space--time subspaces includes the construction of parametric-piecewise-constant subspaces, and tensor decompositions. 
+In the offline stage, this training data is used to identify a low-dimensional subspace capable of representing the majority of the variance of the training data. Typically, this is achieved, e.g., via POD, the reduced basis method. 
+In the present context, unfortunately, these methods cannot be directly applied as, when viewed from the parametric--space--time perspective, the training data comprises only a single training instance, and thus only a single basis vector can be extracted. While this basis vector yields perfect reconstruction error on the training data, it may be inaccurate for prediction at new data points. Potential approaches to address this issue could include tensor-product bases, h-adaptation, and parametric-piecewise-constant subspaces via local bases. 
 
-Alternatively, here we propose to employ deep learning to obtain the low-dimensional space--time--parametric trial subspace. Specifically, we take advantage of the fact that MLP (and residual) networks with a linear final layer learn a Banach space in training. We will refer to these associated subspaces as \textit{deep subspaces}, and now describe their construction. 
+Here we propose a deep-learning-based approach to obtain the low-dimensional space--time--parametric trial subspace. Specifically, we take advantage of the fact that MLP (and residual) networks with a linear final layer learn a Banach space in training. We will refer to these associated subspaces as \textit{deep subspaces}, and now describe their construction. 
 \subsection{Deep subspaces}
 In the proposed \MLSubspaceNameLowercase, we aim to construct data-driven subspaces at the continuous parametric--space--time--level. The parametric--space--time trial subspace is then given as
 $$\SemiDiscreteParametricSpaceTimeTrialSpace \equiv \text{span}\{\SemiDiscreteParametricSpaceTimeBasisVec_i(\x)\}_{i=1}^{\PSTDim},$$
@@ -307,12 +356,74 @@ We first consider the benchmark problem of the parameterized Burgers' equation. 
 for $x \in [0,100]$, $t \in [0,30]$, with $\params_1 \sim U[4,6]$, $\params_2 \sim U[0.01,0.04]$.
 The problem is characterized by a parameterized discontinuity moving left to the right through the domain. Our semi-discrete discretization of~\eqref{eq:burgers_pde} comprises a first-order finite volume discretization with $\NSpace=256$ degrees of freedom. The first-order upwind flux is used at the cell interfaces, and the second-order Crank-Nicolson scheme with a time step of $\Delta t = 0.07$ is employed for time stepping.
 
-\subsubsection{Training data and construction of deep bases} 
-We execute solves of the full-order model for the Cartesian parameter grid $\mu_1 \times \mu_2 = \{ 4.25 + 0.3125 i \}_{i=0}^4 \times \{ 0.015 + 0.05 j \}_{j=0}^3$. We collect snapshots of the FOM every $10$ time steps, resulting in a total of 50 temporal snapshots. In total the dataset comprises $256 \times 5 \times 4 \times 50 = 256,000$ data points. 
+\subsubsection{Training and testing data}
+We now describe the training and testing data used in the following experiments. For training data, we execute solves of the full-order model for the Cartesian parameter grid $\mu_1 \times \mu_2 = \{ 4.25 + 0.3125 i \}_{i=0}^4 \times \{ 0.015 + 0.05 j \}_{j=0}^3$. We collect snapshots of the FOM every $10$ time steps for $t \in [0,15]$, resulting in a total of 50 temporal snapshots. In total the dataset comprises $256 \times 5 \times 4 \times 50 = 256,000$ data points.
 
-To construct our bases, we nominally employ a deep MLP characterized by 6 layers with widths $\{l_1,\cdots,\l_6\} = \{8,16,32,64,128,8\}$, thus the total number of bases vectors employed is $\PSTDim = 8$. A parametric study of different networks is provided later. For training, we employ the Adam algorithm to minimize the MSE over the training data. We employ a learning rate schedule of $\text{lr} = \{5e-4,2e-4,1e-4,5e-5,2e-5,1e-5 \}$, where we switch rates after $1000,2000,5000,10000,$ and $15000$ epochs, respectively. 
+We consider two datasets for testing: one dataset that \textit{interpolates} between the training data, and one dataset that involves \textit{extrapolating} beyond the training data. For this first dataset, we execute solves of the full-order model for the Cartesian parameter grid $\mu_1 \times \mu_2 = \{4.40625 + 0.3125 i \}_{i=0}^3 \times \{ 0.0175 + 0.05 j \}_{j=0}^2$ with a time step of $\Delta t = 0.07$ for $t \in [0,15]$. For the second dataset, we execute solves of the full-order model for the Cartesian parameter grid $\mu_1 \times \mu_2 = \{4.0 + \frac{2}{7} i \}_{i=0}^7 \times \{ 0.01 + \frac{0.03 j}{7} \}_{j=0}^7$ with a time step of $\Delta t = 0.07$ for $t \in [0,30]$. 
 
-We assess two different ROM formulations in what follows. First, we present results for an ensemble of 5 ROMs, where each ROM employs a separate trial subspace obtained by the training procedure presented above. We present ensemble results to (1) fairly assess the methodology as training is stochastic and (2) demonstrate how ensembles can be employed for empirical error detection, as discussed above. In the second formulation, we present ROMs obtained with subspace enrichment. In this process, we train one trial subspace via the procedure presented above, and then train an additional 10 trial subspaces via for 1000 epochs with a learning rate schedule of $\text{lr} = \{5e-3,1e-3,5e-4,1e-4\}$ with switch points after 500, 750, and 900 epochs, respectively.  
+%To construct our bases, we nominally employ a deep MLP characterized by 6 layers with widths $\{l_1,\cdots,\l_6\} = \{8,16,32,64,128,8\}$, thus the total number of bases vectors employed is $\PSTDim = 8$. A parametric study of different networks is provided later. For training, we employ the Adam algorithm to minimize the MSE over the training data. We employ a learning rate schedule of $\text{lr} = \{5e-4,2e-4,1e-4,5e-5,2e-5,1e-5 \}$, where we switch rates after $1000,2000,5000,10000,$ and $15000$ epochs, respectively. 
+
+%We assess two different ROM formulations in what follows. First, we present results for an ensemble of 5 ROMs, where each ROM employs a separate trial subspace obtained by the training procedure presented above. We present ensemble results to (1) fairly assess the methodology as training is stochastic and (2) demonstrate how ensembles can be employed for empirical error detection, as discussed above. In the second formulation, we present ROMs obtained with subspace enrichment. In this process, we train one trial subspace via the procedure presented above, and then train an additional 10 trial subspaces via for 1000 epochs with a learning rate schedule of $\text{lr} = \{5e-3,1e-3,5e-4,1e-4\}$ with switch points after 500, 750, and 900 epochs, respectively.  
+
+\subsection{Results: A priori projection errors, convergence with basis dimension, and the generalizability gap}
+We first assess the impact of the network complexity and dimension of the trial space on the impact of training, convergence, and generalizability. We train .. deep neural networks with the architecture described in ..., with $\text{depth} = \{1,2,3,4,5\}$, and $\PSTDim = \{5,10,15,20,25\}$. We train each network for 10,000 epochs with learning rates of $5e-3,1e-4,5e-4,2e-4,5e-5$ with switching points of $1000,3000,7000,9000$. We assess the following metrics:
+\begin{enumerate}
+\item Mean-squared-error for on the training set: This metric indicates how well our trial space is capable of representing the training data. We expect that, as the expressiveness of the network increases, this error can be driven to zero.
+
+\item Mean-squared-error between the test data and their $\ell^2$ projection onto the trial subspace: This metric indicates how well our trial subspace can generalize to new data, and provides an upper bound on how accurate the ROM can be.
+
+\item Relative error between optimal projection of the test data, and the ML prediction: Constructing the deep subspaces involves optimizing for a set of generalized coordinates, and this model can be directly used to make predictions at new data points. This metric provides an indicator on how much a ROM can improve upon the ML prediction.
+
+\item The generalizability gap: This final metric is defined as the relative error between the optimal projection of the training set and that of the testing set. This metric provides an indicator for how well the deep subspaces can represent the test data, with respect to how well they represented the training data.  
+\end{enumerate}
+
+\begin{figure}
+\begin{center}
+\begin{subfigure}[t]{0.49\textwidth}
+\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/MSE_training.pdf}
+\caption{Least-squares ROM relative error}
+\end{subfigure}
+\begin{subfigure}[t]{0.49\textwidth}
+\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/MSE_training.pdf}
+\caption{$\ell^1$ ROM relative error}
+\end{subfigure}
+\begin{subfigure}[t]{0.49\textwidth}
+\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/MSE_testing.pdf}
+\caption{Least-squares ROM relative error}
+\end{subfigure}
+\begin{subfigure}[t]{0.49\textwidth}
+\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/MSE_testing_ML.pdf}
+\caption{$\ell^1$ ROM relative error}
+\end{subfigure}
+\label{fig:burg_training_results}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\begin{subfigure}[t]{0.49\textwidth}
+\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/gen_gap.pdf}
+\caption{Least-squares ROM relative error}
+\end{subfigure}
+\begin{subfigure}[t]{0.49\textwidth}
+\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/gen_gap_ML.pdf}
+\caption{$\ell^1$ ROM relative error}
+\end{subfigure}
+\label{fig:burg_training_results}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\begin{subfigure}[t]{0.49\textwidth}
+\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/rel_improvement.pdf}
+\caption{Least-squares ROM relative error}
+\end{subfigure}
+\label{fig:burg_training_results}
+\end{center}
+\end{figure}
+
+
 
 \subsection{Results: Extrapolation in parameter space and time}
 We now present results for the framework with both extrapolation in parameter space and in time. We execute reduced-order models on the $8x8$ Cartesian parameter grid  $\mu_1 \times \mu_2 = \{ 4. 0+  \frac{2i}{7} \}_{i=0}^7 \times \{ 0.01 + \frac{j}{70} \}_{j=0}^7$ for $t \in [0,30]$, which comprises extrapolation in both the parameter and temporal dimension. Table~\ref{tab:burg_results} tabulates the mean error and standard deviation for the various ROM methods, where the error and standard deviation are computed from the 5 MLPs. Similarly, Figure~\ref{fig:burg_phys_space} depicts ensembles of physical space solutions for the various ROMs. We observe that all methods are accurate, particularly in the interpolation regime. We observe that, on average, the $\ell^1$ res-min ROM yields the most accurate solutions, followed by the ML and least-squares ROMs. The Galerkin method was only stable for 3 of 5 runs; when stable, Galerkin yields reasonable results, but not as accurate as the other approaches.
