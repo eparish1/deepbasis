@@ -377,39 +377,43 @@ We first assess the impact of the network complexity and dimension of the trial 
 \item The generalizability gap: This final metric is defined as the relative error between the optimal projection of the training set and that of the testing set. This metric provides an indicator for how well the deep subspaces can represent the test data, with respect to how well they represented the training data.  
 \end{enumerate}
 
+Figure~\ref{fig:burg_training_test_projection_mse} depicts the ML-ROM error and the $\ell^2$-orthogonal projection error for the training and testing datasets. We observe that both methods yield similar results that associate with low MSEs for the training set, implying that the ML ROM predicts generalized coordinates that nearly minimize the mean-squared error. We observe that increasing the network depth tends to lower MSE, but increasing the number of basis functions does not tend to decrease the MSE; see Remark~\cite{}. Next, we observe both methods to associate with higher MSEs for the testing dataset. Importantly, we observe that the error associated with $\ell^2$-orthogonal projection onto the trial subspace is lower than the error associated with the ML ROM. We also note that increasing the depth of the network tends to slightly decrease the MSE in the case of $\ell^2$-orthogonal projection, but not as significantly as observed for the training data; we do not observe that increasing the depth of the network improves ML-ROM error. Next, we observe that increasing the basis dimension yields lower MSE in the case of $\ell^2$ orthogonal projection, see Remark~\cite{}. We do not observe that growing the basis dimension yields lower MSEs for the ML-ROM.    
 \begin{figure}
 \begin{center}
 \begin{subfigure}[t]{0.49\textwidth}
 \includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/MSE_training.pdf}
-\caption{Least-squares ROM relative error}
+\caption{$\ell^2$-orthogonal projection (training data)}
 \end{subfigure}
 \begin{subfigure}[t]{0.49\textwidth}
 \includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/MSE_training.pdf}
-\caption{$\ell^1$ ROM relative error}
+\caption{ML-ROM (training data)}
 \end{subfigure}
 \begin{subfigure}[t]{0.49\textwidth}
 \includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/MSE_testing.pdf}
-\caption{Least-squares ROM relative error}
+\caption{$\ell^2$-orthogonal projection (testing data)}
 \end{subfigure}
 \begin{subfigure}[t]{0.49\textwidth}
 \includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/MSE_testing_ML.pdf}
-\caption{$\ell^1$ ROM relative error}
+\caption{ML-ROM (testing data)}
 \end{subfigure}
-\label{fig:burg_training_results}
+\caption{Mean-squared-errors associated with $\ell^2$-orthogonal projection (left) and the ML-ROM (right) for the training data (top) and testing data (bottom).}
+\label{fig:burg_training_test_projection_mse}
 \end{center}
 \end{figure}
 
+Figure~\ref{fig:burg_gen_gap} depicts the generalization gap associated with $\ell^2$-orthogonal projection and the ML-ROM. We observe that, in general, the generalization error grows as the depth is increased for both $\ell^2$-orthogonal projection and the ML-ROM. Growing the basis dimension has a small impact on the generalization error. We additionally observe that the generalization error associated with $\ell^2$-orthogonal projection is lower than the ML-ROM. 
 \begin{figure}
 \begin{center}
 \begin{subfigure}[t]{0.49\textwidth}
 \includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/gen_gap.pdf}
-\caption{Least-squares ROM relative error}
+\caption{$\ell^2$-orthogonal projection}
 \end{subfigure}
 \begin{subfigure}[t]{0.49\textwidth}
 \includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/gen_gap_ML.pdf}
-\caption{$\ell^1$ ROM relative error}
+\caption{ML-ROM}
 \end{subfigure}
-\label{fig:burg_training_results}
+\caption{Generalization error for $\ell^2$ orthogonal projection (left) and the ML-ROM (right).}
+\label{fig:burg_gen_gap}
 \end{center}
 \end{figure}
 
