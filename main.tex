@@ -23,11 +23,12 @@ A wide variety of techniques exist for computing low-cost approximate solutions,
 
 Projection-based reduced-order modeling technologies are mature for both linear and nonlinear systems. Techniques have been developed that, e.g., yield space--time optimality~\cite{choi_stlspg,constantine_strom,yuki_stlspg,parish_wls,townePOD}, preserve physical structure (e.g., conservation), adapt the trial subspace, account for observability, controlability, and $\mathcal{H}^2$ optimality, address the closure problem. This rich body of work has enabled the construction of accurate and efficient ROMs for a wide class of physical systems. One class of systems that remain challenging for ROMs, however, are those whose solutions exhibit a slowly decaying \textit{Kolmogorov n-width}; the Kolmogorov $n$-width provides a metric for quantifying the optimal linear subspace. As ROMs traditionally restrict the state to belong to a \textit{linear} trial subspace, they are known to perform poorly for this class of problems. Approaches that have been proposed to address this issue include transporting and morphing the trial-subspace or space--time mesh, developing local subspaces that are tailored to a particular region of a space--time--parameter domain, adapting and/or refining the basis, and employing a \textit{nonlinear} trial manifold~\cite{LeeCarlberg,kim2020fast}. This latter approach is, at the time of this writing, of particular interest. These manifold approaches operate by restricting the state to live on a low-dimensional (nonlinear) \textit{manifold} (identified, for example, through deep convolutional autoencoders~\cite{LeeCarlberg}). By employing a nonlinear manifold, these approaches are able to overcome the fundamental barrier posed by the Kolmogorov $n$-width. Numerical experiments have demonstrated that, for a given latent dimension, a manifold-based approximation can yield far more accurate solutions than a linear subspace for transport problems. While promising, nonlinear manifold ROMs face several significant challenges, including offline training cost, online model execution cost, generalization, and scalability. 
 
-It is well known that nonlinear phenomena can become linear in higher-dimensional spaces; this is the thesis, for example, behind support vector machines and kernel principal component analysis. Constructing subspaces for projection-based reduced-order models is no different. In all the approaches mentioned above, save for Refs.~\cite{} depending on ones interpretation, parameter-independent trial subspaces/manifolds are constructed for parameterized systems; e.g., one trial subspace/manifold is constructed for the system of interest, and this subspace/manifold is held constant across the entire parameter domain. While this perspective is justified for certain classes of systems, e.g., fluid flow with recurrent coherent structures appearing in similar spatial locations, it falls short for a wide variety of problems, e.g., fluid flow with parameterized shocks and advecting fronts.  Indeed, it is from this parametric-constant perspective that a slowly decaying Kolmogorov n-width is observed for this latter class of problems, and nonlinear dimension reduction techniques are praised as the solution.
+It is well known that nonlinear phenomena can become linear in higher-dimensional spaces; this is the thesis, for example, behind support vector machines and kernel principal component analysis. Constructing subspaces for projection-based reduced-order models is no different. In all the approaches mentioned above, save for Refs.~\cite{}, parameter-independent trial subspaces/manifolds are constructed for parameterized systems; e.g., one trial subspace/manifold is constructed for the system of interest, and this subspace/manifold is held constant across the entire parameter domain. While this perspective is justified for certain classes of systems, e.g., fluid flow with recurrent coherent structures appearing in similar spatial locations, it is non-intuitive for a wide variety of problems, e.g., fluid flow with parameterized shocks and advecting fronts.  Indeed, it is from this parametric-constant perspective that a slowly decaying Kolmogorov n-width is observed for this latter class of problems, and nonlinear dimension reduction techniques are proposed as the solution.
 
-In this work, we propose that the Kolmogorov n-width limitation can be overcome by a change in perspective. Specifically, we propose a ROM framework in where the solution to a parameterized dynamical system is restricted to belong to a low-dimensional \textit{parametric--space--time} trial subspace, and a ROM is constructed via, e.g., Galerkin projection.  One solution to this reduced-order model then yields the system response to the entire parametric--space--time domain. To construct these trial subspaces, we employ the same snapshot data used in traditional POD/RB-based methods. By adapting this higher-dimensional perspective, we show that accurate solutions can be obtained with relatively few basis vectors for problems that are traditionally characterized as being difficult due to the Kolmogorov n-width. 
+In this work, we propose that the Kolmogorov $n$-width limitation can be overcome by a change in perspective. Specifically, we propose a ROM framework in where the solution to a parameterized dynamical system is restricted to belong to a low-dimensional \textit{parametric--space--time} trial subspace, and a ROM is constructed via, e.g., Galerkin projection.  One solution to this reduced-order model then yields the system response over the entire parametric--space--time domain. To construct these trial subspaces, we employ the same snapshot data used in traditional POD/RB-based methods. By adapting this higher-dimensional perspective, we show that accurate solutions can be obtained with relatively few basis vectors for problems that are traditionally characterized as being difficult due to the Kolmogorov $n$-width. 
 
-The first ingredient in our proposed methodology is the construction of a parametric--space--time trial subspace. To the best of the authors' knowledge, the only explored techniques to construct this trial subspace are Refs.~\cite{}, where local spatial subspaces are stitched together to build a monolithic subspace that is piecewise-constant in the parametric-domain. In the online phase, the solution is restricted to a particular local subspace according to the subregion of the solution space where the high-dimensional solution lives. An additional challenge in constructing a parametric--space--time trial subspace is the curse of dimensionality. For instance, a transient system with one spatial dimension and two parameters requires discretization of a four-dimensional domain; this process can become infeasible for systems with a large dimensional set of parameters.   
+The first ingredient in our proposed methodology is the construction of a parametric--space--time trial subspace. To the best of the authors' knowledge, the only explored techniques to construct such trial subspace are Refs.~\cite{}, where local spatial subspaces are stitched together to build a monolithic subspace that is piecewise-constant in the parametric-domain. In the online phase, the solution is restricted to a particular local subspace according to the sub-region of the solution space where the high-dimensional solution lives, and a ROM is derived, e.g., via least-squares residual minimization. While this approach enables parametric-dependent subspaces, it is restricted in that (1) only piecewise-constant subspaces are considered, (2) identifying, \textit{a priori}, the number of local reduced-bases is computationally expensive, and (3) only spatial projection processes are considered, and thus the parametric dimension of the problem is not reduced. 
+%An additional challenge in constructing a parametric--space--time trial subspace is the curse of dimensionality. For instance, a transient system with one spatial dimension and two parameters requires discretization of a four-dimensional domain; this process can become infeasible for systems with a large dimensional set of parameters.   
 
 In this work, we propose a deep-learning-based mesh-free method for constructing parametric--space--time trial subspaces. In this approach, we employ deep feed forward neural networks to directly learn trial subspaces from snapshot data. This is achieved by constructing a network whose inputs comprise a parametric--space--time coordinate, and whose response is a set of basis functions evaluated at the input coordinate; a linear combination of these basis functions via the \textit{generalized coordinates} can then be used to approximate the solution over the entire parametric--space--time domain. We train this network by minimizing, e.g., the mean-squared-error between the snapshot data and the snapshot data projected onto the trial subspace; this minimization process involves jointly optimizing the network weights along with the generalized coordinates.
 
@@ -46,13 +47,14 @@ The second ingredient in our approach is a parametric--space--time projection pr
 \item Final layer is a basis
 \end{itemize}
 \end{enumerate}  
-\section{Mathematical setting}
+\section{Mathematical setting and trial subspaces}
 We consider model reduction of the partial differential equation given by
 \begin{equation}\label{eq:fom}
 \frac{\partial \PDEState}{\partial t}(\PDEStateArgs) = \PDEFlux(\PDEState(\cdot,t,\params),\PDEStateArgs), 
 \end{equation}
 where $\PDEState: \PDEStateDomain \rightarrow \PDEStateCodomain$ with $\PDEState(\cdot,t,\params) \in \PDEStateSpatialTrialSpace$ is the state, $\PDEStateSpatialTrialSpace$ is an appropriate function space for the PDE of interest (e.g., $H_1(\Omega)$), $\PDEFlux(\cdot,\cdot,\cdot,\cdot) \in \RR{\NVars}$ is the right hand side (differential) operator, $\params \in \paramDomain \subset \RR{\numParams}$  are system parameters, and $\x \in \SpatialDomain$ are the spatial coordinates.
 
+\begin{comment}
 In model reduction, it is common to generate reduced-order models not for the continuous PDE~\eqref{eq:fom}, but rather for a semi-discrete form obtained after spatial discretization. To this end, we introduce a discretization of $\Omega$ into $\NSpace$ degrees of freedom characterized by the nodal points $\xd_i$, which in three-dimensions, for example, is given by the coordinates $\xd_i = (\xs_i,\ys_i,\zs_i)$. Spatial discrertization of the FOM PDE~\eqref{eq:fom} yields the semi-discrete system  
 \begin{equation}\label{eq:fom_ode}
 \frac{d \SemiDiscreteState}{dt}(\SemiDiscreteStateArgs) = \velocity(\SemiDiscreteState(\SemiDiscreteStateArgs),t,\params),
@@ -85,13 +87,13 @@ $\residLMS^n$ denotes the FOM O$\Delta$E residual at the $n$th time instance def
 \end{align*} 
 Here, $\alpha^n_j,\beta^n_j\in\RR{}$, $j=0,\ldots,k^n$ are coefficients
 that define the linear multistep method at the $n$th time instance.
+\end{comment}
 
-
- \subsection{Reduced-order models}
+ \subsection{Trial subspaces}
 Projection-based ROMs generate approximate solutions to the FOM
  by approximating the state in a low-dimensional trial
-	subspace. Two types of space--time trial subspaces are commonly used for
-	this purpose:\footnote{For both spatial and space--time ROMs of dynamical systems, all trial subspaces are, strictly speaking, space--time subspaces.} 
+	subspace. Following the description in Ref.~\cite{parish_wls}, two types of trial subspaces are commonly used for
+	this purpose:
 \begin{enumerate} 
 	\item \textit{Subspaces that reduce only the spatial dimension of the full-order
 		model (\spatialAcronym)}. These trial subspaces are characterized by a spatial projection operator, associate with a basis that represents the spatial dependence of the state, and are employed in classic model reduction approaches, e.g., Galerkin and LSPG. %These 
@@ -122,10 +124,10 @@ The trial subspace
 $\SpatialTrialSpace$ 
 is spanned by a basis such that
 $ \SpatialTrialSpace= \text{Span}\{\SpatialBasisVec_i\}_{i=1}^{\RomDim}$.
-The basis vectors $\SpatialBasisVec_i$, $i=1,\ldots,K$ are typically constructed
+The basis vectors $\SpatialBasisVec_i: \x \mapsto \SpatialBasisVec_i(\x)$, $i=1,\ldots,K$ are typically constructed
 using state snapshots, e.g., via
 proper orthogonal decomposition (POD)~\cite{berkooz_turbulence_pod}, the reduced-basis method~\cite{rb_1,rb_2,rb_3,NgocCuong2005,Rozza2008}. 
-Thus, at any time instance $t\in[0,T]$ and parameter instance $\params \in \paramDomain$, ROMs that employ the  \spatialAcronym\
+Thus, ROMs that employ the  \spatialAcronym\
 trial subspace approximate the FOM PDE solution as
 \begin{equation}\label{eq:affine_trialspace}
 \PDEState(\PDEStateArgs)  \approx \ApproxPDEState(\PDEStateArgs) = \sum_{i=1}^{\RomDim} \SpatialBasisVec_i(\x) \GenState_i(\SemiDiscreteGenStateArgs) + \PDEStateRef(\x,t,\params),
@@ -133,7 +135,7 @@ trial subspace approximate the FOM PDE solution as
 where $\GenState(\SemiDiscreteGenStateArgs) \in \RR{\RomDim}$ denotes the generalized
 coordinates. Critically, we note that the generalized coordinates in~\eqref{eq:affine_trialspace} depend on both time and parameters.
 
-Given the trial subspace $\SpatialTrialSpace$, a reduced-order model can be formulated, e.g., via Galerkin projection, least-squares Petrov--Galerkin projection, windowed least-squares residual minimization, streamwise-upwind Petrov Galerkin projection. The result of these projection processes is a $\RomDim$-dimensional reduced-order dynamical system that must be solved for $t \in [0,T]$ for any parameter instance $\params \in \paramDomain$. These spatial-reduction reduced-order have been demonstrated to yield accurate approximate solutions at a greatly reduced computational cost. As these methods only reduce the \textit{spatial} dimension of the problem, however, they can be inefficient for problems with, e.g., long time-horizons. Further, these methods can be ineffective for Kolmogorov $n$-width dominated problems, such as traveling waves.  
+Given the trial subspace $\SpatialTrialSpace$, a reduced-order model can be formulated, e.g., via Galerkin projection, least-squares Petrov--Galerkin projection, windowed least-squares residual minimization, streamwise-upwind Petrov Galerkin projection. The result of these projection processes is a $\RomDim$-dimensional reduced-order dynamical system that must be solved for $t \in [0,T]$ for any parameter instance $\params \in \paramDomain$. These spatial-reduction ROMs have been demonstrated to yield accurate approximate solutions at a greatly reduced computational cost. As these methods only reduce the \textit{spatial} dimension of the problem, however, they can be inefficient for problems with, e.g., long time-horizons. Further, these methods can be ineffective for Kolmogorov $n$-width dominated problems, such as traveling waves.  
 \begin{comment}
 From the space--time perspective, this is equivalent to approximating the
 	FOM ODE solution trajectory $\stateFOM\in\RR{N}\otimes\timeSpace$ with 
@@ -186,8 +188,8 @@ trajectory with an approximation that resides in an
 	\subseteq \PDEStateSpaceTimeTrialSpace.
 \end{equation}
 %and $\stbasis\in\RR{N \times \stdim}\otimes \timeSpace$ with 
-The basis functions $\SpaceTimeBasisVec_i: \x,t \mapsto \SpaceTimeBasisVec_i(\x,t)$ for $i=1,\ldots,\STDim$ denotes the space--time trial basis functions, and are typically obtained via, e.g., space--time POD~\cite{}, spectral POD~\cite{}, tensor products~\cite{choi_stlspg}. Thus, at any time instance $t\in[0,T]$ and parameter instance $\mu \in \paramDomain$, ROMs that employ the
-\spaceTimeAcronym\ trial subspace approximate the FOM ODE solution as
+The basis functions $\SpaceTimeBasisVec_i: (\xDummy,\timeDummy) \mapsto \SpaceTimeBasisVec_i(\xDummy,\timeDummy)$ for $i=1,\ldots,\STDim$ denotes the space--time trial basis functions, and are typically obtained via, e.g., space--time POD~\cite{}, spectral POD~\cite{}, tensor products~\cite{choi_stlspg}. Thus, ROMs that employ
+\spaceTimeAcronym\ trial subspaces approximate the FOM solution as
 \begin{equation}\label{eq:stapprox1}
  \PDEState(\PDEStateArgs) \approx \ApproxPDEState(\PDEStateArgs) = \sum_{i=1}^{\STDim} \SpaceTimeBasisVec_i(\x,t) \SpaceTimeGenState_i(\params) + \PDEStateRef(\PDEStateArgs),
 \end{equation}
@@ -195,12 +197,12 @@ where $ \SemiDiscreteSpaceTimeGenState(\params) \in \RR{\STDim}$ denotes the spa
 highlights that \spatialAcronym\ subspaces associates with time and parameter-dependent
 generalized coordinates, while the \spaceTimeAcronym\ trial subspaces associates with only parameter-dependent generalized coordinates. 
 
-Given the space--time trial subspace $\SpaceTimeTrialSpace$, a reduced-order model can be formulated via, e.g., Galerkin projection, (windowed) space--time least-squares Petrov--Galerkin projection. These projection processes result in a ROM that can be solved for any parameter instance $\params \in \ParamDomain$, and whose solution comprises the entire space--time solution for that parameter instance. Space--time ROMs are a relatively new technology, and show great promise for overcoming challenges associated with spatial-reduction only ROMs. In particular, from the space--time perspective, it is possible to capture phenomena such as traveling waves with relatively few basis vectors. However, for problems that are charcterized by, e.g., parameterized shocks, space--time ROMs can still become inaccurate due to the Kolmogorov $n$-width; for example, for steady state problems characterized by a parameterized shock location, space--time methods yield no advantage. We propose subspaces with parametric space--time dimension reduction to address this issue.
+Given the space--time trial subspace $\SpaceTimeTrialSpace$, a reduced-order model can be formulated via, e.g., Galerkin projection, (windowed) space--time least-squares Petrov--Galerkin projection. These projection processes result in a ROM that can be solved for any parameter instance $\params \in \ParamDomain$, and whose solution comprises the entire space--time solution for that parameter instance. Space--time ROMs are a relatively new technology, and show great promise for overcoming challenges associated with spatial-reduction only ROMs. In particular, from the space--time perspective, it is possible to capture phenomena such as traveling waves with relatively few basis vectors. However, for problems that are charcterized by, e.g., parameterized shocks, space--time ROMs can still become inaccurate due to the Kolmogorov $n$-width; for example, for steady state problems characterized by a parameterized shock location, space--time methods yield no advantage. We propose subspaces with parametric--space--time dimension reduction to address this issue.
 
 
 
 
-\section{Parametric space--time dimension reduction (PSTDR) reduced-order models}
+\section{Parametric space--time dimension reduction (PSTDR) trial subspaces}
 Both \spatialAcronym\ and \spaceTimeAcronym\ construct parameter-independent trial spaces. As a result, neither approach reduces the parametric dimension of the problem. Further, low-dimensional structures in an $x-t-\mu$ space may appear as high-dimensional structures in $x-t$ space, and thus both \spatialAcronym\ and \spaceTimeAcronym\ ROMs can be Kolmogorov $n$-width limited. To address these issues, we propose constructing parametric--space--time dimension reduction (\parametricSpaceTimeAcronym) subspaces. 
 
 With \parametricSpaceTimeAcronym, we propose to approximate the parametric FOM PDE trajectory $\PDEState$, i.e., the FOM trajectory over all of space, time, and parameter instances, with an approximate parametric trajectory that lies within a low-dimensional affine parametric--space--time trial subspace of dimension $\PSTDim$, i.e., $\PDEState(\cdot,\cdot,\cdot) \approx \ApproxPDEState(\cdot,\cdot,\cdot) \in \ParametricSpaceTimeTrialSpace + \PDEStateRef(\cdot,\cdot,\cdot)$ with $\dim(\ParametricSpaceTimeTrialSpace) = \PSTDim$, where
@@ -209,21 +211,26 @@ With \parametricSpaceTimeAcronym, we propose to approximate the parametric FOM P
         \text{Span}\{\ParametricSpaceTimeBasisVec_i\}_{i=1}^{\PSTDim} 
         \subseteq \PDEStateParametricSpaceTimeTrialSpace.
 \end{equation}
-Here, $\ParametricSpaceTimeBasisVec_i: (\xDummy,\timeDummy,\paramsDummy) \mapsto \ParametricSpaceTimeBasisVec_i(\xDummy,\timeDummy,\paramsDummy)$, $i=1,\ldots,\PSTDim$ are parametric--space--time basis functions.  Thus, at any spatial location $\x \in \PhysicalDomain$, time instance $t\in[0,T]$ and parameter instance $\mu \in \paramDomain$, ROMs that employ the
+Here, $\ParametricSpaceTimeBasisVec_i: (\xDummy,\timeDummy,\paramsDummy) \mapsto \ParametricSpaceTimeBasisVec_i(\xDummy,\timeDummy,\paramsDummy)$, $i=1,\ldots,\PSTDim$ are parametric--space--time basis functions.  Thus, at any spatial location $\x \in \PhysicalDomain$, time instance $t\in[0,T]$, and parameter instance $\params \in \paramDomain$, ROMs that employ the
 \parametricSpaceTimeAcronym\ trial subspace approximate the FOM PDE solution as
 \begin{equation}\label{eq:pstapprox1}
- \PDEState(\PDEStateArgs) \approx \ApproxPDEState(\PDEStateArgs) = \sum_{i=1}^{\PSTDim} \ParametricSpaceTimeBasisVec_i(t,\params) \SemiDiscreteParametricSpaceTimeGenState + \SemiDiscreteStateParametricSpaceTimeRef(\SemiDiscreteStateArgs).
+ \PDEState(\PDEStateArgs) \approx \ApproxPDEState(\PDEStateArgs) = \sum_{i=1}^{\PSTDim} \ParametricSpaceTimeBasisVec_i(\PDEStateArgs) \ParametricSpaceTimeGenState + \PDEStateRef(\PDEStateArgs).
 \end{equation}
 Critically, comparing the approximations arising from \parametricSpaceTimeAcronym\ trial subspaces in Eq.~\eqref{eq:pstapprox1} to those arising from \spatialAcronym\ and
 \spaceTimeAcronym\ trial subspaces in Eqs.~\eqref{eq:affine_trialspace} and \eqref{eq:stapprox1}, respectively,
 highlights that the \parametricSpaceTimeAcronym\ approximation associates with a basis matrix that depends on space, time, and parameters. 
 
-\subsection{Projection-based reduced-order models}
-We now highlight several model reduction formulations formulations that leverage \parametricSpaceTimeAcronym\ trial subspaces. In what follow, we construct ROMs for the semi-discrete FOM ODE~\eqref{eq:fom_ode}. We emphasize, however, that similar approaches can be employed for model reduction of the continuous PDE~\eqref{eq:fom}. 
+\section{PSTDR reduced-order models}
+Given the \parametricSpaceTimeAcronym\ trial subspace, reduced-order models can be formed, e.g., via Galerkin projection, least-squares projection. Here, we detail several such approaches. In particular, we note that reduced-order models can be derived by performing a projection process on the continuous PDE~\eqref{eq:fom}, or alternatively by performing projection processes on a spatially discrete or fully discrete version of~\eqref{eq:fom}. Both approaches have advantages and disadvantages. The latter approaches have the advantages that boundary conditions are more easily incorporated into the ROM, and they retain some stability properties of the discrete full-order model. For this reason, here we develop projection-based ROMs for spatially and fully-discrete versions of~\eqref{eq:fom}; we emphasize, however, that similar approaches can be carried out at the spatially continuous level.
 
-\begin{comment}
-\subsection{Time-discrete reduced-order models}
-We now describe time-discrete reduced-order models using linear multistep methods. To this end, we introduce a uniform time
+To the end of spatial discretization, we introduce a discretization of $\Omega$ into $\NSpace$ degrees of freedom characterized by the nodal points $\xd_i$, which in three-dimensions, for example, is given by the coordinates $\xd_i = (\xs_i,\ys_i,\zs_i)$. Spatial discrertization of the FOM PDE~\eqref{eq:fom} yields the semi-discrete system  
+\begin{equation}\label{eq:fom_ode}
+\frac{d \SemiDiscreteState}{dt}(\SemiDiscreteStateArgs) = \velocity(\SemiDiscreteState(\SemiDiscreteStateArgs),t,\params),
+\end{equation}
+where $\SemiDiscreteState(t,\params) \in \RR{\FomDim}$ is the semi-discrete state, $\FomDim = \NVars \NSpace$ is the total number of discrete degrees of freedom, and $\velocity: \RR{\FomDim} \times [0,T] \times \paramDomain \rightarrow \RR{\FomDim}$ is the velocity function.
+
+Numerically solving the FOM ODE~\eqref{eq:fom_ode} requires temporal discretization. We consider linear multistep methods for this purpose. 
+To this end, we introduce a uniform time
 grid with time step $\Delta t$ and time instances
 $t^n = n\Delta
 t$, $n=0,\ldots,\numTimeSteps$. 
@@ -242,12 +249,19 @@ with the initial condition $\FullyDiscreteState^0(\FullyDiscreteStateArgs) =\Sem
 time instance and 
 $\residLMS^n$ denotes the FOM O$\Delta$E residual at the $n$th time instance defined as
 \begin{align*}
-\residLMS^n &: (\FullyDiscreteStateDummy^n;\FullyDiscreteStateDummy^{n-1},\ldots,\FullyDiscreteStateDummy^{n-k^n},\paramsDummy) \mapsto  \frac{1}{\Delta t} \sum_{j=0}^{k^n} \alpha^n_j \FullyDiscreteStateDummy^{n-j} -  \sum_{j=0}^{k^n} \beta^n_j \velocity(\FullyDiscreteStateDummy^{n-j},t^{n-j},\params),
+\residLMS^n &: (\FullyDiscreteStateDummy^n;\FullyDiscreteStateDummy^{n-1},\ldots,\FullyDiscreteStateDummy^{n-k^n},\paramsDummy) \mapsto  \frac{1}{\Delta t} \sum_{j=0}^{k^n} \alpha^n_j \FullyDiscreteStateDummy^{n-j} -  \sum_{j=0}^{k^n} \beta^n_j \velocity(\FullyDiscreteStateDummy^{n-j},t^{n-j},\paramsDummy),
 \\
 &: \RR{\FomDim} \times \RR{k^n + 1} \times \paramDomain \rightarrow \RR{\FomDim}.
 \end{align*} 
 Here, $\alpha^n_j,\beta^n_j\in\RR{}$, $j=0,\ldots,k^n$ are coefficients
 that define the linear multistep method at the $n$th time instance.
+
+
+%In what follow, we construct ROMs for the semi-discrete FOM ODE~\eqref{eq:fom_ode}. We emphasize, however, that similar approaches can be employed for model reduction of the continuous PDE~\eqref{eq:fom}. 
+
+\begin{comment}
+\subsection{Time-discrete reduced-order models}
+We now describe time-discrete reduced-order models using linear multistep methods. 
 \end{comment}
 \subsubsection{Parametric--space--time Galerkin ROM}
 The Galerkin ROM for \parametricSpaceTimeAcronym\ trial subspaces can be obtained by making the substitution $\SemiDiscreteState \leftarrow \ApproxSemiDiscreteState$ and by enforcing orthogonality of the residual of the FOM ODE to the trial subspace. The weak form of the problem reads as follows: find $\ApproxSemiDiscreteState \in \SemiDiscreteParametricSpaceTimeTrialSpace$ such that, $\forall t \in \TimeDomain, \params \in \paramDomain$,
@@ -267,70 +281,107 @@ The Galerkin ROM is known to yield inaccurate results for non-symmetric and non-
 
 \subsubsection{Residual minimization ROMs}
 In residual-minimization ROMs, we define the residual minimization principle,
-$$\ContinuousResMin : \SemiDiscreteState \mapsto \int_{0}^T \int_{\paramDomain} \| \frac{d \SemiDiscreteState}{dt} - \velocity(\SemiDiscreteState,t,\params) \|_{\PSTWeightingMatrix(t,\params)}^p d\params dt,$$
+\begin{equation}\label{eq:minimization_principle}
+\ContinuousResMin : \SemiDiscreteState \mapsto \int_{0}^T \int_{\paramDomain} \| \frac{d \SemiDiscreteState}{dt} - \velocity(\SemiDiscreteState,t,\params) \|_{\PSTWeightingMatrix(t,\params)}^p d\params dt,
+\end{equation}
 for $p>0$ (typically $p=1$ or $p=2$).
 An approximate solution is defined as one that minimizes this principle, 
-\begin{equation}\label{eq:minimization_principle}
+\begin{equation}\label{eq:minimization_problem}
 \ApproxSemiDiscreteState = \underset{ \SemiDiscreteStateDum \in \SemiDiscreteParametricSpaceTimeTrialSpace}{\text{arg min}}\;\ContinuousResMin(\SemiDiscreteStateDum),
 \end{equation}
 subject to $\ApproxSemiDiscreteState(\params) = \mathbb{P}(\SemiDiscreteStateIC).$ 
 
 Various numerical techniques capable of solving the minimization problem~\eqref{eq:minimization_principle} exist. For example, one can take an \textit{indirect}, or \textit{optimize-then-discretize} approach, where weak forms associated with the minimization principle~\eqref{eq:minimization_principle} are obtained, e.g., via the Euler--Lagrange equations (see Ref.~\cite{parish_wls} for the case where $p=2$). In recent years, \textit{direct}, or \textit{discretize-then-optimize} methods have become popular. In these discretize-then-optimize methods, the continuous residual minimization principle~\eqref{eq:minimization_principle} is replaced with a discrete minimization principle, and the resulting system is solved via an algebraic least-squares solver. Due to its ease of implementation and robustness, we outline this approach. 
 
-The weak form given from this residual minimization principle is given as follows: find $\ApproxSemiDiscreteState \in \SemiDiscreteParametricSpaceTimeTrialSpace$ such that, $\forall t \in \TimeDomain, \params \in \paramDomain$,
+Direct approaches require temporal and parametric discretization of the FOM ODE~\eqref{eq:fom_ode}. Here we employ linear multistep methods for discretization of the temporal derivatives, and quadrature rues for discretization of the integrals. For simplicity of presentation, we introduce a uniform time
+grid with time step $\Delta t$ and time instances
+$t^n = n\Delta
+t$, $n=0,\ldots,\numTimeSteps$. 
+Applying a linear multistep method to discretize the FOM ODE \eqref{eq:FOM}
+with this time grid
+yields the FOM O$\Delta$E, which computes the sequence of discrete
+solutions
+$\FullyDiscreteState^n(\FullyDiscreteStateArgs) \approx \SemiDiscreteState(t^n,\params)$, $n=1,\ldots,\numTimeSteps$
+as the implicit solution to the system of algebraic equations
+\begin{equation}\label{eq:lms}
+\residLMS^n
+	(\FullyDiscreteState^n(\FullyDiscreteStateArgs),\FullyDiscreteState^{n-1}(\FullyDiscreteStateArgs),\ldots,\FullyDiscreteState^{n-k^n}(\FullyDiscreteStateArgs))
+	= \bz,\qquad n=1,\ldots,\numTimeSteps,
+\end{equation}
+with the initial condition $\FullyDiscreteState^0(\FullyDiscreteStateArgs) =\SemiDiscreteStateIC$. In the above, $k^n$ denotes the number of steps employed by the scheme at the $n$th
+time instance and 
+$\residLMS^n$ denotes the FOM O$\Delta$E residual at the $n$th time instance defined as
+\begin{align*}
+\residLMS^n &: (\FullyDiscreteStateDummy^n,\FullyDiscreteStateDummy^{n-1},\ldots,\FullyDiscreteStateDummy^{n-k^n},\paramsDummy) \mapsto  \frac{1}{\Delta t} \sum_{j=0}^{k^n} \alpha^n_j \FullyDiscreteStateDummy^{n-j} -  \sum_{j=0}^{k^n} \beta^n_j \velocity(\FullyDiscreteStateDummy^{n-j},t^{n-j},\params),
+\\
+&: \RR{\FomDim} \times \RR{k^n + 1} \times \paramDomain \rightarrow \RR{\FomDim}.
+\end{align*} 
+Here, $\alpha^n_j,\beta^n_j\in\RR{}$, $j=0,\ldots,k^n$ are coefficients
+that define the linear multistep method at the $n$th time instance.
+ 
+Employing a linear multistep method for temporal discretization and leveraging uniform quadrature rules in the temporal and parametric domain enables us to replace the continuous minimization principle~\eqref{eq:minimization_principle} with the discrete minimization principle 
+ \begin{equation}\label{eq:minimization_principle}
+\DiscreteResMin : \SemiDiscreteState \mapsto \sum_{n=1}^{\numTimeSteps}  \sum_{j=1}^{\numQuadPointsParams} \QuadWeights_{ij} \| \residLMS^n (\FullyDiscreteState^n(\params^j),\FullyDiscreteState^{n-1}(\params^j),\ldots,\FullyDiscreteState^{n-k^n}(\params^j)) \|_{\PSTWeightingMatrix(t,\params^j)}^p,
+\end{equation}
+where $\QuadWeights_{ij} \in \RR{}$, $i=1\dots,\numTimeSteps$, $j=1,\ldots,\numQuadPointsParams$ are quadrature weights. We emphasize that, although we present uniform grids here, computational advantages can be obtained by, e.g., employing Gaussian quadrature, Smolyak quadrature.
+ 
+
+%The weak form given from this residual minimization principle is given as follows: find $\ApproxSemiDiscreteState \in \SemiDiscreteParametricSpaceTimeTrialSpace$ such that, $\forall t \in \TimeDomain, \params \in \paramDomain$,
 %  rather than working directly with the FOM ODE~\eqref{eq:fom}, we instead work with the normal equations,
 %\begin{equation}\label{eq:FOM_normal}
 % \bigg[\big[\frac{\partial \velocity}{\partial \boldsymbol y}(  \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params)  \big]^T  + \frac{d}{dt} \bigg] \bigg( \frac{d}{dt}\ApproxSemiDiscreteState(\SemiDiscreteStateArgs) -   \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params) \bigg) = \bz
 %\end{equation} 
 %with an initial boundary condition $\SemiDiscreteState(0,\params) = \SemiDiscreteStateIC$ and a terminal boundary condition $\SemiDiscreteState(T,\params) -   \velocity(\ApproxSemiDiscreteState(T,\params),T,\params) = \bz$. The normal equations have the advantage that they are symmetric, which can improve the stability properties of a ROM.
 
+%\begin{comment}
+% \begin{equation}\label{eq:ROM_normal1}
+%\PSTInnerProduct{ \SemiDiscreteParametricSpaceTimeBasisVec}{ \bigg[\big[\frac{\partial \velocity}{\partial \boldsymbol y}(  \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params)  \big]^T  + \frac{d}{dt} \bigg] \bigg( \frac{d}{dt}\ApproxSemiDiscreteState(\SemiDiscreteStateArgs) -   \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params) \bigg)} = \bz
+%\end{equation} 
+%
+% \begin{equation}\label{eq:ROM_normal1}
+%\PSTInnerProduct{ \SemiDiscreteParametricSpaceTimeBasisVec}{ \big[\frac{\partial \velocity}{\partial \boldsymbol y}(  \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params)  \big]^T  \left( \frac{d}{dt} \ApproxSemiDiscreteState(\SemiDiscreteStateArgs)  -   \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params) \right) + \frac{d^2}{dt} \ApproxSemiDiscreteState(\SemiDiscreteStateArgs) - \frac{d}{dt}  \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params)  } 
+% = \bz
+%\end{equation} 
+% \begin{multline}\label{eq:ROM_normal2}
+%\PSTInnerProduct{ \SemiDiscreteParametricSpaceTimeBasisVec}{ \big[\frac{\partial \velocity}{\partial \boldsymbol y}(  \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params)  \big]^T  \left( \frac{d}{dt} \ApproxSemiDiscreteState(\SemiDiscreteStateArgs)  -   \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params) \right)} 
+%- \PSTInnerProduct{\frac{d \SemiDiscreteParametricSpaceTimeBasisVec}{dt}}{ \frac{d}{dt} \ApproxSemiDiscreteState(\SemiDiscreteStateArgs) -  \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params)  } 
+% =  \\
+%-  \SemiDiscreteParametricSpaceTimeBasisVec \left( \frac{d}{dt} \ApproxSemiDiscreteState(\SemiDiscreteStateArgs)   - \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params) \right)_0^T
+%\end{multline} 
+%\end{comment}
+% \begin{multline}\label{eq:ROM_normal2}
+%\PSTInnerProduct{ \SemiDiscreteParametricSpaceTimeBasisVec}{ \big[\frac{\partial \velocity}{\partial \boldsymbol y}(  \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params)  \big]^T  \left( \frac{d}{dt} \ApproxSemiDiscreteState(\SemiDiscreteStateArgs)  -   \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params) \right)} 
+%+ \PSTInnerProduct{\frac{d \SemiDiscreteParametricSpaceTimeBasisVec}{dt}}{   \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params)  } \\
+%- \PSTInnerProduct{\frac{d^2 \SemiDiscreteParametricSpaceTimeBasisVec}{dt^2}}{  \ApproxSemiDiscreteState(\SemiDiscreteStateArgs)} 
+% =  
+%-  \SemiDiscreteParametricSpaceTimeBasisVec \left( \frac{d}{dt} \ApproxSemiDiscreteState(\SemiDiscreteStateArgs)   - \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params) \right)_0^T - \frac{d \SemiDiscreteParametricSpaceTimeBasisVec}{dt}\ApproxSemiDiscreteState|_0^T \qquad \forall \SemiDiscreteParametricSpaceTimeBasisVec \in \SemiDiscreteParametricSpaceTimeTrialSpace
+%\end{multline} 
+%
+\subsection{Hyper-reduction}
 \begin{comment}
- \begin{equation}\label{eq:ROM_normal1}
-\PSTInnerProduct{ \SemiDiscreteParametricSpaceTimeBasisVec}{ \bigg[\big[\frac{\partial \velocity}{\partial \boldsymbol y}(  \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params)  \big]^T  + \frac{d}{dt} \bigg] \bigg( \frac{d}{dt}\ApproxSemiDiscreteState(\SemiDiscreteStateArgs) -   \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params) \bigg)} = \bz
-\end{equation} 
-
- \begin{equation}\label{eq:ROM_normal1}
-\PSTInnerProduct{ \SemiDiscreteParametricSpaceTimeBasisVec}{ \big[\frac{\partial \velocity}{\partial \boldsymbol y}(  \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params)  \big]^T  \left( \frac{d}{dt} \ApproxSemiDiscreteState(\SemiDiscreteStateArgs)  -   \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params) \right) + \frac{d^2}{dt} \ApproxSemiDiscreteState(\SemiDiscreteStateArgs) - \frac{d}{dt}  \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params)  } 
- = \bz
-\end{equation} 
- \begin{multline}\label{eq:ROM_normal2}
-\PSTInnerProduct{ \SemiDiscreteParametricSpaceTimeBasisVec}{ \big[\frac{\partial \velocity}{\partial \boldsymbol y}(  \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params)  \big]^T  \left( \frac{d}{dt} \ApproxSemiDiscreteState(\SemiDiscreteStateArgs)  -   \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params) \right)} 
-- \PSTInnerProduct{\frac{d \SemiDiscreteParametricSpaceTimeBasisVec}{dt}}{ \frac{d}{dt} \ApproxSemiDiscreteState(\SemiDiscreteStateArgs) -  \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params)  } 
- =  \\
--  \SemiDiscreteParametricSpaceTimeBasisVec \left( \frac{d}{dt} \ApproxSemiDiscreteState(\SemiDiscreteStateArgs)   - \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params) \right)_0^T
-\end{multline} 
-\end{comment}
- \begin{multline}\label{eq:ROM_normal2}
-\PSTInnerProduct{ \SemiDiscreteParametricSpaceTimeBasisVec}{ \big[\frac{\partial \velocity}{\partial \boldsymbol y}(  \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params)  \big]^T  \left( \frac{d}{dt} \ApproxSemiDiscreteState(\SemiDiscreteStateArgs)  -   \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params) \right)} 
-+ \PSTInnerProduct{\frac{d \SemiDiscreteParametricSpaceTimeBasisVec}{dt}}{   \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params)  } \\
-- \PSTInnerProduct{\frac{d^2 \SemiDiscreteParametricSpaceTimeBasisVec}{dt^2}}{  \ApproxSemiDiscreteState(\SemiDiscreteStateArgs)} 
- =  
--  \SemiDiscreteParametricSpaceTimeBasisVec \left( \frac{d}{dt} \ApproxSemiDiscreteState(\SemiDiscreteStateArgs)   - \velocity(\ApproxSemiDiscreteState(\SemiDiscreteStateArgs),t,\params) \right)_0^T - \frac{d \SemiDiscreteParametricSpaceTimeBasisVec}{dt}\ApproxSemiDiscreteState|_0^T \qquad \forall \SemiDiscreteParametricSpaceTimeBasisVec \in \SemiDiscreteParametricSpaceTimeTrialSpace
-\end{multline} 
-
 \subsubsection{Collocated minimum-residual ROMs}
 Collocation-based residual-minimization ROMs work with a discrete minimization principle, as opposed to the continuous one described in~\eqref{eq:}. Specifically, we discretize the parametric--space--time domain to obtain the set of collocation points, 
 $$\CollocationSet = \{ \x_i,t_i,\mu_i\}_{i=1}^{\NCollocation},$$
 where $\NCollocation \ge \PSTDim$ denotes the number of collocation points. These collocation points can be obtained via, e.g., tensor grids, sparse tensor grids, random sampling. With these collocation points, we can define the residual minimization principle 
 $$\mathbf{J} = \sum_{i=1}^{\NCollocation} \ResidualLoss\left( \dot{\SemiDiscreteParametricSpaceTimeBasisMat}(\x_i,t_i,\params_i)\SemiDiscreteParametricSpaceTimeGenState - \velocity( \SemiDiscreteParametricSpaceTimeBasisMat(\x_i,t_i,\params_i) \SemiDiscreteParametricSpaceTimeGenState ,t_i,\params_i) \right),$$
 where $\ResidualLoss : \RR{} \rightarrow \RR{+}$ is, e.g., an $\ell^2$ loss function. 
-
+\end{comment}
 \section{Construction of \parametricSpaceTimeAcronym\ trial subspaces via deep learning}
 We now outline a mesh-free deep-learning-based strategy for constructing of the \parametricSpaceTimeAcronym\ trial subspaces. We note that other approaches exist for computing these subspaces, e.g., tensor-product bases~\cite{choi_stlspg}, piecewise-constant subspaces via local bases~\cite{}, vector-basis splitting on the space--time--parametric solution snapshot~\cite{carlberg_hadaptation,ETTER2020112931}. Here, we pursue a deep-learning-based approach due to the expressiveness and flexibility of the resulting subspace.
 \subsection{Training data}
 As is customary in the traditional offline-online paradigm, we assume access to an \textit{a priori} set of \textit{training data} comprising solution snapshots of the full-order model at various spatial, temporal, and parametric instances,
-$$\TrainingData = \{\SemiDiscreteState(\x_i,t_i,\params_i) \}_{i=1}^{\NTrain}.$$ 
+$$\TrainingData = \{\PDEState(\x_i,t_i,\params_i) \}_{i=1}^{\NTrain}.$$ 
 In the offline stage, this training data is used to identify a low-dimensional subspace capable of representing the majority of the variance of the training data. Typically, this is achieved, e.g., via POD, the reduced basis method. 
 In the present context, unfortunately, these methods cannot be directly applied as, when viewed from the parametric--space--time perspective, the training data comprises only a single training instance, and thus only a single basis vector can be extracted. While this basis vector yields perfect reconstruction error on the training data, it may be inaccurate for prediction at new data points. Potential approaches to address this issue could include tensor-product bases, h-adaptation, and parametric-piecewise-constant subspaces via local bases. 
 
-Here we propose a deep-learning-based approach to obtain the low-dimensional space--time--parametric trial subspace. Specifically, we take advantage of the fact that MLP (and residual) networks with a linear final layer learn a Banach space in training. We will refer to these associated subspaces as \textit{deep subspaces}, and now describe their construction. 
+Here we propose a deep-learning-based approach to obtain the low-dimensional space--time--parametric trial subspace. Specifically, we take advantage of the fact that feed-forward neural networks with a linear final layer can be understood as approximation techniques that learn a data-driven trial subspace in training. We will refer to these associated trial subspaces as \textit{deep subspaces}, and now describe their construction. 
 \subsection{Deep subspaces}
-In the proposed \MLSubspaceNameLowercase, we aim to construct data-driven subspaces at the continuous parametric--space--time--level. The parametric--space--time trial subspace is then given as
-$$\SemiDiscreteParametricSpaceTimeTrialSpace \equiv \text{span}\{\SemiDiscreteParametricSpaceTimeBasisVec_i(\x)\}_{i=1}^{\PSTDim},$$
-where the bases are given as
-$$\SemiDiscreteParametricSpaceTimeBasisMat (\PDEStateArgs)\equiv \begin{bmatrix} \SemiDiscreteParametricSpaceTimeBasisVec_1(\PDEStateArgs) &
+In the proposed \MLSubspaceNameLowercase, we aim to construct data-driven subspaces --- that depend on space, time, and parameters --- that are spanned by a set of basis vectors, 
+$$\ParametricSpaceTimeTrialSpace \equiv \text{span}\{\ParametricSpaceTimeBasisVec_i\}_{i=1}^{\PSTDim}.$$
+Here, we propose to describe these basis vectors via deep feedforward neural networks,
+$$\ParametricSpaceTimeBasisMat (\PDEStateArgs)\equiv \begin{bmatrix} \ParametricSpaceTimeBasisVec_1(\PDEStateArgs) &
 \hdots & 
- \SemiDiscreteParametricSpaceTimeBasisVec_{\PSTDim}(\PDEStateArgs) \end{bmatrix}
+ \ParametricSpaceTimeBasisVec_{\PSTDim}(\PDEStateArgs) \end{bmatrix}^T
 = \NeuralNetwork(\PDEStateArgs;\NNWeights).
 $$
 \begin{figure}
@@ -339,8 +390,16 @@ $$
 \caption{Depiction of a deep neural network for the bases, $\SemiDiscreteParametricSpaceTimeBasisMat$.}
 \end{center}
 \end{figure}
+where $\NeuralNetwork$ is a neural network defined by
+\begin{align}
+&\NeuralNetwork : (\xDummy,\timeDummy,\paramsDummy;\NNWeights) \mapsto \text{reshape}(\cdot,\PSTDim ,\NVars) \circ \activation_d(\cdot,\NNWeights_d) \circ \cdots \circ \activation_1(\xDummy,\timeDummy,\paramsDummy; \NNWeights_1) \\
+&\NeuralNetwork(\cdot,\cdot,\cdot;\NNWeights) : \PhysicalDomain \times \TimeDomain \times \paramDomain \rightarrow \RR{\PSTDim \times \NVars}.
+\end{align}
+In the above, $\NNWeights \equiv (\NNWeights_1,\cdots,\NNWeights_d) \in \RR{\NumWeights}$ with $\NNWeights_i \equiv (\Weights_i,\biases_i) \in \RR{p_i \times p_{i-1}} \times \RR{p_i}$, $i=1,\ldots,d$ are the weights and biases, $\activation_i : \RR{p_{i-1}} \rightarrow \RR{p_i}$, $i=1,\ldots,d$ denotes the activation function employed at the $i$th layer, $d$ denotes the depth of the network, and $p_i, i=0,\ldots,d$ (with $p_0 = \numParams + \numSpaceDims + 1$ and $p_d = \NVars \PSTDim$) denotes the number of neurons at layer $i$. The activation functions take the form
+$$\activation_i: (\boldsymbol w, \NNWeights_i) \mapsto \activationFunc_i(\Weights_i \boldsymbol w + \biases_i), \; \; i=1,\ldots,d,$$
+where $\activationFunc_i : \RR{p_{i-1}} \rightarrow \RR{p_i}$ denote activation functions (e.g., exponential linear units) that are applied elementwise.  
 
-In the above, $\NeuralNetwork(\cdot,\cdot,\cdot;\NNWeights): \PhysicalDomain \times \TimeDomain \times \paramDomain \rightarrow \RR{\PSTDim}$ is a (nonlinear) regression function (e.g., a deep MLP), and $\NNWeights \in  \NWeights$ are the regression weights. Before proceeding, we make two critical remarks regarding these deep subspaces. 
+Before proceeding, we make two critical remarks regarding these deep subspaces. 
 
 \begin{remark}               
 \textbf{Increasing subspace dimension does not yield lower projection errors for training data.} In the traditional ROM paradigm, more accurate trial subspaces are obtained from retaining additional basis functions. In the present context, the dimension of the subspace can be controlled setting the number of basis vectors in the final layer of the network. Growing the number of basis functions does not necessarily translate to increased accuracy, however. The explanation for this is as follows: as the proposed framework constructs ROMs from the parametric--space--time viewpoint, the training data can be described by a \textbf{single} basis vector, i.e., this single basis vector is the training data solution. Thus, there exists a one-dimensional trial subspace that describes the data. In practice, learning a network that is capable of describing this solution vector with a single basis vector can be challenging, and employing multiple basis vectors may have practical advantages.  
@@ -352,14 +411,14 @@ In the above, $\NeuralNetwork(\cdot,\cdot,\cdot;\NNWeights): \PhysicalDomain \ti
 
 \subsection{Training}
 To train the weights $\NNWeights$, we aim to learn a subspace that is optimal in reconstructing the training data (e.g., in the least-squares sense). To this end, we define the loss function 
-$$\mathcal{L}(\NNWeights,\SemiDiscreteParametricSpaceTimeGenStateNN) = \sum_{i=1}^{\NTrain} \| \SemiDiscreteState(\x_i,t_i,\params_i) - \NeuralNetwork(\x_i,t_i,\params_i;\weights) \SemiDiscreteParametricSpaceTimeGenStateNN \|_2^2$$  
+$$\mathcal{L}(\NNWeights,\ParametricSpaceTimeGenStateNN) = \sum_{i=1}^{\NTrain} \| \PDEState(\x_i,t_i,\params_i) - \left[\NeuralNetwork(\x_i,t_i,\params_i;\weights)\right]^T \ParametricSpaceTimeGenStateNN \|_2^2$$  
 where $\SemiDiscreteParametricSpaceTimeGenStateNN \in \RR{\PSTDim}$ act as generalized coordinates. We then solve the (offline) minimization problem,
 \begin{equation}\label{eq:offline_min}
 \NNWeights^*,\SemiDiscreteParametricSpaceTimeGenStateNN^* = \underset{ \NNWeights \in \RR{\NWeights},\SemiDiscreteParametricSpaceTimeGenStateNN \in \RR{\PSTDim}}{\text{arg min}} \mathcal{L}(\NNWeights,\SemiDiscreteParametricSpaceTimeGenStateNN).
 \end{equation} 
-The solution to this minimization problem yields the optimal weights $\NNWeights^*$, as well as a set of generalized coordinates that minimize the error on the training data (in the sense defined in the objective function, e.g., least-squares, $\ell^1$).
+The solution to this minimization problem yields the optimal weights $\NNWeights^*$, as well as a set of generalized coordinates that minimize the error on the training data (in the sense defined in the objective function, e.g., least-squares, $\ell^1$). Various approaches can be employed to solve the optimization problem~\eqref{eq:offline_min}, including stochastic gradient decent, Adam, and alternating least-squares.
 
-\subsection{Deep ensemble subspaces}
+\subsection{Deep ensemble subspaces} 
 Almost all modern algorithms for training neural networks are stochastic. As the optimization problem~\eqref{offline_min} does not, in general, have a unique solution, it is expected that a different set of bases functions will be obtained each time the network is trained. This stochastic training process can have benefits; for example, the use of ensemble models is one way of quantifying extrapolation that has garnered recent attention in deep learning~\cite{deep_ensembles}. Here, we propose two ways that stochastic training can be leveraged:
 \begin{enumerate}
 \item \textbf{Ensemble ROMs for empirical error detection:} It has been empirically observed that independently trained deep neural networks yield similar results when queried for \textit{in-distribution} data. When queried for \textit{out-of-distribution} data, however, results are known to vary significantly. From this observation, ensemble-based approaches have garnered attention as methods to assess the accuracy of an ML model on novel, potentially out-of-distribution, training data~\cite{deep_ensembles}. Here, we propose that stochastic training can be used to develop an ensemble of ROMs, where each ROM uses its own independently learned subspace. The variance of the ROM solutions can then be used to assess accuracy.   
@@ -504,29 +563,29 @@ We now present results for the framework with both extrapolation in parameter sp
 \begin{figure}
 \begin{center}
 \begin{subfigure}[t]{0.32\textwidth}
-\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results/rel_MSE_LS.pdf}
-\caption{PST-LSPG}
+\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results/LS_hist_MSE.pdf}
+\caption{LS}
 \end{subfigure}
 \begin{subfigure}[t]{0.32\textwidth}
-\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results/rel_L1_LS.pdf}
-\caption{PST-LSPG}
+\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results/L1_hist_MSE.pdf}
+\caption{L1}
 \end{subfigure}
 \begin{subfigure}[t]{0.32\textwidth}
-\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results/rel_Linf_LS.pdf}
-\caption{PST-LSPG}
+\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results/ML_hist_MSE.pdf}
+\caption{ML}
 \end{subfigure}
-\begin{subfigure}[t]{0.32\textwidth}
-\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results/rel_MSE_L1.pdf}
-\caption{PST-LSPG ($\ell^1$)}
-\end{subfigure}
-\begin{subfigure}[t]{0.32\textwidth}
-\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results/rel_L1_L1.pdf}
-\caption{PST-LSPG ($\ell^1$)}
-\end{subfigure}
-\begin{subfigure}[t]{0.32\textwidth}
-\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results/rel_Linf_L1.pdf}
-\caption{PST-LSPG ($\ell^1$)}
-\end{subfigure}
+%\begin{subfigure}[t]{0.32\textwidth}
+%\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results/rel_MSE_L1.pdf}
+%\caption{PST-LSPG ($\ell^1$)}
+%\end{subfigure}
+%\begin{subfigure}[t]{0.32\textwidth}
+%\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results/rel_L1_L1.pdf}
+%\caption{PST-LSPG ($\ell^1$)}
+%\end{subfigure}
+%\begin{subfigure}[t]{0.32\textwidth}
+%\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results/rel_Linf_L1.pdf}
+%\caption{PST-LSPG ($\ell^1$)}
+%\end{subfigure}
 \caption{Mean-squared-errors associated with $\ell^2$-orthogonal projection (left) and the ML-ROM (right) for the training data (top) and testing data (bottom).}
 \label{fig:burg_training_test_projection_mse}
 \end{center}
