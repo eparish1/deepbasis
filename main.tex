@@ -319,12 +319,17 @@ $\residLMS^n$ denotes the FOM O$\Delta$E residual at the $n$th time instance def
 Here, $\alpha^n_j,\beta^n_j\in\RR{}$, $j=0,\ldots,k^n$ are coefficients
 that define the linear multistep method at the $n$th time instance.
  
-Employing a linear multistep method for temporal discretization and leveraging uniform quadrature rules in the temporal and parametric domain enables us to replace the continuous minimization principle~\eqref{eq:minimization_principle} with the discrete minimization principle 
- \begin{equation}\label{eq:minimization_principle}
-\DiscreteResMin : \SemiDiscreteState \mapsto \sum_{n=1}^{\numTimeSteps}  \sum_{j=1}^{\numQuadPointsParams} \QuadWeights_{ij} \| \residLMS^n (\FullyDiscreteState^n(\params^j),\FullyDiscreteState^{n-1}(\params^j),\ldots,\FullyDiscreteState^{n-k^n}(\params^j)) \|_{\PSTWeightingMatrix(t,\params^j)}^p,
+Next, we introduce a discretization of the parametric domain $\mathcal{D}$ into $N_{\numQuadPointsParams}$ nodal points with locations $\{ \DiscreteParams^i \}_{i = 1}^{\numQuadPointsParams}$, where $\DiscreteParams^i = (\DiscreteParams^i_1 , \ldots,\DiscreteParams^i_{\numParams}) \in \paramDomain$, $i=1,\ldots,\numQuadPointsParams$. The nodal points can be determined, e.g., via uniform Cartesian discretization, Gaussian quadrature, Smolyak quadrature. Discretization of the temporal and parametric domain enables us to replace the continuous minimization principle~\eqref{eq:minimization_principle} with the discrete minimization principle
+ \begin{equation}\label{eq:discrete_minimization_principle}
+\DiscreteResMin : \ParametricFullyDiscreteStateDummy  \mapsto \sum_{n=1}^{\numTimeSteps}  \sum_{j=1}^{\numQuadPointsParams} \QuadWeights_{ij} \| \residLMS^n (\FullyDiscreteStateDummy^{n,j},\FullyDiscreteStateDummy^{n-1,j},\ldots,\FullyDiscreteStateDummy^{n-k^n,j},\DiscreteParams^j) \|_{\PSTWeightingMatrix(t^n,\params^j)}^p,
 \end{equation}
-where $\QuadWeights_{ij} \in \RR{}$, $i=1\dots,\numTimeSteps$, $j=1,\ldots,\numQuadPointsParams$ are quadrature weights. We emphasize that, although we present uniform grids here, computational advantages can be obtained by, e.g., employing Gaussian quadrature, Smolyak quadrature.
- 
+where $\ParametricFullyDiscreteStateDummy^{nj} \in \RR{\FomDim \numTimeSteps \numQuadPointsParams} =  \begin{bmatrix} \FullyDiscreteStateDummy^{1,1} & \cdots & \FullyDiscreteStateDummy^{\numTimeSteps,1} & \FullyDiscreteStateDummy^{1,2} & \cdots & \FullyDiscreteStateDummy^{\numTimeSteps,\numQuadPointsParams} \end{bmatrix}^T \in \RR{\FomDim \numTimeSteps \numQuadPointsParams}$, with $\FullyDiscreteState^{i,j} \in \RR{\FomDim}$ and $\QuadWeights^{nj} \in \RR{}$, $i=1\dots,\numTimeSteps$, $j=1,\ldots,\numQuadPointsParams$ are quadrature weights. 
+
+An approximate solution obtained from the discreate residual minimization formulation is given as
+\begin{equation}\label{eq:discrete_minimization_principle_solution}
+\ParametricSpaceTimeGenState = \underset{\ParametricSpaceTimeGenStateDum \in \RR{\PSTDim} }{\text{arg min} } \; \DiscreteResMin( \DiscreteParametricSpaceTimeBasisMat \ParametricSpaceTimeGenStateDum),
+\end{equation}
+where $\DiscreteParametricSpaceTimeBasisMat \equiv \begin{bmatrix} \left[ \ParametricSpaceTimeBasisMat(\xd,t^1,\DiscreteParams^1)\right]^T & \cdots & \left[\ParametricSpaceTimeBasisMat(\xd,t^{\numTimeSteps},\DiscreteParams^1) \right]^T & \left[ \ParametricSpaceTimeBasisMat(\xd,t^1,\DiscreteParams^2) \right]^T & \cdots & \left[\ParametricSpaceTimeBasisMat(\xd,t^{\numTimeSteps},\DiscreteParams^{\numQuadPointsParams}) \right]^T \end{bmatrix}^T \in \RR{\FomDim \numTimeSteps \numQuadPointsParams \times \PSTDim}$ is the parametric--space--time basis evaluated on the parametric--space--time grid.
 
 %The weak form given from this residual minimization principle is given as follows: find $\ApproxSemiDiscreteState \in \SemiDiscreteParametricSpaceTimeTrialSpace$ such that, $\forall t \in \TimeDomain, \params \in \paramDomain$,
 %  rather than working directly with the FOM ODE~\eqref{eq:fom}, we instead work with the normal equations,
@@ -358,6 +363,7 @@ where $\QuadWeights_{ij} \in \RR{}$, $i=1\dots,\numTimeSteps$, $j=1,\ldots,\numQ
 %\end{multline} 
 %
 \subsection{Hyper-reduction}
+Both the Galerkin ROM~\eqref{eq:pst_galerkin} and the residual minimization ROM~\eqref{eq:discrete_minimization_principle_solution} require solving for $\PSTDim \ll \FomDim \numTimeSteps \numQuadPointsParams$ generalized coordinates. However, for general nonlinear problems, algorithms to solve these problems scale with the full dimension of the parametric--space--time grid; this is because the quadrature rules in Eqs.~\eqref{eq:pst_galerkin} and~\eqref{eq:discrete_minimization_principle_solution} need to be evaluated each time the solution is updated. \textit{Hyper-reduction} techniques, such as the (discrete) empirical interpolation method, have been developed to circumvent this bottleneck. Here, we outline several hyper-reduction approaches. 
 \begin{comment}
 \subsubsection{Collocated minimum-residual ROMs}
 Collocation-based residual-minimization ROMs work with a discrete minimization principle, as opposed to the continuous one described in~\eqref{eq:}. Specifically, we discretize the parametric--space--time domain to obtain the set of collocation points, 
@@ -425,6 +431,35 @@ Almost all modern algorithms for training neural networks are stochastic. As the
 
 \item \textbf{Subspace enrichment:} We can leverage the linearity of our trial subspaces, and the stochastic training process, to perform subspace enrichment. In this approach, we again train an ensemble of subspace models in the offline phase. As opposed to treating each subspace individually in the online phase, however, we can combine them to construct a single enriched subspace.
 \end{enumerate}  
+
+\section{Computational considerations}
+
+\begin{algorithm}[H]
+\caption{Algorithm for an implicit Euler update for the LSPG ROM using a Gauss-Newton method with Gaussian Elimination}
+\label{alg:alg_LSPG}
+%\SetKwInOut{Input}{Input}\SetKwInOut{Output}{Output}
+Input: $\FullyDiscreteState^n$, residual tolerance $\epsilon$ \;
+Output: $\FullyDiscreteState^{n+1}$\;
+Steps:
+\begin{enumerate}
+\item Set initial guess, $\FullyDiscreteState_k$
+\item  Loop while $\mathbf{r}_k > \epsilon$
+\begin{enumerate}
+    \item Compute the state from the generalized coordinates, $\ApproxFullyDiscreteState  =\ParametricSpaceTimeBasisMat \ParametricSpaceTimeGenState_{k}$
+    \item Compute the residual from the full state, $\residLMS(\ApproxFullyDiscreteState)$
+    \item Compute the Jacobian, $\mathbf{J}_k = \frac{\partial \residLMS}{\partial \ParametricSpaceTimeGenState} \ParametricSpaceTimeBasisMat $
+    \item Compute the product, $\mathbf{J}_k^T \mathbf{J}_k$
+    \item Project the residual onto the test space, $\mathbf{J}^T \residLMS$
+    \item Solve $\FullyDiscreteJacobian^T \FullyDiscreteJacobian \Delta \ParametricSpaceTimeGenState = - \FullyDiscreteJacobian^T \residLMS$ via Gaussian elimination
+    \item Update solution, $\ParametricSpaceTimeGenState_{k+1} = \ParametricSpaceTimeGenState_k + \Delta \ParametricSpaceTimeGenState$
+    \item k = k + 1
+\end{enumerate}
+\item Set final state, $\ParametricSpaceTimeGenState^{n+1} = \ParametricSpaceTimeGenState_k$
+\end{enumerate}
+\end{algorithm}
+
+
+
 
 \section{Numerical experiments}
 We now present numerical experiments of the proposed framework.

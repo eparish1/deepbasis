@@ -10,7 +10,7 @@ close("all")
 torch.set_default_dtype(torch.float32)
 
 #== Load data
-data = np.load('../snapshots_st_cn.npz')
+data = np.load('snapshots_st_cn.npz')
 U = data['snapshots'] 
 mu1 = data['mu1']
 mu2 = data['mu2']
