@@ -10,7 +10,7 @@ close("all")
 torch.set_default_dtype(torch.float32)
 
 #== Load data
-data = np.load('../snapshots_st_cn.npz')
+data = np.load('snapshots_st_cn.npz')
 U = data['snapshots'] 
 mu1 = data['mu1']
 mu2 = data['mu2']
@@ -53,14 +53,14 @@ input_features_test = np.append(input_features_test,mu2vtest[:,None],axis=1)
 Utest = data['snapshots'][::xskip,::tskip]
 #===
 depth=6
-nbasis = 8
+nbasis = 8 
 model = DeepNN(depth,nbasis)
 np.random.seed(1)
-try:
-  model.load_state_dict(torch.load('tmp_model_depth' + str(depth),map_location='cpu'))
-  print('Succesfully loaded model!')
-except:
-  print('Failed to load model')
+#try:
+#  model.load_state_dict(torch.load('tmp_model_depth' + str(depth),map_location='cpu'))
+#  print('Succesfully loaded model!')
+#except:
+#  print('Failed to load model')
 
 device = 'cpu'
 model.to(device)
@@ -84,7 +84,7 @@ def my_criterion(y,yhat):
   loss_mse = torch.mean( (y - yhat)**2 )
   return loss_mse 
 #Optimizer
-optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
+optimizer = torch.optim.Adam(model.parameters(), lr=2e-3)
 
 
 #Epochs
@@ -94,12 +94,16 @@ t0 = time.time()
 plot_freq = 10
 ls_freq = 5
 for epoch in range(1, n_epochs+1):
-    if (epoch == 2000):
+    if (epoch == 1000):
       optimizer = torch.optim.Adam(model.parameters(), lr=5e-4)
-    if (epoch == 3000):
+    if (epoch == 2000):
+      optimizer = torch.optim.Adam(model.parameters(), lr=2e-4)
+    if (epoch == 5000):
       optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
-    if (epoch == 4000):
+    if (epoch == 10000):
       optimizer = torch.optim.Adam(model.parameters(), lr=5e-5)
+    if (epoch == 15000):
+      optimizer = torch.optim.Adam(model.parameters(), lr=2e-5)
 
     # monitor training loss
     train_loss = 0.0
@@ -115,10 +119,10 @@ for epoch in range(1, n_epochs+1):
         optimizer.step()
         train_loss += loss.item()*inputs.size(0)
 
-    if (epoch%ls_freq == 0):
-      weights0 = model.forward_list[-1].weight.data.detach().numpy().flatten()
-      weights = scipy.optimize.least_squares(loss_ls,weights0,verbose=2).x
-      model.forward_list[-1].weight.data[0] = torch.tensor(weights,dtype=torch.float32)
+    #if (epoch%ls_freq == 0):
+    #  weights0 = model.forward_list[-1].weight.data.detach().numpy().flatten()
+    #  weights = scipy.optimize.least_squares(loss_ls,weights0,verbose=2).x
+    #  model.forward_list[-1].weight.data[0] = torch.tensor(weights,dtype=torch.float32)
 
     train_loss = train_loss#/len(train_loader)
     train_loss_hist = np.append(train_loss_hist,train_loss)
@@ -132,15 +136,15 @@ for epoch in range(1, n_epochs+1):
       plot(Utest[:,32,10].flatten(),color='red',label='Truth')
       xlabel(r'$x$')
       ylabel(r'$\rho(x)$')
-      savefig('u_test_depth' + str(depth) + '.png')
+      savefig('boxu_test_depth' + str(depth) + '.png')
       figure(2)
       loglog(train_loss_hist)
       xlabel(r'Epoch')
       ylabel(r'Loss')
-      savefig('train_loss_depth' + str(depth) + '.png')
+      savefig('boxtrain_loss_depth' + str(depth) + '.png')
       close("all")
 
-      torch.save(model.state_dict(), 'tmp_model_depth' + str(depth))
+      torch.save(model.state_dict(), 'box_model_depth' + str(depth))
 
   
 tf = time.time()
