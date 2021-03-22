@@ -73,11 +73,11 @@ def trainModel(modelName,Normalize=False,BoxInit=False):
     input_features = np.append(input_features,yv[:,None],axis=1)
     input_features = np.append(input_features,mu1v[:,None],axis=1)
     input_features = np.append(input_features,mu2v[:,None],axis=1)
-    ninput = np.size(input_features[:,0])
-    indices = np.array(range(0,ninput),dtype='int')
-    choices = np.random.choice(indices,int(ninput*0.05),replace=False)
-    input_features = input_features[choices,:]
-    train_data = np.float32(np.append(input_features,np.rollaxis(U[:,choices],1),axis=1))
+    #ninput = np.size(input_features[:,0])
+    #indices = np.array(range(0,ninput),dtype='int')
+    #choices = np.random.choice(indices,int(ninput*0.05),replace=False)
+    #input_features = input_features[choices,:]
+    train_data = np.float32(np.append(input_features,np.rollaxis(U[:],1),axis=1))
     train_loader = torch.utils.data.DataLoader(train_data, batch_size=5000)
 
     tstep = 75
