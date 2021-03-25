@@ -1,4 +1,9 @@
 \newcommand{\TODO}[1]{{\color{red}{to do: #1}}}
+
+\newcommand{\PSTLSROM}{\text{PST-ResMin}-$\ell^2$}
+\newcommand{\PSTLONEROM}{\text{PST-ResMin}-$\ell^1$}
+\newcommand{\MLROM}{ML}
+
 \newcommand{\timeDummy}{\tau}
 \newcommand{\spatialAcronym}{SDR}
 \newcommand{\spaceTimeAcronym}{STDR}
@@ -24,7 +29,15 @@
 \newcommand{\PDEStateCodomain}{\RR{\NVars}}
 \newcommand{\PDEFlux}{\mathcal{F}}
 \newcommand{\NSpace}{N_s}
+\newcommand{\numSpatialPoints}{N_s}
 \newcommand{\NTime}{\numTimeSteps}
+\newcommand{\Nat}[1]{\mathbb{N}(#1)}
+\newcommand{\pstIndicesFom}{\mathfrak{pst}_{\text{FOM}}}
+\newcommand{\pstIndicesTraining}{\mathfrak{pst}_{\text{train}}}
+
+\newcommand{\pstIndicesHyper}{\mathfrak{pst}_{\text{Hyper}}}
+\newcommand{\Card}[1]{|#1|}
+\newcommand{\numSample}{N_{\text{sample}}}
 \newcommand{\NST}{N_{st}}
 \newcommand{\x}{\boldsymbol x}
 \newcommand{\xd}{\mathbf{x}}
@@ -36,15 +49,25 @@
 \newcommand{\TimeSpace}{\mathcal{T}}
 \newcommand{\STDim}{K_{\text{st}}}
 \newcommand{\PSTDim}{K_{\text{pst}}}
+\newcommand{\PSTDimResidual}{R_{\text{pst}}}
 
 \newcommand{\SemiDiscreteSpaceTimeTrialSpace}{\mathcal{ST}}
+
+\newcommand{\ParametricSpaceTimeTrialSpaceResidual}{\mathcal{PXT}^{\boldsymbol r}}
+\newcommand{\ApproxPDEResid}{\tilde{\mathcal{R}}}
+\newcommand{\PDEResid}{\mathcal{R}}
 
 \newcommand{\ParametricSpaceTimeTrialSpace}{\mathcal{PXT}}
 
 \newcommand{\SemiDiscreteParametricSpaceTimeTrialSpace}{\mathcal{PST}}
 
 \newcommand{\ParametricSpaceTimeBasisVec}{\boldsymbol \psi}
+\newcommand{\ParametricSpaceTimeBasisVecResidual}{\boldsymbol \psi^{\boldsymbol r}}
 \newcommand{\ParametricSpaceTimeBasisMat}{\boldsymbol \Psi}
+\newcommand{\DiscreteParametricSpaceTimeBasisMatTrain}{\mathbf{\Psi}_{\text{train}}}
+
+\newcommand{\ParametricSpaceTimeBasisMatResidual}{\boldsymbol \Psi^{\boldsymbol r}}
+
 \newcommand{\DiscreteParametricSpaceTimeBasisMat}{\mathbf{ \Psi}}
 
 \newcommand{\SpaceTimeBasisVec}{\boldsymbol \pi}
@@ -54,6 +77,9 @@
 \newcommand{\SemiDiscreteParametricSpaceTimeBasisVec}{\boldsymbol \phi}
 
 \newcommand{\TrainingData}{\mathcal{S}}
+\newcommand{\TrainingDataVec}{\mathbf{S}}
+\newcommand{\TrainingDataProjectVec}{\tilde{\mathbf{S}}}
+
 \newcommand{\NTrain}{N_{\text{train}}}
 \newcommand{\SemiDiscreteStateIC}{\SemiDiscreteState_0(\params)}
 \newcommand{\SemiDiscreteStateParametricSpaceTimeRef}{\SemiDiscreteState_{\text{ref}}}
@@ -62,6 +88,7 @@
 \newcommand{\RR}[1]{\mathbb{R}^{#1}}
 \newcommand{\FomDim}{N}
 \newcommand{\ApproxPDEState}{\tilde{\PDEState}}
+\newcommand{\ApproxPDEStateProject}{\tilde{\PDEState}_{\ell^2}}
 
 \newcommand{\PDEStateParametricSpaceTimeTrialSpace}{\textit{PXT}}
 
@@ -101,6 +128,11 @@
 \newcommand{\ParametricFullyDiscreteState}{\overline{\FullyDiscreteState}}
 \newcommand{\ParametricFullyDiscreteStateDummy}{\overline{\FullyDiscreteStateDummy}}
 
+\newcommand{\EllTwoPDEState}{\tilde{\PDEState}_{\ell^2} }
+
+\newcommand{\MLPDEState}{\tilde{\PDEState}_{\text{ML}} }
+
+\newcommand{\MLFullyDiscreteState}{\tilde{\FullyDiscreteState}_{\text{ML}} }
 \newcommand{\ApproxFullyDiscreteState}{\tilde{\FullyDiscreteState}}
 
 \newcommand{\ApproxSemiDiscreteState}{\tilde{\SemiDiscreteState}}
@@ -118,6 +150,8 @@
 \newcommand{\FullyDiscreteState}{\mathbf{u}}
 \newcommand{\FullyDiscreteStateArgs}{\params}
 
+\newcommand{\parametricSpaceTimeResidLMS}{\overline{\boldsymbol{r}}}
+
 \newcommand{\residLMS}{\boldsymbol{r}}
 
 \newcommand{\CollocationSet}{\mathcal{C}}
@@ -132,10 +166,16 @@
 
 \newcommand{\SemiDiscreteSpaceTimeGenState}{\overline{\hat{\SemiDiscreteState}}}
 \newcommand{\ParametricSpaceTimeGenState}{\overline{\hat{\SemiDiscreteState}}}
+\newcommand{\ParametricSpaceTimeGenStateResidual}{\overline{\hat{\boldsymbol r}}}
+
 \newcommand{\ParametricSpaceTimeGenStateDum}{\overline{\hat{\SemiDiscreteStateDum}}}
 
 \newcommand{\SemiDiscreteParametricSpaceTimeGenState}{\overline{\hat{\SemiDiscreteState}}}
 \newcommand{\SemiDiscreteParametricSpaceTimeGenStateNN}{\overline{\hat{\boldsymbol z}}}
+
+\newcommand{\ParametricSpaceTimeGenStateEllTwo}{\overline{\hat{\boldsymbol z}}_{\ell^2}}
+\newcommand{\inputDummy}{\boldsymbol a}
+
 \newcommand{\ParametricSpaceTimeGenStateNN}{\overline{\hat{\boldsymbol z}}}
 
 \newcommand{\DiscreteResid}{\mathbf{R}}
@@ -145,6 +185,8 @@
 \newcommand{\DiscreteSpaceTimeState}{\overline{\DiscreteState}}
 \newcommand{\DiscreteSpaceTimeResid}{\overline{\DiscreteResid}}
 \newcommand{\DiscreteSpaceTimeResidArgs}{\params}
+
+\newcommand{\DiscreteResMinCollocation}{J_{\text{c}}}
 
 \newcommand{\DiscreteResMin}{J}
 \newcommand{\ContinuousResMin}{\mathcal{J}}
