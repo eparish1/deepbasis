@@ -8,7 +8,8 @@ def uExact(t):
   return u 
 
 def residual(u):
-  return u - un - 0.5*dt*( f(u) + f(un) )
+  residual =  u - un - 0.5*dt*( f(u) + f(un) )
+  return residual 
 
 def f(u):
   ux = np.zeros(np.size(u))
@@ -26,9 +27,13 @@ uIC = np.ones(nx)
 et = 35 
 rk4const = np.array([1./4.,1./3.,1./2.,1.])
 #usave = np.zeros((nx,0,0))
-
+##Training
 mu1v = np.linspace(4.25,5.5,5)
 mu2v = np.linspace(0.015,0.015 + 0.015,4)
+##In distribution
+mu1v = np.linspace(4.30,5.45,8)
+mu2v = np.linspace(0.016,0.015 + 0.014,8)
+
 mu2a,mu1a = np.meshgrid(mu2v,mu1v)
 mu1a = mu1a.flatten()
 mu2a = mu2a.flatten()
@@ -49,17 +54,17 @@ for k in range(0,np.size(mu1a)):
     #for i in range(0,4):
     #  u = u0 + dt*rk4const[i]*f(u)
     t += dt
+    counter += 1
     if (counter  % save_freq == 0):
       usavel = np.append(usavel,u[:,None],axis=1)
       tsave = np.append(tsave,t)
-    counter += 1
 
   if k == 0:
     usave = usavel[:,:,None]*1.
   else:
     usave = np.append(usave,usavel[:,:,None],axis=2)
 
-np.savez('snapshots_st_cn',snapshots=usave,mu1a=mu1a,mu2a=mu2a,mu1=mu1v,mu2=mu2v,x=x,t=tsave)
+np.savez('snapshots_st_cn_indistribution',snapshots=usave,mu1a=mu1a,mu2a=mu2a,mu1=mu1v,mu2=mu2v,x=x,t=tsave)
 
 '''
 U,S,V = np.linalg.svd(usave)
