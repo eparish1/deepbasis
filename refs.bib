@@ -1,3 +1,16 @@
+@article{parish_WLS,
+title = {Windowed least-squares model reduction for dynamical systems},
+journal = {Journal of Computational Physics},
+volume = {426},
+pages = {109939},
+year = {2021},
+issn = {0021-9991},
+doi = {https://doi.org/10.1016/j.jcp.2020.109939},
+url = {https://www.sciencedirect.com/science/article/pii/S0021999120307130},
+author = {Eric J. Parish and Kevin T. Carlberg},
+keywords = {Reduced-order modeling, Residual minimization, Least-squares, Petrov–Galerkin, Optimal control, Space–time},
+abstract = {This work proposes a windowed least-squares (WLS) approach for model reduction of dynamical systems. The proposed approach sequentially minimizes the time-continuous full-order-model residual within a low-dimensional space–time trial subspace over time windows. The approach comprises a generalization of existing model reduction approaches, as particular instances of the methodology recover Galerkin, least-squares Petrov–Galerkin (LSPG), and space–time LSPG projection. In addition, the approach addresses key deficiencies in existing model reduction techniques, e.g., the dependence of LSPG and space–time LSPG projection on the time discretization and the exponential growth in time exhibited by a posteriori error bounds for both Galerkin and LSPG projection. We consider two types of space–time trial subspaces within the proposed approach: one that reduces only the spatial dimension of the full-order model, and one that reduces both the spatial and temporal dimensions of the full-order model. For each type of trial subspace, we consider two different solution techniques: direct (i.e., discretize then optimize) and indirect (i.e., optimize then discretize). Numerical experiments conducted using trial subspaces characterized by spatial dimension reduction demonstrate that the WLS approach can yield more accurate solutions with lower space–time residuals than Galerkin and LSPG projection.}
+}
 @article{LEE2020108973,
 title = {Model reduction of dynamical systems on nonlinear manifolds using deep convolutional autoencoders},
 journal = {Journal of Computational Physics},
@@ -66,7 +79,7 @@ abstract = {Nearly all model-reduction techniques project the governing equation
 	Year = {2015},
 	Bdsk-Url-1 = {https://onlinelibrary.wiley.com/doi/abs/10.1002/nme.4800},
 	Bdsk-Url-2 = {https://doi.org/10.1002/nme.4800}
-
+}
 @article{ETTER2020112931,
 title = {Online adaptive basis refinement and compression for reduced-order models via vector-space sieving},
 journal = {Computer Methods in Applied Mechanics and Engineering},
@@ -77,6 +90,592 @@ issn = {0045-7825},
 doi = {https://doi.org/10.1016/j.cma.2020.112931},
 url = {https://www.sciencedirect.com/science/article/pii/S0045782520301146},
 author = {Philip A. Etter and Kevin T. Carlberg},
+}
+
+@article{iliescu_pod_eddyviscosity,
+	Author = {Omer San and Traian Iliescu},
+	Date-Added = {2016-10-30 16:05:17 +0000},
+	Date-Modified = {2017-12-21 18:11:30 +0000},
+	Journal = {Comput. Methods Appl. Mech. Engrg},
+	Number = {3},
+	Pages = {217-237},
+	Title = {Proper Orthogonal Decomposition Closure Models for Fluid Flows: {Burgers} Equation},
+	Volume = {5},
+	Year = {2014}}
+
+
+@article{Wang:269133,
+	Abstract = {Closure modeling based on the Mori-Zwanzig formalism has  proven effective to improve the stability and accuracy of  projection-based model order reduction. However, closure  models are often expensive and infeasible for complex  nonlinear systems. Towards efficient model reduction of  general problems, this paper presents a recurrent neural  network (RNN) closure of parametric POD-Galerkin  reduced-order model. Based on the short time history of the  reduced-order solutions, the RNN predicts the memory  integral which represents the impact of the unresolved  scales on the resolved scales. A conditioned long short  term memory (LSTM) network is utilized as the regression  model of the memory integral, in which the POD coefficients  at a number of time steps are fed into the LSTM units, and  the physical/geometrical parameters are fed into the  initial hidden state of the LSTM. The reduced-order model  is integrated in time using an implicit-explicit (IMEX)  Runge-Kutta scheme, in which the memory term is integrated  explicitly and the remaining right-hand-side term is  integrated implicitly to improve the computational  efficiency. Numerical results demonstrate that the RNN  closure can significantly improve the accuracy and  efficiency of the POD-Galerkin reduced-order model of  nonlinear problems. The POD-Galerkin reduced-order model  with the RNN closure is also shown to be capable of making  accurate predictions, well beyond the time interval of the  training data.},
+	Author = {Wang, Qian and Ripamonti, Nicol{\`o} and Hesthaven, Jan S.},
+	Journal = {Journal of Computational Physics},
+	Title = {Recurrent neural network closure of parametric {POD-Galerkin} reduced-order models based on the {Mori-Zwanzig} formalism},
+	Url = {http://infoscience.epfl.ch/record/269133},
+	Year = {2019},
+	Bdsk-Url-1 = {http://infoscience.epfl.ch/record/269133}}
+
+@inbook{wentland_apg,
+	Author = {Christopher R. Wentland and Cheng Huang and Karthikeyan Duraisamy},
+	Booktitle = {AIAA Aviation 2019 Forum},
+	Doi = {10.2514/6.2019-3531},
+	Eprint = {https://arc.aiaa.org/doi/pdf/10.2514/6.2019-3531},
+	Title = {Closure of reacting flow reduced-order models via the {Adjoint Petrov-Galerkin} Method},
+	Url = {https://arc.aiaa.org/doi/abs/10.2514/6.2019-3531},
+	Bdsk-Url-1 = {https://arc.aiaa.org/doi/abs/10.2514/6.2019-3531},
+	Bdsk-Url-2 = {https://doi.org/10.2514/6.2019-3531}}
+
+@article{San2018,
+	Abstract = {Many reduced-order models are neither robust with respect to parameter changes nor cost-effective enough for handling the nonlinear dependence of complex dynamical systems. In this study, we put forth a robust machine learning framework for projection-based reduced-order modeling of such nonlinear and nonstationary systems. As a demonstration, we focus on a nonlinear advection-diffusion system given by the viscous Burgers equation, which is a prototypical setting of more realistic fluid dynamics applications due to its quadratic nonlinearity. In our proposed methodology the effects of truncated modes are modeled using a single layer feed-forward neural network architecture. The neural network architecture is trained by utilizing both the Bayesian regularization and extreme learning machine approaches, where the latter one is found to be more computationally efficient. A significant emphasis is laid on the selection of basis functions through the use of both Fourier bases and proper orthogonal decomposition. It is shown that the proposed model yields significant improvements in accuracy over the standard Galerkin projection methodology with a negligibly small computational overhead and provide reliable predictions with respect to parameter changes.},
+	Author = {San, Omer and Maulik, Romit},
+	Day = {01},
+	Doi = {10.1007/s10444-018-9590-z},
+	Issn = {1572-9044},
+	Journal = {Advances in Computational Mathematics},
+	Month = {Dec},
+	Number = {6},
+	Pages = {1717--1750},
+	Title = {Neural network closures for nonlinear model order reduction},
+	Url = {https://doi.org/10.1007/s10444-018-9590-z},
+	Volume = {44},
+	Year = {2018},
+	Bdsk-Url-1 = {https://doi.org/10.1007/s10444-018-9590-z}}
+
+
+@article{benner_st,
+	Author = {Baumann, M. and Benner, P. and Heiland, J.},
+	Doi = {10.1137/17M1135281},
+	Eprint = {https://doi.org/10.1137/17M1135281},
+	Journal = {SIAM Journal on Scientific Computing},
+	Number = {3},
+	Pages = {A1611-A1641},
+	Title = {Space-time {Galerkin} {POD} with application in optimal control of semilinear partial differential equations},
+	Url = {https://doi.org/10.1137/17M1135281},
+	Volume = {40},
+	Year = {2018},
+	Bdsk-Url-1 = {https://doi.org/10.1137/17M1135281}}
+
+@article{berkooz_turbulence_pod,
+	Author = {Berkooz, Gal and Holmes, Philip and Lumley, John L.},
+	Journal = {Annu. Rev. Fluid Mech.},
+	Pages = {539--575},
+	Publisher = {Annual Reviews},
+	Title = {The proper orthogonal decomposition in the analysis of turbulent flows},
+	Volume = {25},
+	Year = {1993}}
+
+
+@inbook{rb_2,
+	Author = {Karen Veroy and Christophe Prud'homme and Dimitrios Rovas and Anthony Patera},
+	Booktitle = {16th AIAA Computational Fluid Dynamics Conference},
+	Doi = {10.2514/6.2003-3847},
+	Eprint = {https://arc.aiaa.org/doi/pdf/10.2514/6.2003-3847},
+	Title = {A posteriori error bounds for reduced-basis approximation of parametrized noncoercive and nonlinear elliptic partial differential equations},
+	Url = {https://arc.aiaa.org/doi/abs/10.2514/6.2003-3847},
+	Bdsk-Url-1 = {https://arc.aiaa.org/doi/abs/10.2514/6.2003-3847},
+	Bdsk-Url-2 = {https://doi.org/10.2514/6.2003-3847}}
+
+@article{rb_3,
+	Author = {Veroy, K. and Patera, A. T.},
+	Journal = {International Journal for Numerical Methods in Fluids},
+	Number = {8-9},
+	Pages = {773-788},
+	Title = {Certified real-time solution of the parametrized steady incompressible {Navier-Stokes} equations: Rigorous reduced-basis a posteriori error bounds},
+	Volume = {47},
+	Year = {2005}}
+
+
+@article{rb_1,
+	Abstract = {{We present a technique for the rapid and reliable prediction of linear-functional outputs of elliptic (and parabolic) partial differential equations with affine parameter dependence. The essential components are (i) (provably) rapidly convergent global reduced-basis approximations---Galerkin projection onto a space WN spanned by solutions of the governing partial differential equation at N selected points in parameter space; (ii) a posteriori error estimation---relaxations of the error-residual equation that provide inexpensive yet sharp and rigorous bounds for the error in the outputs of interest; and (iii) off-line/on-line computational procedures methods which decouple the generation and projection stages of the approximation process. The operation count for the on-line stage in which, given a new parameter value, we calculate the output of interest and associated error bound, depends only on N (typically very small) and the parametric complexity of the problem; the method is thus ideally suited for the repeated and rapid evaluations required in the context of parameter estimation, design, optimization, and real-time control. }},
+	Author = {Prud'homme , C. and Rovas , D. V. and Veroy , K. and Machiels, L. and Maday, Y. and Patera, A. T. and Turinici, G.},
+	Doi = {10.1115/1.1448332},
+	Eprint = {https://asmedigitalcollection.asme.org/fluidsengineering/article-pdf/124/1/70/4780603/70\_1.pdf},
+	Issn = {0098-2202},
+	Journal = {Journal of Fluids Engineering},
+	Month = {11},
+	Number = {1},
+	Pages = {70-80},
+	Title = {Reliable Real-Time Solution of Parametrized Partial Differential Equations: Reduced-Basis Output Bound Methods},
+	Url = {https://doi.org/10.1115/1.1448332},
+	Volume = {124},
+	Year = {2001},
+	Bdsk-Url-1 = {https://doi.org/10.1115/1.1448332}}
+
+@inbook{NgocCuong2005,
+	Abstract = {Engineering analysis requires the prediction of (say, a single) selected ``output'' se relevant to ultimate component and system performance:* typical outputs include energies and forces, critical stresses or strains, flowrates or pressure drops, and various local and global measures of concentration, temperature, and flux. These outputs are functions of system parameters, or ``inputs'', $\mu$, that serve to identify a particular realization or configuration of the component or system: these inputs typically reflect geometry, properties, and boundary conditions and loads; we shall assume that $\mu$ is a P-vector (or P-tuple) of parameters in a prescribed closed input domain D ⊂ ℝp. The input-output relationship se($\mu$): D {\textrightarrow} ℝ thus encapsulates the behavior relevant to the desired engineering context.},
+	Address = {Dordrecht},
+	Author = {Ngoc Cuong, Nguyen and Veroy, Karen and Patera, Anthony T.},
+	Booktitle = {Handbook of Materials Modeling: Methods},
+	Doi = {10.1007/978-1-4020-3286-8_76},
+	Editor = {Yip, Sidney},
+	Isbn = {978-1-4020-3286-8},
+	Pages = {1529--1564},
+	Publisher = {Springer Netherlands},
+	Title = {Certified real-time solution of parametrized partial differential equations},
+	Url = {https://doi.org/10.1007/978-1-4020-3286-8_76},
+	Year = {2005},
+	Bdsk-Url-1 = {https://doi.org/10.1007/978-1-4020-3286-8_76}}
+
+@article{eim,
+	Author = {Maxime Barrault and Yvon Maday and Ngoc Cuong Nguyen and Anthony T. Patera},
+	Journal = {C. R. Acad. Sci. Paris},
+	Number = {9},
+	Pages = {667-672},
+	Title = {An `empirical interpolation' method: application to efficient reduced-basis discretization of partial differential equations},
+	Volume = {339},
+	Year = {2004}}
+
+@article{Rozza2008,
+	Abstract = {In this paper we consider (hierarchical, Lagrange) reduced basis approximation and a posteriori error estimation for linear functional outputs of affinely parametrized elliptic coercive partial differential equations. The essential ingredients are (primal-dual) Galerkin projection onto a low-dimensional space associated with a smooth ``parametric manifold''---dimension reduction; efficient and effective greedy sampling methods for identification of optimal and numerically stable approximations---rapid convergence; a posteriori error estimation procedures---rigorous and sharp bounds for the linear-functional outputs of interest; and Offline-Online computational decomposition strategies---minimum marginal cost for high performance in the real-time/embedded (e.g., parameter-estimation, control) and many-query (e.g., design optimization, multi-model/scale) contexts. We present illustrative results for heat conduction and convection-diffusion, inviscid flow, and linear elasticity; outputs include transport rates, added mass, and stress intensity factors.},
+	Author = {Rozza, G. and Huynh, D. B. P. and Patera, A. T.},
+	Day = {21},
+	Doi = {10.1007/s11831-008-9019-9},
+	Issn = {1886-1784},
+	Journal = {Archives of Computational Methods in Engineering},
+	Month = {May},
+	Number = {3},
+	Pages = {229},
+	Title = {Reduced Basis Approximation and a Posteriori Error Estimation for Affinely Parametrized Elliptic Coercive Partial Differential Equations},
+	Url = {https://doi.org/10.1007/s11831-008-9019-9},
+	Volume = {15},
+	Year = {2008},
+	Bdsk-Url-1 = {https://doi.org/10.1007/s11831-008-9019-9}}
+
+@techreport{Kalashnikova_sand2014,
+	Author = {Irina Kalashnikova and Srinivasan Arunajatesan and Matthew F. Barone and Bart G. van Bloemen Waanders and Jeffrey A. Fike},
+	Date-Added = {2016-03-26 02:38:55 +0000},
+	Date-Modified = {2016-03-26 02:40:16 +0000},
+	Institution = {Sandia},
+	Month = {May},
+	Number = {SAND2014-4693},
+	Title = {Reduced Order Modeling for Prediction and Control of Large-Scale Systems},
+	Type = {Report},
+	Year = {2014}}
+
+@article{rowley_pod_energyproj,
+	Author = {Clarence W. Rowley and Tim Colonius and Richard M. Murray},
+	Date-Added = {2016-10-31 14:04:02 +0000},
+	Date-Modified = {2016-10-31 14:05:10 +0000},
+	Journal = {Physica D: Nonlinear Phenomena},
+	Number = {1-2},
+	Pages = {115-129},
+	Title = {{Model reduction for compressible flows using POD and Galerkin projection}},
+	Volume = {189},
+	Year = {2004}}
+
+@article{adeim_peherstorfer,
+	Author = {Benjamin Peherstorfer and Karen Willcox},
+	Issue = {4},
+	Journal = {J. Sci. Comput.},
+	Pages = {A2123--A2150},
+	Publisher = {SIAM},
+	Title = {Online adaptive model reduction for nonlinear systems via low-rank updates},
+	Volume = {37},
+	Year = {2015}}
+
+@inproceedings{structurePreserveBeattie,
+	Author = {Beattie, Christopher and Gugercin, Serkan},
+	Booktitle = {Decision and Control and European Control Conference (CDC-ECC), 2011 50th IEEE Conference on},
+	Organization = {IEEE},
+	Pages = {6564--6569},
+	Title = {Structure-preserving model reduction for nonlinear port-{H}amiltonian systems},
+	Year = {2011}}
+
+@article{chaturantabut2016structure,
+	Author = {Chaturantabut, Saifon and Beattie, Chris and Gugercin, Serkan},
+	Journal = {SIAM Journal on Scientific Computing},
+	Number = {5},
+	Pages = {B837--B865},
+	Publisher = {SIAM},
+	Title = {Structure-preserving model reduction for nonlinear port-{Hamiltonian} systems},
+	Volume = {38},
+	Year = {2016}}
+
+@article{farhat2014dimensional,
+	Author = {Farhat, Charbel and Avery, Philip and Chapman, Todd and Cortial, Julien},
+	Journal = {International Journal for Numerical Methods in Engineering},
+	Number = {9},
+	Pages = {625--662},
+	Publisher = {Wiley Online Library},
+	Title = {Dimensional reduction of nonlinear finite element dynamic models with finite rotations and energy-based mesh sampling and weighting for computational efficiency},
+	Volume = {98},
+	Year = {2014}}
+
+@article{carlberg2012spd,
+	Author = {Carlberg, K. and Tuminaro, R. and Boggs, P.},
+	Journal = {SIAM J. Sci. Comput.},
+	Number = {2},
+	Pages = {B153---B184.},
+	Title = {Preserving {L}agrangian structure in nonlinear model reduction with application to structural dynamics},
+	Volume = {37},
+	Year = {2015}}
+
+@article{LALL2003304,
+	Abstract = {This paper focuses on methods of constructing of reduced-order models of mechanical systems which preserve the Lagrangian structure of the original system. These methods may be used in combination with standard spatial decomposition methods, such as the Karhunen--Lo{\`e}ve expansion, balancing, and wavelet decompositions. The model reduction procedure is implemented for three-dimensional finite-element models of elasticity, and we show that using the standard Newmark implicit integrator, significant savings are obtained in the computational costs of simulation. In particular simulation of the reduced model scales linearly in the number of degrees of freedom, and parallelizes well.},
+	Author = {Sanjay Lall and Petr Krysl and Jerrold E Marsden},
+	Doi = {https://doi.org/10.1016/S0167-2789(03)00227-6},
+	Issn = {0167-2789},
+	Journal = {Physica D: Nonlinear Phenomena},
+	Keywords = {Model reduction, Karhunen--Lo{\`e}ve expansion, Balanced truncation, Lagrangian mechanics},
+	Note = {Complexity and Nonlinearity in Physical Systems -- A Special Issue to Honor Alan Newell},
+	Number = {1},
+	Pages = {304 - 318},
+	Title = {Structure-preserving model reduction for mechanical systems},
+	Url = {http://www.sciencedirect.com/science/article/pii/S0167278903002276},
+	Volume = {184},
+	Year = {2003},
+	Bdsk-Url-1 = {http://www.sciencedirect.com/science/article/pii/S0167278903002276},
+	Bdsk-Url-2 = {https://doi.org/10.1016/S0167-2789(03)00227-6}}
+
+@article{everson_sirovich_gappy,
+	Author = {R. Everson and L. Sirovich},
+	Date-Added = {2016-10-31 14:04:02 +0000},
+	Date-Modified = {2016-10-31 14:05:10 +0000},
+	Journal = {Journal of the Optical Society of America A},
+	Pages = {1657-1644},
+	Title = {{{Karhunen-Lo\`eve} procedure for gappy data}},
+	Volume = {12},
+	Year = {1995}}
+
+
+@article{deim,
+	Author = {Saifon Chaturantabut and Danny C. Sorensen},
+	Date-Added = {2016-10-31 14:04:02 +0000},
+	Date-Modified = {2016-10-31 14:05:10 +0000},
+	Journal = {SIAM J. Sci. Comput.},
+	Number = {5},
+	Pages = {2737-2764},
+	Title = {{Nonlinear Model Reduction via Discrete Empirical Interpolation}},
+	Volume = {32},
+	Year = {2010}}
+
+
+@article{l1,
+	Author = {R. Abgrall and R. Crisovan},
+	Date-Added = {2019-05-05 14:14:31 -0700},
+	Date-Modified = {2019-05-05 14:15:20 -0700},
+	Journal = {International Journal for Numerical Methods in Fluids},
+	Number = {12},
+	Pages = {628--651},
+	Title = {{Model reduction using L1-norm minimization as an application to nonlinear hyperbolic problems}},
+	Volume = {87},
+	Year = {2018}}
+
+
+@phdthesis{carlberg_thesis,
+	Author = {Kevin Carlberg},
+	Date-Added = {2019-06-10 11:17:22 -0700},
+	Date-Modified = {2019-06-10 11:19:10 -0700},
+	School = {Stanford University},
+	Title = {Model reduction of nonlinear mechanical systems via optimal projection and tensor approximation},
+	Year = {2011}}
+
+@phdthesis{rovas_thesis,
+	Author = {Dimitrios V. Rovas},
+	Date-Added = {2017-09-01 01:54:33 +0000},
+	Date-Modified = {2017-09-01 01:55:44 +0000},
+	School = {Massachusetts Institute of Technology},
+	Title = {{Reduced-basis output bound methods for parametrized partial differential equations}},
+	Year = {2003}}
+
+@phdthesis{bui_thesis,
+	Author = {Tan Bui-Thanh},
+	Date-Added = {2017-09-01 01:54:33 +0000},
+	Date-Modified = {2017-09-01 01:55:44 +0000},
+	School = {Massachusetts Institute of Technology},
+	Title = {{Model-constrained optimization methods for reduction of parameterized large-scale systems}},
+	Year = {2007}}
+
+@phdthesis{Wang_ROM_thesis,
+	Author = {Zhu Wang},
+	Date-Added = {2017-09-01 01:54:33 +0000},
+	Date-Modified = {2017-09-01 01:55:44 +0000},
+	School = {Virginia Polytechnic Institute and State University},
+	Title = {Reduced-Order Modeling of Complex Engineering and Geophysical Flows: Analysis and Computations},
+	Year = {2012}}
+
+@article{bui_resmin_steady,
+	Author = {Bui-Thanh, T. and Willcox, K. and Ghattas, O.},
+	Doi = {10.1137/070694855},
+	Eprint = {https://doi.org/10.1137/070694855},
+	Journal = {SIAM Journal on Scientific Computing},
+	Number = {6},
+	Pages = {3270-3288},
+	Title = {Model Reduction for Large-Scale Systems with High-Dimensional Parametric Input Space},
+	Url = {https://doi.org/10.1137/070694855},
+	Volume = {30},
+	Year = {2008},
+	Bdsk-Url-1 = {https://doi.org/10.1137/070694855}}
+
+@inbook{legresley_3,
+	Author = {Patrick LeGresley and Juan Alonso},
+	Booktitle = {41st Aerospace Sciences Meeting and Exhibit},
+	Doi = {10.2514/6.2003-250},
+	Eprint = {https://arc.aiaa.org/doi/pdf/10.2514/6.2003-250},
+	Title = {Dynamic domain decomposition and error correction for reduced order models},
+	Url = {https://arc.aiaa.org/doi/abs/10.2514/6.2003-250},
+	Bdsk-Url-1 = {https://arc.aiaa.org/doi/abs/10.2514/6.2003-250},
+	Bdsk-Url-2 = {https://doi.org/10.2514/6.2003-250}}
+
+@inbook{legresley_2,
+	Author = {Patrick LeGresley and Juan Alonso},
+	Booktitle = {39th Aerospace Sciences Meeting and Exhibit},
+	Doi = {10.2514/6.2001-926},
+	Eprint = {https://arc.aiaa.org/doi/pdf/10.2514/6.2001-926},
+	Title = {Investigation of non-linear projection for {POD} based reduced order models for Aerodynamics},
+	Url = {https://arc.aiaa.org/doi/abs/10.2514/6.2001-926},
+	Bdsk-Url-1 = {https://arc.aiaa.org/doi/abs/10.2514/6.2001-926},
+	Bdsk-Url-2 = {https://doi.org/10.2514/6.2001-926}}
+
+@inbook{legresley_1,
+	Author = {Patrick LeGresley and Juan Alonso},
+	Booktitle = {Fluids 2000 Conference and Exhibit},
+	Doi = {10.2514/6.2000-2545},
+	Eprint = {https://arc.aiaa.org/doi/pdf/10.2514/6.2000-2545},
+	Title = {Airfoil design optimization using reduced order models based on proper orthogonal decomposition},
+	Url = {https://arc.aiaa.org/doi/abs/10.2514/6.2000-2545},
+	Bdsk-Url-1 = {https://arc.aiaa.org/doi/abs/10.2514/6.2000-2545},
+	Bdsk-Url-2 = {https://doi.org/10.2514/6.2000-2545}}
+
+
+@article{wang_smag,
+	Author = {Z. Wang and I. Akhtar and J. Borggaard and T. Iliescu},
+	Date-Added = {2016-10-31 14:04:02 +0000},
+	Date-Modified = {2016-10-31 14:05:10 +0000},
+	Journal = {Journal of Computational Physics},
+	Number = {1},
+	Pages = {126-146},
+	Title = {{Two-level discretizations of nonlinear closure models for proper orthogonal decomposition}},
+	Volume = {230},
+	Year = {2011}}
+
+@article{Bergmann_pod_vms,
+	Author = {M. Bergmann and C.H. Bruneaua and A. Iollo},
+	Date-Added = {2016-10-31 14:04:02 +0000},
+	Date-Modified = {2016-10-31 14:05:10 +0000},
+	Journal = {Journal of Computational Physics},
+	Number = {1},
+	Pages = {516-538},
+	Title = {{Enablers for robust POD models}},
+	Volume = {228},
+	Year = {2009}}
+
+@article{iliescu_ciazzo_residual_rom,
+	Abstract = {This report has two main goals. First, it numerically investigates three velocity--pressure reduced order models (ROMs) for incompressible flows. The proper orthogonal decomposition (POD) is used to generate the modes. One method computes the ROM pressure solely based on the velocity POD modes, whereas the other two ROMs use pressure modes as well. To the best of the authorsʼ knowledge, one of the latter methods is novel. The second goal is to numerically investigate the impact of the snapshot accuracy on the results of the ROMs. Numerical studies are performed on a two-dimensional laminar flow past a circular obstacle. Comparing the results of the ROMs and of the simulations for computing the snapshots, it turns out that the latter results are generally well reproduced by the ROMs. This observation is made for snapshots of different accuracy. Both in terms of reproducing the results of the underlying simulations for obtaining the snapshots and of efficiency, the two ROMs that utilize pressure modes are superior to the ROM that uses only velocity modes.},
+	Author = {Alfonso Caiazzo and Traian Iliescu and Volker John and Swetlana Schyschlowa},
+	Doi = {https://doi.org/10.1016/j.jcp.2013.12.004},
+	Issn = {0021-9991},
+	Journal = {Journal of Computational Physics},
+	Keywords = {Navier--Stokes equations, Proper orthogonal decomposition, Velocity--pressure reduced order models, Snapshot accuracy},
+	Pages = {598 - 616},
+	Title = {A numerical investigation of velocity--pressure reduced order models for incompressible flows},
+	Url = {http://www.sciencedirect.com/science/article/pii/S0021999113008036},
+	Volume = {259},
+	Year = {2014},
+	Bdsk-Url-1 = {http://www.sciencedirect.com/science/article/pii/S0021999113008036},
+	Bdsk-Url-2 = {https://doi.org/10.1016/j.jcp.2013.12.004}}
+
+@article{iliescu_vms_pod_supg,
+	Abstract = {This paper presents a Streamline-Upwind Petrov--Galerkin (SUPG) reduced order model (ROM) based on proper orthogonal decomposition (POD). This ROM is investigated theoretically and numerically for convection-dominated convection--diffusion--reaction problems. The SUPG finite element method was used on realistic meshes for computing the snapshots, leading to some noise in the POD data. Numerical analysis is used to propose the scaling of the stabilization parameter for the SUPG-ROM. Two approaches are used: One based on the underlying finite element discretization and the other one based on the POD truncation. The resulting SUPG-ROMs and the standard Galerkin ROM (G-ROM) are studied numerically. For many settings, the results obtained with the SUPG-ROMs are more accurate. Finally, one of the choices for the stabilization parameter is recommended.},
+	Author = {Swetlana Giere and Traian Iliescu and Volker John and David Wells},
+	Doi = {https://doi.org/10.1016/j.cma.2015.01.020},
+	Issn = {0045-7825},
+	Journal = {Computer Methods in Applied Mechanics and Engineering},
+	Keywords = {Reduced order models (ROMs), Convection-dominated equations, Streamline-Upwind Petrov--Galerkin (SUPG) method, Proper Orthogonal Decomposition (POD), Stabilization parameter},
+	Pages = {454 - 474},
+	Title = {{SUPG} reduced order models for convection-dominated convection--diffusion--reaction equations},
+	Url = {http://www.sciencedirect.com/science/article/pii/S0045782515000419},
+	Volume = {289},
+	Year = {2015},
+	Bdsk-Url-1 = {http://www.sciencedirect.com/science/article/pii/S0045782515000419},
+	Bdsk-Url-2 = {https://doi.org/10.1016/j.cma.2015.01.020}}
+
+@article{san_iliescu_geostrophic,
+	Author = {Omar San and Traian Iliescu},
+	Date-Added = {2016-10-31 14:04:02 +0000},
+	Date-Modified = {2016-10-31 14:05:10 +0000},
+	Journal = {Adv Comput Math},
+	Number = {1},
+	Pages = {1289-1319},
+	Title = {{A stabilized proper orthogonal decomposition reduced-order model for large scale quasigeostrophic ocean circulation}},
+	Volume = {41},
+	Year = {2015}}
+
+@article{wang_pod_compare_closure,
+	Author = {Zhu Wang, Imran Akhtar, Jeff Borggaard, Traian Iliescu},
+	Date-Added = {2016-10-31 14:04:02 +0000},
+	Date-Modified = {2016-10-31 14:05:10 +0000},
+	Journal = {Comput. Methods Appl. Mech. Engrg.},
+	Pages = {10-26},
+	Title = {{Proper orthogonal decomposition closure models for turbulent flows: A numerical comparison}},
+	Volume = {237},
+	Year = {2012}}
+
+@article{iliescu_vms_pod_ns,
+	Author = {Traian Iliescu and Zhu Wang},
+	Date-Added = {2016-10-31 14:04:02 +0000},
+	Date-Modified = {2016-10-31 14:05:10 +0000},
+	Journal = {Numerical Methods for Partial Differential Equations},
+	Number = {2},
+	Pages = {641-663},
+	Title = {Variational Multiscale Proper Orthogonal Decomposition: {Navier--Stokes} Equations},
+	Volume = {30},
+	Year = {2014}}
+
+
+@article{carlberg_lspg,
+	Author = {Kevin Carlberg and Charbel Bou-Mosleh and Charbel Farhat},
+	Date-Added = {2016-10-31 14:04:02 +0000},
+	Date-Modified = {2016-10-31 14:05:10 +0000},
+	Journal = {Int. J. Numer. Methods Eng.},
+	Pages = {155--181},
+	Title = {Efficient non-linear model reduction via a least-squares {Petrov--Galerkin} projection and compressive tensor approximations},
+	Volume = {86},
+	Year = {2011}}
+
+@article{bui_unsteady,
+	Author = {Bui-Thanh, T. and Willcox, K. and Ghattas, O.},
+	Doi = {10.2514/1.35850},
+	Eprint = {https://doi.org/10.2514/1.35850},
+	Journal = {AIAA Journal},
+	Number = {10},
+	Pages = {2520-2529},
+	Title = {Parametric Reduced-Order Models for Probabilistic Analysis of Unsteady Aerodynamic Applications},
+	Url = {https://doi.org/10.2514/1.35850},
+	Volume = {46},
+	Year = {2008},
+	Bdsk-Url-1 = {https://doi.org/10.2514/1.35850}}
+
+@article{carlberg_gnat,
+	Author = {Kevin Carlberg and Charbel Farhat and Julien Cortial and David Amsallem},
+	Journal = {Journal of Computational Physics},
+	Pages = {623--647},
+	Publisher = {Elsevier},
+	Title = {The {GNAT} method for nonlinear model reduction: Effective implementation and application to computational fluid dynamics and turbulent flows},
+	Volume = {242},
+	Year = {2013}}
+
+@article{carlberg_lspg_v_galerkin,
+	Author = {Kevin Carlberg and Matthew Barone and Harbir Antil},
+	Date-Added = {2016-10-31 14:04:02 +0000},
+	Date-Modified = {2016-10-31 14:05:10 +0000},
+	Journal = {Journal of Computational Physics},
+	Pages = {693--734},
+	Title = {{Galerkin v. least-squares Petrov-Galerkin projection in nonlinear model reduction}},
+	Volume = {330},
+	Year = {2017}}
+
+@article{carlberg_conservative_rom,
+	Author = {Kevin Carlberg and Youngsoo Choi and Syuzanna Sargsyan},
+	Journal = {Journal of Computational Physics},
+	Pages = {280-314},
+	Publisher = {Elsevier},
+	Title = {Conservative model reduction for finite-volume models},
+	Volume = {371},
+	Year = {2018}}
+
+@misc{mojgani2020physicsaware,
+      title={Physics-aware registration based auto-encoder for convection dominated PDEs}, 
+      author={Rambod Mojgani and Maciej Balajewicz},
+      year={2020},
+      eprint={2006.15655},
+      archivePrefix={arXiv},
+      primaryClass={math.DS}
+}
+
+@misc{mojgani2017lagrangian,
+      title={Lagrangian basis method for dimensionality reduction of convection dominated nonlinear flows}, 
+      author={Rambod Mojgani and Maciej Balajewicz},
+      year={2017},
+      eprint={1701.04343},
+      archivePrefix={arXiv},
+      primaryClass={physics.flu-dyn}
+}
+
+@article{Welper_transformsnapshots,
+author = {Welper, G.},
+title = {Interpolation of Functions with Parameter Dependent Jumps by Transformed Snapshots},
+journal = {SIAM Journal on Scientific Computing},
+volume = {39},
+number = {4},
+pages = {A1225-A1250},
+year = {2017},
+doi = {10.1137/16M1059904},
+
+URL = { 
+        https://doi.org/10.1137/16M1059904
+    
+},
+eprint = { 
+        https://doi.org/10.1137/16M1059904
+    
+}
+
+}
+@article{nair_tsmor,
+author = {Nair, Nirmal J. and Balajewicz, Maciej},
+title = {Transported snapshot model order reduction approach for parametric, steady-state fluid flows containing parameter-dependent shocks},
+journal = {International Journal for Numerical Methods in Engineering},
+volume = {117},
+number = {12},
+pages = {1234-1262},
+keywords = {hyperbolic PDE, parametric model order reduction, shock, steady-state residual},
+doi = {https://doi.org/10.1002/nme.5998},
+url = {https://onlinelibrary.wiley.com/doi/abs/10.1002/nme.5998},
+eprint = {https://onlinelibrary.wiley.com/doi/pdf/10.1002/nme.5998},
+abstract = {Summary A new model order reduction approach is proposed for parametric steady-state nonlinear fluid flows characterized by shocks and discontinuities whose spatial locations and orientations are strongly parameter dependent. In this method, solutions in the predictive regime are approximated using a linear superposition of parameter-dependent basis. The sought-after parametric reduced bases are obtained by transporting the snapshots in a spatially and parametrically dependent transport field. Key to the proposed approach is the observation that the transport fields are typically smooth and continuous, despite the solution themselves not being so. As a result, the transport fields can be accurately expressed using a low-order polynomial expansion. Similar to traditional projection-based model order reduction approaches, the proposed method is formulated mathematically as a residual minimization problem for the generalized coordinates. The proposed approach is also integrated with well-known hyper-reduction strategies to obtain significant computational speedups. The method is successfully applied to the reduction of a parametric one-dimensional flow in a converging-diverging nozzle, a parametric two-dimensional supersonic flow over a forward-facing step, and a parametric two-dimensional jet diffusion flame in a combustor.},
+year = {2019}
+}
+
+
+@article{chan2019entropy,
+	Author = {Chan, Jesse},
+	Journal = {arXiv preprint arXiv:1909.09103},
+	Title = {Entropy stable reduced order modeling of nonlinear conservation laws},
+	Year = {2019}}
+@article{chen_entropy,
+	Author = {Tianheng Chen and Chi-Wang Shu},
+	Date-Added = {2017-09-01 12:50:43 +0000},
+	Date-Modified = {2017-09-01 12:51:55 +0000},
+	Journal = {Journal of Computational Physics},
+	Pages = {427-461},
+	Title = {{Entropy stable high order discontinuous Galerkin methods with suitable quadrature rules for hyperbolic conservation laws}},
+	Volume = {345},
+	Year = {2017}}
+
+@article{yano19,
+	Abstract = {We present a model reduction formulation for parametrized nonlinear partial differential equations (PDEs) associated with steady hyperbolic and convection-dominated conservation laws. Our formulation builds on three ingredients: a discontinuous Galerkin (DG) method which provides stability for conservation laws, reduced basis (RB) spaces which provide low-dimensional approximations of the parametric solution manifold, and the empirical quadrature procedure (EQP) which provides hyperreduction of the Galerkin-projection-based reduced model. The hyperreduced system inherits the stability of the DG discretization: (i) energy stability for linear hyperbolic systems, (ii) symmetry and non-negativity for steady linear diffusion systems, and hence (iii) energy stability for linear convection-diffusion systems. In addition, the framework provides (a) a direct quantitative control of the solution error induced by the hyperreduction, (b) efficient and simple hyperreduction posed as a ℓ1 minimization problem, and (c) systematic identification of the reduced bases and the empirical quadrature rule by a greedy algorithm. We demonstrate the formulation for parametrized aerodynamics problems governed by the compressible Euler and Navier-Stokes equations.},
+	Author = {Yano, Masayuki},
+	Da = {2019/12/01},
+	Date-Added = {2021-03-26 09:55:52 -0700},
+	Date-Modified = {2021-03-26 09:55:52 -0700},
+	Doi = {10.1007/s10444-019-09710-z},
+	Id = {Yano2019},
+	Isbn = {1572-9044},
+	Journal = {Advances in Computational Mathematics},
+	Number = {5},
+	Pages = {2287--2320},
+	Title = {Discontinuous Galerkin reduced basis empirical quadrature procedure for model reduction of parametrized nonlinear conservation laws},
+	Ty = {JOUR},
+	Url = {https://doi.org/10.1007/s10444-019-09710-z},
+	Volume = {45},
+	Year = {2019},
+	Bdsk-Url-1 = {https://doi.org/10.1007/s10444-019-09710-z}}
+
+
+@article{carlberg_hadaptation,
+	Author = {Carlberg, Kevin},
+	Doi = {10.1002/nme.4800},
+	Eprint = {https://onlinelibrary.wiley.com/doi/pdf/10.1002/nme.4800},
+	Journal = {International Journal for Numerical Methods in Engineering},
+	Keywords = {adaptive refinement, h-refinement, model reduction, dual-weighted residual, adjoint error estimation, clustering},
+	Number = {5},
+	Pages = {1192-1210},
+	Title = {Adaptive $h$-refinement for reduced-order models},
+	Url = {https://onlinelibrary.wiley.com/doi/abs/10.1002/nme.4800},
+	Volume = {102},
+	Year = {2015},
+	Bdsk-Url-1 = {https://onlinelibrary.wiley.com/doi/abs/10.1002/nme.4800},
+	Bdsk-Url-2 = {https://doi.org/10.1002/nme.4800}}
+
 keywords = {Adaptive refinement, Adaptive coarsening, Model reduction, Dual-weighted residual, Adjoint error estimation},
 abstract = {In many applications, projection-based reduced-order models (ROMs) have demonstrated the ability to provide rapid approximate solutions to high-fidelity full-order models (FOMs). However, there is no a priori assurance that these approximate solutions are accurate; their accuracy depends on the ability of the low-dimensional trial basis to represent the FOM solution. As a result, ROMs can generate inaccurate approximate solutions, e.g., when the FOM solution at the online prediction point is not well represented by training data used to construct the trial basis. To address this fundamental deficiency of standard model-reduction approaches, this work proposes a novel online-adaptive mechanism for efficiently enriching the trial basis in a manner that ensures convergence of the ROM to the FOM, yet does not incur any FOM solves. The mechanism is based on the previously proposed adaptive h-refinement method for ROMs (carlberg, 2015), but improves upon this work in two crucial ways. First, the proposed method enables basis refinement with respect to any orthogonal basis (not just the Kronecker basis), thereby generalizing the refinement mechanism and enabling it to be tailored to the physics characterizing the problem at hand. Second, the proposed method provides a fast online algorithm for periodically compressing the enriched basis via an efficient proper orthogonal decomposition (POD) method, which does not incur any operations that scale with the FOM dimension. These two features allow the proposed method to serve as (1) a failsafe mechanism for ROMs, as the method enables the ROM to satisfy any prescribed error tolerance online (even in the case of inadequate training), and (2) an efficient online basis-adaptation mechanism, as the combination of basis enrichment and compression enables the basis to adapt online while controlling its dimension.}
 }}

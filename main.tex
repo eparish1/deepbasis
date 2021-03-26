@@ -21,7 +21,10 @@ The simulation of parameterized partial differential equations is ubiquitous in 
 
 A wide variety of techniques exist for computing low-cost approximate solutions, including projection-based reduced-order models (ROMs), coarse mesh and/or reduced physics solutions, kriging, and machine learning regression models. Projection-based reduced-order models comprise an approximation strategy that has received significant attention. These techniques operate in an offline--online paradigm. First, in the offline stage, a computationally expensive training process is undertaken to compute a low-dimensional \textit{trial subspace} on which the system's state can be well approximated (e.g., via the proper orthogonal decomposition). Second, projection-based reduced-order models execute an inexpensive \textit{online} stage in where they compute approximate solutions to the system that reside on this low-dimensional trial subspace via, e.g., Galerkin projection. 
 
-Projection-based reduced-order modeling technologies are mature for both linear and nonlinear systems. Techniques have been developed that, e.g., yield space--time optimality~\cite{choi_stlspg,constantine_strom,yuki_stlspg,parish_wls,townePOD}, preserve physical structure (e.g., conservation), adapt the trial subspace, account for observability, controlability, and $\mathcal{H}^2$ optimality, address the closure problem. This rich body of work has enabled the construction of accurate and efficient ROMs for a wide class of physical systems. One class of systems that remain challenging for ROMs, however, are those whose solutions exhibit a slowly decaying \textit{Kolmogorov n-width}; the Kolmogorov $n$-width provides a metric for quantifying the optimal linear subspace. As ROMs traditionally restrict the state to belong to a \textit{linear} trial subspace, they are known to perform poorly for this class of problems. Approaches that have been proposed to address this issue include transporting and morphing the trial-subspace or space--time mesh, developing local subspaces that are tailored to a particular region of a space--time--parameter domain, adapting and/or refining the basis, and employing a \textit{nonlinear} trial manifold~\cite{LeeCarlberg,kim2020fast}. This latter approach is, at the time of this writing, of particular interest. These manifold approaches operate by restricting the state to live on a low-dimensional (nonlinear) \textit{manifold} (identified, for example, through deep convolutional autoencoders~\cite{LeeCarlberg}). By employing a nonlinear manifold, these approaches are able to overcome the fundamental barrier posed by the Kolmogorov $n$-width. Numerical experiments have demonstrated that, for a given latent dimension, a manifold-based approximation can yield far more accurate solutions than a linear subspace for transport problems. While promising, nonlinear manifold ROMs face several significant challenges, including offline training cost, online model execution cost, generalization, and scalability. 
+Projection-based reduced-order modeling technologies are mature for both linear and nonlinear systems. Techniques have been developed that, e.g., equip the ROM with a notion of optimality via residual minimization~\cite{carlberg_lspg,carlberg_gnat,legresley_1,legresley_2,legresley_3,bui_resmin_steady,bui_unsteady,rovas_thesis,carlberg_thesis,bui_thesis,l1, yano_thesis, choi_stlspg,constantine_strom,yuki_stlspg,parish_wls,townePOD}, enable efficient computation of nonlinear operators~\cite{eim,deim,everson_sirovich_gappy,carlberg_gnat,yano19}, preserve physical structure (e.g., conservation, Hamiltonian)~\cite{carlberg_conservative_rom,LALL2003304,carlberg2012spd,structurePreserveBeattie,chaturantabut2016structure,farhat2014dimensional}, adapt the trial subspace~\cite{ETTER2020112931,carlberg_hadaptation,adeim_peherstorfer}, construct ``energy-based'' inner
+products that ensure non-increasing entropy in the ROM
+solution~\cite{rowley_pod_energyproj,Kalashnikova_sand2014,chan2019entropy},
+ address the closure problem~\cite{san_iliescu_geostrophic,iliescu_pod_eddyviscosity,iliescu_vms_pod_ns,Bergmann_pod_vms,iliescu_ciazzo_residual_rom,Wang_ROM_thesis,wentland_apg,Wang:269133,San2018}. This rich body of work has enabled the construction of accurate and efficient ROMs for a wide class of physical systems. One class of systems that remain challenging for ROMs, however, are those whose solutions exhibit a slowly decaying \textit{Kolmogorov n-width}; the Kolmogorov $n$-width provides a metric for quantifying the optimal linear subspace. As ROMs traditionally restrict the state to belong to a \textit{linear} trial subspace, they are known to perform poorly for this class of problems. Approaches that have been proposed to address this issue include transporting and morphing the trial-subspace or space--time mesh~\cite{nair_tsmor,mojgani2020physicsaware,mojgani2017lagrangian,}, developing local subspaces that are tailored to a particular region of a space--time--parameter domain, adapting and/or refining the basis, and employing a \textit{nonlinear} trial manifold~\cite{LEE2020108973,kim2020fast}. This latter approach is, at the time of this writing, of particular interest. These manifold approaches operate by restricting the state to live on a low-dimensional (nonlinear) \textit{manifold} (identified, for example, through deep convolutional autoencoders~\cite{LeeCarlberg}). By employing a nonlinear manifold, these approaches are able to overcome the fundamental barrier posed by the Kolmogorov $n$-width. Numerical experiments have demonstrated that, for a given latent dimension, a manifold-based approximation can yield far more accurate solutions than a linear subspace for transport problems. While promising, nonlinear manifold ROMs face several significant challenges, including offline training cost, online model execution cost, generalization, and scalability. 
 
 It is well known that nonlinear phenomena can become linear in higher-dimensional spaces; this is the thesis, for example, behind support vector machines and kernel principal component analysis. Constructing subspaces for projection-based reduced-order models is no different. In all the approaches mentioned above, save for Refs.~\cite{}, parameter-independent trial subspaces/manifolds are constructed for parameterized systems; e.g., one trial subspace/manifold is constructed for the system of interest, and this subspace/manifold is held constant across the entire parameter domain. While this perspective is justified for certain classes of systems, e.g., fluid flow with recurrent coherent structures appearing in similar spatial locations, it is non-intuitive for a wide variety of problems, e.g., fluid flow with parameterized shocks and advecting fronts.  Indeed, it is from this parametric-constant perspective that a slowly decaying Kolmogorov n-width is observed for this latter class of problems, and nonlinear dimension reduction techniques are proposed as the solution.
 
@@ -419,7 +422,7 @@ Before proceeding, we make two critical remarks regarding these deep subspaces.
 \begin{remark}\label{remark:add_basis_training}              
 \textbf{Increasing subspace dimension does not yield lower projection errors for training data.} In the traditional ROM paradigm, more accurate trial subspaces are obtained from retaining additional basis functions. In the present context, the dimension of the subspace can be controlled setting the number of basis vectors in the final layer of the network. Growing the number of basis functions does not necessarily translate to increased accuracy, however. The explanation for this is as follows: as the proposed framework constructs ROMs from the parametric--space--time viewpoint, the training data can be described by a \textbf{single} basis vector, i.e., this single basis vector is the training data solution. Thus, there exists a one-dimensional trial subspace that describes the data. In practice, learning a network that is capable of describing this solution vector with a single basis vector can be challenging, and employing multiple basis vectors may have practical advantages.  
 \end{remark}
-\begin{remark}               
+\begin{remark}\label{remark:add_basis_testing}
 \textbf{Increasing subspace dimension can yield lower projection errors for testing data.} While increasing the subspace dimension does not yield improved projection errors on the training data, it can yield lower projection errors for testing data. The reason for this is that the single basis function described by the training data solution will not yield zero projection errors for testing data, and as such is can be advantageous to have multiple basis functions for the predictive setting of the ROM. 
 \end{remark}
 
@@ -543,22 +546,22 @@ The problem is characterized by a parameterized discontinuity moving left to the
 \subsubsection{Training and testing data}
 We now describe the training and testing data used in the following experiments. For training data, we execute solves of the full-order model for the Cartesian parameter grid $\mu_1 \times \mu_2 = \{ 4.25 + 0.3125 i \}_{i=0}^4 \times \{ 0.015 + 0.05 j \}_{j=0}^3$. We collect snapshots of the FOM every $10$ time steps for $t \in [0,15]$, resulting in a total of 50 temporal snapshots. In total the dataset comprises $256 \times 5 \times 4 \times 50 = 256,000$ data points.
 
-We consider two datasets for testing: one dataset that is \textit{in distribution } with respect to the training data, and one dataset that is \textit{out-of-distribution} with respect to the training data. For the in distribution dataset, we execute solves of the full-order model for the Cartesian parameter grid $\mu_1 \times \mu_2 = \{4.40625 + 0.3125 i \}_{i=0}^3 \times \{ 0.0175 + 0.05 j \}_{j=0}^2$ with a time step of $\Delta t = 0.07$ for $t \in [0,15]$. For the out-of-distribution dataset, we execute solves of the full-order model for the Cartesian parameter grid $\mu_1 \times \mu_2 = \{4.0 + \frac{2}{7} i \}_{i=0}^7 \times \{ 0.01 + \frac{0.03 j}{7} \}_{j=0}^7$ with a time step of $\Delta t = 0.07$ for $t \in [0,30]$. 
+We consider two datasets for testing: one dataset that is \textit{in-distribution } (I.D.) with respect to the training data, and one dataset that is \textit{out-of-distribution} (O.O.D.) with respect to the training data. For the I.D. dataset, we execute solves of the full-order model for the Cartesian parameter grid $\mu_1 \times \mu_2 = \{4.40625 + 0.3125 i \}_{i=0}^3 \times \{ 0.0175 + 0.05 j \}_{j=0}^2$ with a time step of $\Delta t = 0.07$ for $t \in [0,15]$. For the O.O.D. dataset, we execute solves of the full-order model for the Cartesian parameter grid $\mu_1 \times \mu_2 = \{4.0 + \frac{2}{7} i \}_{i=0}^7 \times \{ 0.01 + \frac{0.03 j}{7} \}_{j=0}^7$ with a time step of $\Delta t = 0.07$ for $t \in [0,30]$. 
 
 %To construct our bases, we nominally employ a deep MLP characterized by 6 layers with widths $\{l_1,\cdots,\l_6\} = \{8,16,32,64,128,8\}$, thus the total number of bases vectors employed is $\PSTDim = 8$. A parametric study of different networks is provided later. For training, we employ the Adam algorithm to minimize the MSE over the training data. We employ a learning rate schedule of $\text{lr} = \{5e-4,2e-4,1e-4,5e-5,2e-5,1e-5 \}$, where we switch rates after $1000,2000,5000,10000,$ and $15000$ epochs, respectively. 
 
 %We assess two different ROM formulations in what follows. First, we present results for an ensemble of 5 ROMs, where each ROM employs a separate trial subspace obtained by the training procedure presented above. We present ensemble results to (1) fairly assess the methodology as training is stochastic and (2) demonstrate how ensembles can be employed for empirical error detection, as discussed above. In the second formulation, we present ROMs obtained with subspace enrichment. In this process, we train one trial subspace via the procedure presented above, and then train an additional 10 trial subspaces via for 1000 epochs with a learning rate schedule of $\text{lr} = \{5e-3,1e-3,5e-4,1e-4\}$ with switch points after 500, 750, and 900 epochs, respectively.  
 
 \subsection{Results: A priori projection errors, convergence with basis dimension, and the generalizability gap}
-We first assess the impact of the network complexity and dimension of the trial space on the impact of training and generalizability. To this end, we train a total of 150 deep neural networks with the architecture described in ..., with $\text{depth} = \{1,2,3,4,5\}$, and $\PSTDim = \{5,10,15,20,25,30,35,45,50\}$. For each configuration, we train the network three times so-as to account for stochastic training effects. We train each network for 10,000 epochs with learning rates of $5e-3,1e-4,5e-4,2e-4,5e-5$ with switching points of $1000,3000,7000,9000$. For each model, we examine two approximate solutions:
+We first assess the impact of the network complexity and dimension of the trial space on the impact of training and generalizability. To this end, we train a total of 150 deep neural networks with the architecture described in ..., with $\text{depth} = \{1,2,3,4,5\}$, and $\PSTDim = \{5,10,15,20,25,30,35,45,50\}$. For each configuration, we train the network three times so-as to account for stochastic training effects. We train each network for 10,000 epochs with a learning rate schedule $\text{lr} = \{5\times 10^{-3},1 \times 10^{-4},5 \times 10^{-4},2 \times 10^{-4},5 \times 10^{-5}\}$, where the learning rate is switched after $1000,3000,7000,$ and $9000$ epochs. For each model, we examine two approximate solutions:
 \begin{enumerate}
-\item ML prediction. Given the optimal generalized coordinates $\SemiDiscreteParametricSpaceTimeGenStateNN^*$ obtained during the training optimization problem~\eqref{eq:offline_min}, we consider the ML prediction
+\item ML prediction. Given the optimal generalized coordinates $\SemiDiscreteParametricSpaceTimeGenStateNN^*$ obtained during the (offline) training optimization problem~\eqref{eq:offline_min}, we consider the ML prediction
 $$\MLPDEState(\x,t,\params)= \ParametricSpaceTimeBasisMat(\x,t,\params) \ParametricSpaceTimeGenStateNN^*.$$ 
 \item Orthogonal $\ell^2$-projection of testing data. In this approximate solution, we perform orthogonal $\ell^2$ projection of the testing data onto the \parametricSpaceTimeAcronym\ trial subspace,
 $$\EllTwoPDEState(\x,t,\params) = \ParametricSpaceTimeBasisMat(\x,t,\params) \ParametricSpaceTimeGenStateEllTwo,$$
 where $\ParametricSpaceTimeGenStateEllTwo \in \RR{\PSTDim}$ is given by the solution to the minimization problem
 $$\ParametricSpaceTimeGenStateEllTwo = \underset{ \ParametricSpaceTimeGenStateDum \in \RR{\PSTDim} }{\text{arg min} } \; \sum_{i=1}^{N_{test}} \| \ParametricSpaceTimeBasisMat(\x,t,\params) \ParametricSpaceTimeGenStateEllTwo  - \PDEState(\x,t_i,\params_i) \|_2.$$
-We emphasize that $\EllTwoPDEState$ provides a measure of how well a given trial space can represent the training data; it does not directly measure the predictive capabilities of our ROMs as it is an \textit{a posteriori} quantity. 
+We emphasize that $\EllTwoPDEState$ provides a measure of how well a given trial space can represent the data; it does not directly measure the predictive capabilities of our ROMs as it is an \textit{a posteriori} quantity. 
 \end{enumerate}
 %We assess the following metrics:
 %\begin{enumerate}
@@ -572,31 +575,41 @@ We emphasize that $\EllTwoPDEState$ provides a measure of how well a given trial
 %\item The generalizability gap: This final metric is defined as the relative error between the optimal projection of the training set and that of the testing set. This metric provides an indicator for how well the deep subspaces can represent the test data, with respect to how well they represented the training data.  
 %\end{enumerate}
 
-Figure~\ref{fig:burg_training_test_projection_mse} depicts the error (averaged across three independently trained models) in the ML prediction and the $\ell^2$-orthogonal projection for the training dataset. We observe that the ML prediction is almost identical to the $\ell^2$-orthogonal projection; this is to be expected on the training data as the ML prediction is trained to miminize the MSE. We additionally observe that increasing the network depth tends to lower MSE, but increasing the number of basis functions has little impact; see Remark~\ref{remark:add_basis_training}.
+Figure~\ref{fig:burg_training_test_projection_mse} depicts the error (averaged across three independently trained models) in the ML prediction and the $\ell^2$-orthogonal projection for the training, I.D., and O.O.D. datasets. We observe that the ML prediction is almost identical to the $\ell^2$-orthogonal projection on the training and I.D. dataset. This is to be expected on the training data as the ML prediction is trained to miminize the MSE, and the similarity on the I.D. data demonstrats that the models have not been overfit. We additionally observe that, on the training and I.D. datasets, increasing the network depth tends to lower MSE, but increasing the number of basis functions has little impact; see Remark~\ref{remark:add_basis_training}. Next, we observe both methods to associate with higher MSEs for the O.O.D. dataset. Importantly, we observe that the error associated with $\ell^2$-orthogonal projection onto the trial subspace is signficantly lower than the error associated with the ML prediction. We also note that increasing the depth of the network tends to slightly decrease the MSE in the case of $\ell^2$-orthogonal projection, but not as significantly as observed for the training and I.D. data; we do not observe that increasing the depth of the network improves ML prediction. Next, we observe that increasing the basis dimension yields lower MSEs in the case of $\ell^2$ orthogonal projection. We believe that this trend is observed as growing the basis dimension enriches the trial subspace, see Remark~\ref{remark:add_basis_testing}. We do not observe that growing the basis dimension yields lower MSEs on the O.O.D. dataset for the ML prediction. 
 
-We observe that both methods yield similar results that associate with low MSEs for the training set, implying that the ML ROM predicts generalized coordinates that nearly minimize the mean-squared error. We observe that increasing the network depth tends to lower MSE, but increasing the number of basis functions does not tend to decrease the MSE; see Remark~\cite{}. Next, we observe both methods to associate with higher MSEs for the testing dataset. Importantly, we observe that the error associated with $\ell^2$-orthogonal projection onto the trial subspace is lower than the error associated with the ML ROM. We also note that increasing the depth of the network tends to slightly decrease the MSE in the case of $\ell^2$-orthogonal projection, but not as significantly as observed for the training data; we do not observe that increasing the depth of the network improves ML-ROM error. Next, we observe that increasing the basis dimension yields lower MSE in the case of $\ell^2$ orthogonal projection, see Remark~\cite{}. We do not observe that growing the basis dimension yields lower MSEs for the ML-ROM.    
 \begin{figure}
 \begin{center}
-\begin{subfigure}[t]{0.49\textwidth}
+\begin{subfigure}[t]{0.32\textwidth}
 \includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/MSE_training.pdf}
-\caption{$\ell^2$-orthogonal projection (training data)}
+\caption{$\ell^2$ projection (training data)}
 \end{subfigure}
-\begin{subfigure}[t]{0.49\textwidth}
+\begin{subfigure}[t]{0.32\textwidth}
+\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study_indistribution/MSE_training.pdf}
+\caption{$\ell^2$ projection (in distribution)}
+\end{subfigure}
+\begin{subfigure}[t]{0.32\textwidth}
+\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/MSE_testing.pdf}
+\caption{$\ell^2$ projection (out of distribution)}
+\end{subfigure}
+
+\begin{subfigure}[t]{0.32\textwidth}
 \includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/MSE_training.pdf}
-\caption{ML-ROM (training data)}
+\caption{ML prediction (training data)}
 \end{subfigure}
-%\begin{subfigure}[t]{0.49\textwidth}
-%\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/MSE_testing.pdf}
-%\caption{$\ell^2$-orthogonal projection (testing data)}
-%\end{subfigure}
-%\begin{subfigure}[t]{0.49\textwidth}
-%\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/MSE_testing_ML.pdf}
-%\caption{ML-ROM (testing data)}
-%\end{subfigure}
-\caption{Mean-squared-errors associated with $\ell^2$-orthogonal projection (left) and the ML-ROM (right) for the training data (top) and testing data (bottom).}
+\begin{subfigure}[t]{0.32\textwidth}
+\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study_indistribution/MSE_training.pdf}
+\caption{ML prediction (in distribution)}
+\end{subfigure}
+\begin{subfigure}[t]{0.32\textwidth}
+\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/MSE_testing_ML.pdf}
+\caption{ML prediction (out of distribution)}
+\end{subfigure}
+\caption{Mean-squared-errors associated with $\ell^2$-orthogonal projection (top) and the ML-ROM (bottom) for training data (left), I.D. data (center) and O.O.D. data (right).}
 \label{fig:burg_training_test_projection_mse}
 \end{center}
 \end{figure}
+
+\begin{comment}
 
 \begin{figure}
 \begin{center}
@@ -620,7 +633,6 @@ We observe that both methods yield similar results that associate with low MSEs 
 \label{fig:burg_training_test_projection_mse}
 \end{center}
 \end{figure}
-
 
 Figure~\ref{fig:burg_gen_gap} depicts the generalization gap associated with $\ell^2$-orthogonal projection and the ML-ROM. We observe that, in general, the generalization error grows as the depth is increased for both $\ell^2$-orthogonal projection and the ML-ROM. Growing the basis dimension has a small impact on the generalization error. We additionally observe that the generalization error associated with $\ell^2$-orthogonal projection is lower than the ML-ROM. 
 \begin{figure}
@@ -647,18 +659,84 @@ Figure~\ref{fig:burg_gen_gap} depicts the generalization gap associated with $\e
 \label{fig:burg_training_results}
 \end{center}
 \end{figure}
-
+\end{comment}
 
 
 \subsection{Results: Projection-based ROMs for out-of-distribution dataset}
-We now present results for projection-based ROMs deployed on the parametric--space--time grid characterizing the out-of-distribution dataset. We consider three predictions: 
+We now present results for projection-based ROMs deployed on the parametric--space--time grid characterizing the O.O.D. dataset. We consider three predictions: 
 \begin{enumerate}
 \item (PST-ResMin-$\ell^2$) Projection-based ROM defined by least-squares residual minimization. This approximate solution is obtained by solving the residual minimization problem~\eqref{eq:discrete_minimization_principle_solution} with $p=2$.
  \item (PST-ResMin-$\ell^1$) Projection-based ROM defined by $\ell^1$ residual minimization. This approximate solution is obtained by solving the residual minimization problem~\eqref{eq:discrete_minimization_principle_solution} with $p=1$.
 \item ML prediction. This is the same as described previously.
+\item LSPG projection with POD bases. This approximate solution is defined by the standard LSPG projection reduced-order model~\cite{bui_thesis,carlberg_lspg,carlberg_lspg_v_galerkin}, in where the time-discrete residual is minimized at each time step. We employ POD for construction of the trial bases, and use an energy criterion of $99.9999\%$ to truncate our POD bases to $\RomDim=87$ basis vectors. 
 \end{enumerate}
-We present results for same 150 neural networks presented above. Figure~\ref{fig:burg_rom_results} presents the MSE (Fig.~\ref{fig:burg_rom_results1}-\ref{fig:burg_rom_results3}) and %$\ell^1$ (Fig.~\ref{fig:burg_rom_results4}-\ref{fig:burg_rom_results6}), 
-$\ell^{\infty}$ (Fig.~\ref{fig:burg_rom_results7}-\ref{fig:burg_rom_results9}) errors for the various approximate solutions. %Figures~\ref{fig:burg_rom_results1}-\ref{fig:burg_rom_results3} depicts the MSE for the \PSTLSROM, \PSTLONEROM, and the \MLROM\ solutions, respectively. Similarly, Figures~\ref{fig:burg_rom_results1}-\ref{fig:burg_rom_results3} depicts the MSE 
+We emphasize that none of the ROMs considered in this subsection are equipped with hyperreduction; this will be addressed in the next section.
+First, Figure~\ref{fig:burg_phys_space} depicts the approximate solutions associated with the various methodologies for three parameter instances, $(\mu_1,\mu_2) = (4.0,0.01)$, $(\mu_1,\mu_2) = (4.857,0.0223)$, and $(\mu_1,\mu_2) = (6.0,0.04)$. In all cases, we plot the median solution across models of depth $d=\{3,4,5\}$ and basis dimensions $\{5i\}_{i=1}^{10}$, as well as the $5$th and $95$th quantiles\footnote{We do not consider dpeth = 1,2 models as we can see from training that they do not have significant capacity.}. We first discuss median solutions. We observe all methods to yield accurate median solutions for $(\mu_1,\mu_2) = (4.857,0.0223)$, $t<15$, which corresponds to I.D. data points. Further, for $(\mu_1,\mu_2) = (4.857,0.0223)$, all PST methods are able to extrapolate with some accuracy beyond the time training region; we note that this is not the case for standard LSPG projection. For parameter instances $(\mu_1,\mu_2) = (4.0,0.01)$ and $(\mu_1,\mu_2) = (6.0,0.04)$, both of which are O.O.D. with respect to the training data, we observe that all PST methods yield accurate median solutions for $t<15$; although some discrepancy is observed for the $(\mu_1,\mu_2) = (6.0,0.04)$ case at $x>80$. For $t>15$, we observe accurate predictions for the $(\mu_1,\mu_2) = (4.0,0.01)$ parameter instance, but less so for the $(\mu_1,\mu_2) = (6.0,0.04)$ case. 
+
+We now discuss the $5$th and $95$th quantiles. We observe that for all approximate solutions, the quantile spread is correlated with prediction error. We observe tight quantiles for early time, I.D. data, where the models are accurate, and loose quantiles for later time, O.O.D. data, where the models are less accurate. Next, we observe that the ML prediction has the tightest quantiles for I.D. data, but the loosest quantiles for O.O.D. data. This is expected, as deep learning models are known to perform poorly on O.O.D. data. We observe the \PSTLSROM\ and \PSTLONEROM\ ROMs to have loose quantiles for in distribution data, but much tighter quantiles (w.r.p. to the ML prediction) for O.O.D. data. This result highlights how PST ROMs can improve generalization via the residual minimization problem. 
+\begin{figure}
+\begin{center}
+\begin{subfigure}[t]{0.24\textwidth}
+\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results/figures/uquartiles_mu1_3_mu2_3_t_0080.png} 
+\caption{$t=5.6$}
+\end{subfigure}
+\begin{subfigure}[t]{0.24\textwidth}
+\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results/figures/uquartiles_mu1_3_mu2_3_t_0180.png} 
+\caption{$t=12.6$}
+\end{subfigure}
+\begin{subfigure}[t]{0.24\textwidth}
+\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results/figures/uquartiles_mu1_3_mu2_3_t_0280.png} 
+\caption{$t=19.6$}
+\end{subfigure}
+\begin{subfigure}[t]{0.24\textwidth}
+\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results/figures/uquartiles_mu1_3_mu2_3_t_0380.png} 
+\caption{$t=26.6$}
+\end{subfigure}
+
+\begin{subfigure}[t]{0.24\textwidth}
+\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results/figures/uquartiles_mu1_0_mu2_0_t_0080.png} 
+\caption{$t=5.6$}
+\end{subfigure}
+\begin{subfigure}[t]{0.24\textwidth}
+\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results/figures/uquartiles_mu1_0_mu2_0_t_0180.png} 
+\caption{$t=12.6$}
+\end{subfigure}
+\begin{subfigure}[t]{0.24\textwidth}
+\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results/figures/uquartiles_mu1_0_mu2_0_t_0280.png} 
+\caption{$t=19.6$}
+\end{subfigure}
+\begin{subfigure}[t]{0.24\textwidth}
+\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results/figures/uquartiles_mu1_0_mu2_0_t_0380.png} 
+\caption{$t=26.6$}
+\end{subfigure}
+
+\begin{subfigure}[t]{0.24\textwidth}
+\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results/figures/uquartiles_mu1_7_mu2_7_t_0080.png} 
+\caption{$t=5.6$}
+\end{subfigure}
+\begin{subfigure}[t]{0.24\textwidth}
+\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results/figures/uquartiles_mu1_7_mu2_7_t_0180.png} 
+\caption{$t=12.6$}
+\end{subfigure}
+\begin{subfigure}[t]{0.24\textwidth}
+\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results/figures/uquartiles_mu1_7_mu2_7_t_0280.png} 
+\caption{$t=19.6$}
+\end{subfigure}
+\begin{subfigure}[t]{0.24\textwidth}
+\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results/figures/uquartiles_mu1_7_mu2_7_t_0380.png} 
+\caption{$t=26.6$}
+\end{subfigure}
+
+\caption{Physical solutions for ROMs of the 1D Burgers equation at various time instances. Parameter interpolation (top), and parameter extrapolation (bottom).}
+\label{fig:burg_phys_space}
+\end{center}
+\end{figure}
+
+
+Next, Figure~\ref{fig:burg_rom_results} presents the MSE (Fig.~\ref{fig:burg_rom_results1}-\ref{fig:burg_rom_results3}) and %$\ell^1$ (Fig.~\ref{fig:burg_rom_results4}-\ref{fig:burg_rom_results6}), 
+$\ell^{\infty}$ (Fig.~\ref{fig:burg_rom_results7}-\ref{fig:burg_rom_results9}) errors for the various approximate solutions. Table~\ref{tab:burg_results} tabulates the associated mean, median, and best errors, while Figure~\ref{fig:burg_hist} provides histograms for the MSE. First, we observe that all PST ROMs are more accurate than standard LSPG; the optimal MSE in \PSTLSROM\ is $2\%$ of that associated with LSPG projection. We additionally empahsize that the PST ROMs are all significantly faster; LSPG only reduces the spatial dimension of the FOM and the total parametric--space--time dimension for the O.O.D. dataset is $\PSTDim = 87 \times 500 \times 8 \times 8 = 2,784,000$.  We observe that the \PSTLONEROM\ ROM, followed by the \PSTLSROM\ ROM, yields the most accurate solutions (in every measure, with the exception that the ML model yields a slightly lowoer median $\ell^{\infty}$ error than the \PSTLSROM\ ROM). Similarly to the \textit{a priori}  projection errors, we find that enriching the subspace, in general, yields more accurate predictions for the PST ROMs, but not for the ML prediction. In terms of network depth, we find little improvement in any method past $d=3$; for $d>3$ we observe that the ML model degrades. Lastly, we observe that the ML prediction is more prone to outlier predictions with poor accuracy than the PST ROMs.  
+
+ %Figures~\ref{fig:burg_rom_results1}-\ref{fig:burg_rom_results3} depicts the MSE for the \PSTLSROM, \PSTLONEROM, and the \MLROM\ solutions, respectively. Similarly, Figures~\ref{fig:burg_rom_results1}-\ref{fig:burg_rom_results3} depicts the MSE 
 %We now present results for the framework with both extrapolation in parameter space and in time. We execute reduced-order models on the $8x8$ Cartesian parameter grid  $\mu_1 \times \mu_2 = \{ 4. 0+  \frac{2i}{7} \}_{i=0}^7 \times \{ 0.01 + \frac{j}{70} \}_{j=0}^7$ for $t \in [0,30]$, which comprises extrapolation in both the parameter and temporal dimension. Table~\ref{tab:burg_results} tabulates the mean error and standard deviation for the various ROM methods, where the error and standard deviation are computed from the 5 MLPs. Similarly, Figure~\ref{fig:burg_phys_space} depicts ensembles of physical space solutions for the various ROMs. We observe that all methods are accurate, particularly in the interpolation regime. We observe that, on average, the $\ell^1$ res-min ROM yields the most accurate solutions, followed by the ML and least-squares ROMs. The Galerkin method was only stable for 3 of 5 runs; when stable, Galerkin yields reasonable results, but not as accurate as the other approaches.
 
 
@@ -729,28 +807,11 @@ $\ell^{\infty}$ (Fig.~\ref{fig:burg_rom_results7}-\ref{fig:burg_rom_results9}) e
 \includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results/ML_hist_MSE.pdf}
 \caption{ML}
 \end{subfigure}
-%\begin{subfigure}[t]{0.32\textwidth}
-%\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results/rel_MSE_L1.pdf}
-%\caption{PST-LSPG ($\ell^1$)}
-%\end{subfigure}
-%\begin{subfigure}[t]{0.32\textwidth}
-%\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results/rel_L1_L1.pdf}
-%\caption{PST-LSPG ($\ell^1$)}
-%\end{subfigure}
-%\begin{subfigure}[t]{0.32\textwidth}
-%\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results/rel_Linf_L1.pdf}
-%\caption{PST-LSPG ($\ell^1$)}
-%\end{subfigure}
 \caption{Mean-squared-errors associated with $\ell^2$-orthogonal projection (left) and the ML-ROM (right) for the training data (top) and testing data (bottom).}
-\label{fig:burg_training_test_projection_mse}
+\label{fig:burg_hist}
 \end{center}
 \end{figure}
 
-
-
-
-
-Next, Figure~\ref{fig:error_vs_params} presents relative errors averaged over the ensemble for the various ROMs. We observe that all ROMs yield similar results: Sub 1\% relative errors are obtained for all parameters within the training regime, and sub 1.5\% relative errors are obtained for extrapolation cases. We additionally observe that the models extrapolate much better in the $\mu_2$ parameter than in the $\mu_1$ parameter. 
 \begin{table}[]
 \begin{centering}
 \begin{tabular}{l l l l l l l}
@@ -760,6 +821,7 @@ Next, Figure~\ref{fig:error_vs_params} presents relative errors averaged over th
 \PSTLSROM & $0.351$  & $0.179$ & $0.0411$ & $4.666$ & $4.231$ & $2.620$\\
 \PSTLONEROM& $0.262$ &  $0.100$ & $0.0290$ & $4.298$ & $3.893$ & $2.297$\\
 \MLROM    & $0.713$ & $0.207$  &  $0.0445$ & $6.514$ & $4.191$ & $2.870$\\
+LSPG ($K=87$) & 1.211 & 1.211 & 1.211 & 7.377 & 7.377 & 7.377  \\ 
 \hline
 \end{tabular}
 \caption{Error metrics of various reduced-order models executed for the out-of-distribution test case.}
@@ -767,61 +829,56 @@ Next, Figure~\ref{fig:error_vs_params} presents relative errors averaged over th
 \end{centering}
 \end{table}
 
+\subsection{Hyperreduced ROMs}
+
 \begin{figure}
 \begin{center}
-\begin{subfigure}[t]{0.24\textwidth}
-\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/elu/results/usol_0001.pdf} 
-\caption{$t=7.0$}
+\begin{subfigure}[t]{0.32\textwidth}
+\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results_hyperreduction/MSE_LS.pdf}
+\caption{PST-ResMin-$\ell^2$}
+\label{fig:burg_rom_results1}
 \end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
-\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/elu/results/usol_0003.pdf} 
-\caption{$t=10.0$}
+\begin{subfigure}[t]{0.32\textwidth}
+\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results_hyperreduction/MSE_ML.pdf}
+\caption{ML prediction}
+\label{fig:burg_rom_results3}
 \end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
-\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/elu/results/usol_0005.pdf} 
-\caption{$t=21.0$}
+%\begin{subfigure}[t]{0.32\textwidth}
+%\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results/L1_LS.pdf}
+%\caption{PST-ResMin-$\ell^2$}
+%\label{fig:burg_rom_results4}
+%\end{subfigure}
+%\begin{subfigure}[t]{0.32\textwidth}
+%\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results/L1_L1.pdf}
+%\caption{PST-ResMin-$\ell^1$}
+%\label{fig:burg_rom_results5}
+%\end{subfigure}
+%\begin{subfigure}[t]{0.32\textwidth}
+%\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results/L1_ML.pdf}
+%\caption{ML prediction}
+%\label{fig:burg_rom_results6}
+%\end{subfigure}
+\begin{subfigure}[t]{0.32\textwidth}
+\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results_hyperreduction/Linf_LS.pdf}
+\caption{PST-ResMin-$\ell^2$}
+\label{fig:burg_rom_results7}
 \end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
-\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/elu/results/usol_0007.pdf} 
-\caption{$t=28.0$}
-\end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
-\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/elu/results/usolExtrapolate_0001.pdf} 
-\caption{$t=7.0$}
-\end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
-\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/elu/results/usolExtrapolate_0003.pdf} 
-\caption{$t=10.0$}
-\end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
-\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/elu/results/usolExtrapolate_0005.pdf} 
-\caption{$t=21.0$}
-\end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
-\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/elu/results/usolExtrapolate_0007.pdf} 
-\caption{$t=28.0$}
-\end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
-\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/elu/results/usolExtrapolate2_0001.pdf} 
-\caption{$t=7.0$}
-\end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
-\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/elu/results/usolExtrapolate2_0003.pdf} 
-\caption{$t=10.0$}
-\end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
-\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/elu/results/usolExtrapolate2_0005.pdf} 
-\caption{$t=21.0$}
-\end{subfigure}
-\begin{subfigure}[t]{0.24\textwidth}
-\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/elu/results/usolExtrapolate2_0007.pdf} 
-\caption{$t=28.0$}
+\begin{subfigure}[t]{0.32\textwidth}
+\includegraphics[trim={0cm 0cm 0cm 0cm},clip,width=1.0\linewidth]{code/burgers/synapse_models/basis_study/results_hyperreduction/Linf_ML.pdf}
+\caption{ML prediction}
+\label{fig:burg_rom_results9}
 \end{subfigure}
 
-\caption{Physical solutions for ROMs of the 1D Burgers equation at various time instances. Parameter interpolation (top), and parameter extrapolation (bottom).}
-\label{fig:burg_phys_space}
+\caption{Mean-squared-errors associated with $\ell^2$-orthogonal projection (left) and the ML-ROM (right) for the training data (top) and testing data (bottom).}
+\label{fig:burg_rom_results}
 \end{center}
 \end{figure}
+
+
+
+\begin{comment}
+Next, Figure~\ref{fig:error_vs_params} presents relative errors averaged over the ensemble for the various ROMs. We observe that all ROMs yield similar results: Sub 1\% relative errors are obtained for all parameters within the training regime, and sub 1.5\% relative errors are obtained for extrapolation cases. We additionally observe that the models extrapolate much better in the $\mu_2$ parameter than in the $\mu_1$ parameter. 
+
 
 \begin{figure}
 \begin{center}
@@ -840,7 +897,7 @@ Next, Figure~\ref{fig:error_vs_params} presents relative errors averaged over th
 \label{fig:rom_metrics_swe_updatefreq}
 \end{center}
 \end{figure}
-
+\end{comment}
 \bibliographystyle{siam}
 \bibliography{refs}
 
