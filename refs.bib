@@ -678,4 +678,129 @@ year = {2019}
 
 keywords = {Adaptive refinement, Adaptive coarsening, Model reduction, Dual-weighted residual, Adjoint error estimation},
 abstract = {In many applications, projection-based reduced-order models (ROMs) have demonstrated the ability to provide rapid approximate solutions to high-fidelity full-order models (FOMs). However, there is no a priori assurance that these approximate solutions are accurate; their accuracy depends on the ability of the low-dimensional trial basis to represent the FOM solution. As a result, ROMs can generate inaccurate approximate solutions, e.g., when the FOM solution at the online prediction point is not well represented by training data used to construct the trial basis. To address this fundamental deficiency of standard model-reduction approaches, this work proposes a novel online-adaptive mechanism for efficiently enriching the trial basis in a manner that ensures convergence of the ROM to the FOM, yet does not incur any FOM solves. The mechanism is based on the previously proposed adaptive h-refinement method for ROMs (carlberg, 2015), but improves upon this work in two crucial ways. First, the proposed method enables basis refinement with respect to any orthogonal basis (not just the Kronecker basis), thereby generalizing the refinement mechanism and enabling it to be tailored to the physics characterizing the problem at hand. Second, the proposed method provides a fast online algorithm for periodically compressing the enriched basis via an efficient proper orthogonal decomposition (POD) method, which does not incur any operations that scale with the FOM dimension. These two features allow the proposed method to serve as (1) a failsafe mechanism for ROMs, as the method enables the ROM to satisfy any prescribed error tolerance online (even in the case of inadequate training), and (2) an efficient online basis-adaptation mechanism, as the combination of basis enrichment and compression enables the basis to adapt online while controlling its dimension.}
+
+@article{AmsZahWas15,
+	Author = {Amsallem, David and Zahr, Matthew J. and Washabaugh, Kyle},
+	Da = {2015/10/01},
+	Date-Added = {2020-10-22 16:30:13 -0700},
+	Date-Modified = {2020-10-22 16:30:13 -0700},
+	Doi = {10.1007/s10444-015-9409-0},
+	Id = {Amsallem2015},
+	Isbn = {1572-9044},
+	Journal = {Advances in Computational Mathematics},
+	Number = {5},
+	Pages = {1187--1230},
+	Title = {Fast local reduced basis updates for the efficient reduction of nonlinear systems with hyper-reduction},
+	Ty = {JOUR},
+	Url = {https://doi.org/10.1007/s10444-015-9409-0},
+	Volume = {41},
+	Year = {2015},
+	Bdsk-Url-1 = {https://doi.org/10.1007/s10444-015-9409-0}}
+
+@article{amsallem2012nonlinear,
+	Author = {Amsallem, David and Zahr, Matthew J and Farhat, Charbel},
+	Date-Added = {2020-06-16 18:57:48 +0000},
+	Date-Modified = {2020-06-16 18:58:16 +0000},
+	Journal = {International Journal for Numerical Methods in Engineering},
+	Keywords = {LSPG, Window},
+	Number = {10},
+	Pages = {891--916},
+	Publisher = {Wiley Online Library},
+	Title = {Nonlinear model order reduction based on local reduced-order bases},
+	Volume = {92},
+	Year = {2012}}
+
+@article{EfPaRo10,
+author = {Eftang, Jens L. and Patera, Anthony T. and Rønquist, Einar M.},
+title = {An "\$hp\$" Certified Reduced Basis Method for Parametrized Elliptic Partial Differential Equations},
+journal = {SIAM Journal on Scientific Computing},
+volume = {32},
+number = {6},
+pages = {3170-3200},
+year = {2010},
+doi = {10.1137/090780122},
+
+URL = { 
+        https://doi.org/10.1137/090780122
+    
+},
+eprint = { 
+        https://doi.org/10.1137/090780122
+    
+}
+
+}
+
+@article{HaDiOh11,
+author = { Bernard   Haasdonk  and  Markus   Dihlmann  and  Mario   Ohlberger },
+title = {A training set and multiple bases generation approach for parameterized model reduction based on adaptive grids in parameter space},
+journal = {Mathematical and Computer Modelling of Dynamical Systems},
+volume = {17},
+number = {4},
+pages = {423-442},
+year  = {2011},
+publisher = {Taylor & Francis},
+doi = {10.1080/13873954.2011.547674},
+
+URL = { 
+        https://doi.org/10.1080/13873954.2011.547674
+    
+},
+eprint = { 
+        https://doi.org/10.1080/13873954.2011.547674
+    
+}
+
+}
+
+@article{DiKaHa12,
+title = {Online Reduced Basis Construction Procedure for Model Reduction of Parametrized Evolution Systems},
+journal = {IFAC Proceedings Volumes},
+volume = {45},
+number = {2},
+pages = {112-117},
+year = {2012},
+note = {7th Vienna International Conference on Mathematical Modelling},
+issn = {1474-6670},
+doi = {https://doi.org/10.3182/20120215-3-AT-3016.00020},
+url = {https://www.sciencedirect.com/science/article/pii/S147466701630653X},
+author = {Markus Dihlmann and Sven Kaulmann and Bernard Haasdonk},
+keywords = {Reduced-order models, partial differential equations, evolution equations, reduced basis method},
+abstract = {Abstract
+The reduced basis method is a model reduction technique for parametrized PDEs. It approximates the parameter-dependent solutions in a low dimensional space constructed by “snapshots” of high dimensional discrete solutions for selected parameters. Usually this reduced space is built up in advance in a costly offline phase and is suited to approximate well all solutions for parameters stemming from a given parameter domain. For the case of time dependent problems we propose a new method which rapidly builds up a locally adapted approximation space for a given parameter by selection from and combination of a set of POD bases. Instead of generating a globally valid reduced space for the whole parameter domain we will show how to construct online a low dimensional approximation space which is more performant with respect to the online cost.}
+}
+
+@InProceedings{CyGuPa20,
+  title = 	 {Robust Training and Initialization of Deep Neural Networks: {A}n Adaptive Basis Viewpoint},
+  author =       {Cyr, Eric C. and Gulian, Mamikon A. and Patel, Ravi G. and Perego, Mauro and Trask, Nathaniel A.},
+  booktitle = 	 {Proceedings of The First Mathematical and Scientific Machine Learning Conference},
+  pages = 	 {512--536},
+  year = 	 {2020},
+  editor = 	 {Jianfeng Lu and Rachel Ward},
+  volume = 	 {107},
+  series = 	 {Proceedings of Machine Learning Research},
+  address = 	 {Princeton University, Princeton, NJ, USA},
+  month = 	 {20--24 Jul},
+  publisher =    {PMLR},
+  pdf = 	 {http://proceedings.mlr.press/v107/cyr20a/cyr20a.pdf},
+  url = 	 {http://proceedings.mlr.press/v107/cyr20a.html},
+  abstract = 	 {Motivated by the gap between theoretical optimal approximation rates of deep neural networks (DNNs) and the accuracy realized in practice, we seek to improve the training of DNNs. The adoption of an adaptive basis viewpoint of DNNs leads to novel initializations and a hybrid least squares/gradient descent optimizer. We provide analysis of these techniques and illustrate via numerical examples dramatic increases in accuracy and convergence rate for benchmarks characterizing scientific applications where DNNs are currently used, including regression problems and physics-informed neural networks for the solution of partial differential equations. }
+}
+
+@article{RaPeKa18,
+title = {Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations},
+journal = {Journal of Computational Physics},
+volume = {378},
+pages = {686-707},
+year = {2019},
+issn = {0021-9991},
+doi = {https://doi.org/10.1016/j.jcp.2018.10.045},
+url = {https://www.sciencedirect.com/science/article/pii/S0021999118307125},
+author = {M. Raissi and P. Perdikaris and G.E. Karniadakis},
+keywords = {Data-driven scientific computing, Machine learning, Predictive modeling, Runge–Kutta methods, Nonlinear dynamics},
+abstract = {We introduce physics-informed neural networks – neural networks that are trained to solve supervised learning tasks while respecting any given laws of physics described by general nonlinear partial differential equations. In this work, we present our developments in the context of solving two main classes of problems: data-driven solution and data-driven discovery of partial differential equations. Depending on the nature and arrangement of the available data, we devise two distinct types of algorithms, namely continuous time and discrete time models. The first type of models forms a new family of data-efficient spatio-temporal function approximators, while the latter type allows the use of arbitrarily accurate implicit Runge–Kutta time stepping schemes with unlimited number of stages. The effectiveness of the proposed framework is demonstrated through a collection of classical problems in fluids, quantum mechanics, reaction–diffusion systems, and the propagation of nonlinear shallow-water waves.}
+}
+
 }}
+
+
