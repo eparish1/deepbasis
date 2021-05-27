@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Use the compute queue and set a 10 minute time limit, and write job output to out.txt
+
+
+#SBATCH -o may15_median.txt
+#SBATCH -p zen
+#SBATCH -t 10:00:00
+
+python3 yk_secondLevelPPM.py
+#python3 yk_postProcessModels.py
